@@ -7,11 +7,10 @@ import './index.css'
 
 async function enableMocking() {
   if (import.meta.env.DEV) {
-    const { worker } = await import('./mocks/brower.ts')
+    const { worker } = await import('./mocks/browser.ts')
     await worker.start()
   }
 }
-
 enableMocking().then(() => {
   createRoot(document.getElementById('root')!).render(
     <StrictMode>
