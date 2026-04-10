@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react'
 
-import { useOutsideClick } from '../../../../hooks/useOutsideClick'
-import { cn } from '../../../../utils/cn'
+import { useOutsideClick } from '@/hooks/useOutsideClick'
+import { cn } from '@/utils/cn'
 
 type ActionMenuItem = {
   label: string
@@ -50,7 +50,7 @@ export function ActionMenu({
       {(isOpen || isClosing) && (
         <ul
           className={cn(
-            'absolute z-10 mt-1 min-w-[100px] rounded-[12px] shadow-card-main px-[16px] py-[14px]',
+            'absolute z-10 mt-1 min-w-30 rounded-xl shadow-card-main px-4 py-3.5',
             align === 'right' ? 'right-0' : 'left-0',
             isClosing
               ? 'animate-[dropdown-out_0.2s_ease-in_forwards]'
@@ -66,7 +66,7 @@ export function ActionMenu({
                   onClick()
                   close()
                 }}
-                className="w-full px-[6px] py-[3px] text-center text-[12px] rounded-[4px] cursor-pointer hover:bg-[#C3DBFF]/21 hover:text-[#1B57FF] hover:font-semibold"
+                className="w-full px-1.5 py-1 text-center text-sm rounded-sm cursor-pointer hover:bg-primary-100 hover:text-primary-600 hover:font-semibold"
               >
                 {label}
               </button>
