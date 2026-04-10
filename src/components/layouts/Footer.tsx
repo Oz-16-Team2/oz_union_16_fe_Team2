@@ -1,4 +1,5 @@
 import { DarklogoImage } from '@/assets/images'
+import { FOOTER } from '@/constants/footer'
 
 /**
  * TODO: Footer 디자인 임시 구현
@@ -6,19 +7,6 @@ import { DarklogoImage } from '@/assets/images'
  */
 
 export default function Footer() {
-  const githubLinks = [
-    {
-      href: 'https://github.com/Oz-16-Team2/oz_union_16_fe_Team2',
-      label: 'Frontend Repository',
-      text: 'Frontend',
-    },
-    {
-      href: 'https://github.com/Oz-16-Team2/oz_union_16_be_Team2',
-      label: 'Backend Repository',
-      text: 'Backend',
-    },
-  ]
-
   return (
     <footer className="bg-gray-950 py-14">
       <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-4">
@@ -26,7 +14,7 @@ export default function Footer() {
         <div className="flex flex-col gap-2">
           <span className="text-xs text-gray-500">GitHub</span>
           <div className="flex items-center gap-3">
-            {githubLinks.map(({ href, label, text }) => (
+            {FOOTER.githubLinks.map(({ href, label, text }) => (
               <a
                 key={href}
                 href={href}
