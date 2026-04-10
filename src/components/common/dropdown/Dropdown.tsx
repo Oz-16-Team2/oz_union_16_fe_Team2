@@ -11,7 +11,7 @@ const MAX_VISIBLE_ITEMS = 4
 const LIST_MAX_HEIGHT = ITEM_HEIGHT * MAX_VISIBLE_ITEMS
 
 const dropdownTriggerVariants = cva(
-  'flex w-full items-center justify-between border border-[#E2E2E2] bg-white text-[14px] text-gray-400 transition-colors cursor-pointer',
+  'flex w-full items-center justify-between border border-gray-200 bg-white text-[14px] text-gray-400 transition-colors cursor-pointer',
   {
     variants: {
       size: {
@@ -35,9 +35,9 @@ const dropdownListVariants = cva(
         lg: 'rounded-[9999px]',
       },
       shadow: {
-        sm: 'shadow-[0_2px_10px_rgba(0,0,0,0.1)]',
-        md: 'shadow-[0_4px_10px_rgba(0,0,0,0.25)]',
-        lg: 'shadow-[0_8px_24px_rgba(0,0,0,0.2)]',
+        sm: 'shadow-card-main',
+        md: 'shadow-card-light',
+        lg: 'shadow-card-hover',
       },
     },
     defaultVariants: {
@@ -93,17 +93,16 @@ export function Dropdown({
         onClick={() => (isOpen ? close() : setIsOpen(true))}
         className={cn(
           dropdownTriggerVariants({ size }),
-          (isOpen || value) && 'border-[#3C7DFF]',
+          (isOpen || value) && 'border-border-active',
           value && 'text-gray-900 cursor-pointer'
         )}
       >
         <span>{selectedLabel ?? placeholder}</span>
         <ChevronDown
           size={16}
-          stroke="#555"
           strokeWidth={1.5}
           className={cn(
-            'transition-transform duration-200',
+            'text-gray-700 transition-transform duration-200',
             isOpen && 'rotate-180'
           )}
         />
@@ -134,8 +133,8 @@ export function Dropdown({
                   className={cn(
                     'w-full p-[16px] text-left text-[14px] rounded-[4px] transition-colors cursor-pointer',
                     value === opt.value
-                      ? 'bg-[#1675F9] text-white'
-                      : 'hover:bg-[#C3DBFF]/21 hover:text-[#1B57FF] hover:font-semibold'
+                      ? 'bg-primary-500 text-white'
+                      : 'hover:bg-primary-100/21 hover:text-primary-600 hover:font-semibold'
                   )}
                 >
                   {opt.label}
