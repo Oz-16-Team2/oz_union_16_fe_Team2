@@ -1,8 +1,7 @@
 import { createBrowserRouter } from 'react-router'
 
+import { RootLayout } from '@/components'
 import { Main } from '@/pages'
-
-import Layout from '../layouts/Layout'
 
 /*
  * 라우터 설정 파일
@@ -14,7 +13,7 @@ import Layout from '../layouts/Layout'
 export const router = createBrowserRouter([
   {
     path: '/',
-    element: <Layout />,
+    element: <RootLayout />,
     children: [
       {
         index: true,
