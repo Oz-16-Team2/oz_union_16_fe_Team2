@@ -1,2 +1,6 @@
+export { default as blueCharacterImage } from './blue_character.png'
 export { default as DarklogoImage } from './dark_logo.png'
 export { default as logoImage } from './logo.png'
+export { default as orangeCharacterImage } from './orange_character.png'
+export { default as pinkCharacterImage } from './pink_character.png'
+export { default as yellowCharacterImage } from './yellow_character.png'

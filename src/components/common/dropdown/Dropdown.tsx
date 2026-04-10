@@ -11,11 +11,11 @@ const MAX_VISIBLE_ITEMS = 4
 const LIST_MAX_HEIGHT = ITEM_HEIGHT * MAX_VISIBLE_ITEMS
 
 const dropdownTriggerVariants = cva(
-  'flex w-full items-center justify-between border border-gray-200 bg-white text-[14px] text-gray-400 transition-colors cursor-pointer',
+  'flex w-full items-center justify-between border border-border-default bg-white text-sm text-text-muted transition-colors cursor-pointer',
   {
     variants: {
       size: {
-        md: 'rounded-[4px] px-[16px] py-[10px]',
+        md: 'rounded-sm px-4 py-2.5',
         // 추가 가능
       },
     },
@@ -26,13 +26,13 @@ const dropdownTriggerVariants = cva(
 )
 
 const dropdownListVariants = cva(
-  'absolute left-0 right-0 z-10 mt-[8px] overflow-hidden bg-white',
+  'absolute left-0 right-0 z-50 mt-2 overflow-hidden bg-white',
   {
     variants: {
       size: {
-        sm: 'rounded-[6px] ',
-        md: 'rounded-[12px] p-[6px]',
-        lg: 'rounded-[9999px]',
+        sm: 'rounded-md ',
+        md: 'rounded-xl p-1.5',
+        lg: 'rounded-full',
       },
       shadow: {
         sm: 'shadow-card-main',
@@ -53,6 +53,7 @@ export type DropdownOption = {
 }
 
 type DropdownProps = {
+  id?: string
   options: DropdownOption[]
   placeholder?: string
   size?: 'md' // 추가 가능
@@ -61,6 +62,7 @@ type DropdownProps = {
 }
 
 export function Dropdown({
+  id,
   options,
   placeholder = '해당되는 항목을 선택해 주세요.',
   size = 'md',
@@ -86,9 +88,10 @@ export function Dropdown({
   const selectedLabel = options.find((opt) => opt.value === value)?.label
 
   return (
-    <div ref={ref} className="relative w-full min-w-[250px]">
+    <div ref={ref} className="relative w-full min-w-64">
       {/* TODO: 버튼 공통 컴포넌트 만들면 적용 */}
       <button
+        id={id}
         type="button"
         onClick={() => (isOpen ? close() : setIsOpen(true))}
         className={cn(
@@ -131,7 +134,7 @@ export function Dropdown({
                     close()
                   }}
                   className={cn(
-                    'w-full p-[16px] text-left text-[14px] rounded-[4px] transition-colors cursor-pointer',
+                    'w-full p-4 text-left text-sm rounded-sm transition-colors cursor-pointer',
                     value === opt.value
                       ? 'bg-primary-500 text-white'
                       : 'hover:bg-primary-100/21 hover:text-primary-600 hover:font-semibold'
