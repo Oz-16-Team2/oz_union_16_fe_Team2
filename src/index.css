@@ -1,1 +1,291 @@
 @import 'tailwindcss';
+
+body {
+  font-family: 'Pretendard', ui-sans-serif, system-ui, sans-serif;
+}
+
+:root {
+  /* ========================
+     Primitive Token
+  ======================== */
+
+  /* primary */
+  --color-primary-100: #e3eef7;
+  --color-primary-400: #6b94ff;
+  --color-primary-500: #3c7dff;
+  --color-primary-600: #1b57ff;
+
+  /* gray */
+  --color-gray-100: #fafafa;
+  --color-gray-200: #e8e5e5;
+  --color-gray-300: #d0cccc;
+  --color-gray-400: #afafaf;
+  --color-gray-500: #979797;
+  --color-gray-700: #484848;
+  --color-gray-750: #363639;
+  --color-gray-800: #27272a;
+  --color-gray-900: #222222;
+  --color-gray-950: #1a1a1a;
+  --color-white: #ffffff;
+
+  /* status */
+  --color-success-200: #5dcaa5;
+  --color-success-500: #2e9210;
+  --color-danger-100: #ffe5e5;
+  --color-danger-500: #ff4d4f;
+  --color-danger-200: #fecaca;
+
+  /* overlay color */
+  --color-overlay-50: rgba(0, 0, 0, 0.5);
+
+  /* ranking background color - light */
+  --color-rank-light-gold-bg: #fff7de;
+  --color-rank-light-silver-bg: #f5f5f7;
+  --color-rank-light-bronze-bg: #ffeddb;
+  --color-rank-light-default-bg: #ffffff;
+  --color-rank-light-border: #e8e5e5;
+
+  /* ranking text color - light */
+  --color-rank-light-gold-text: #e6bf6a;
+  --color-rank-light-silver-text: #9b9b9b;
+  --color-rank-light-bronze-text: #cc7e5e;
+
+  /* shadow */
+  --shadow-card-light: 0px 2px 10px rgba(0, 0, 0, 0.25);
+  --shadow-card-main: 0px 4px 10px rgba(0, 0, 0, 0.11);
+  --shadow-card-hover: 0px 10px 30px rgba(0, 0, 0, 0.15);
+  --shadow-rank-light: 0 0 10px rgba(137, 137, 137, 0.5);
+
+  /* mypage stats */
+  --color-mypage-stats-bg: #ffffff;
+  --color-mypage-stats-border: #e8e5e5;
+
+  --color-mypage-stats-card-blue-bg: #eaf3ff;
+  --color-mypage-stats-card-mint-bg: #eafbf3;
+  --color-mypage-stats-card-yellow-bg: #fff9e5;
+
+  /* =========================
+   Semantic Token
+========================= */
+
+  /* =========================
+     Background
+  ========================= */
+  --bg-surface: var(--color-gray-100);
+  --bg-overlay: var(--color-overlay-50);
+
+  /* =========================
+     Text
+  ========================= */
+  --text-primary: var(--color-gray-950);
+  --text-muted: var(--color-gray-500);
+  --text-inverse: var(--color-gray-100);
+
+  /* =========================
+     Border (base)
+  ========================= */
+  --border-subtle: var(--color-gray-300); /* #D0CCCC */
+  --border-default: var(--color-gray-500); /* 기본 */
+  --border-strong: var(--color-gray-700);
+
+  --border-active: var(--color-primary-500);
+
+  /* =========================
+     Component - Card
+  ========================= */
+  --card-border: var(--border-default);
+  --card-wrapper-border: var(--border-default);
+
+  /* =========================
+     Component - Input / Form
+  ========================= */
+  --input-border: var(--border-default); /* 일반 input */
+  --input-card-border: var(--border-subtle); /* 카드 안 input */
+
+  --textarea-border: var(--border-default);
+
+  --input-bg: var(--color-white);
+  --textarea-bg: var(--bg-surface);
+
+  /* =========================
+     Focus
+  ========================= */
+  --focus-border: var(--color-primary-500);
+
+  /* =========================
+     Shadow
+  ========================= */
+  --shadow-input: var(--shadow-card-main);
+  --shadow-none: none;
+
+  --input-shadow: var(--shadow-input);
+  --input-card-shadow: var(--shadow-none);
+
+  --shadow-card-active: var(--shadow-card-light);
+  --shadow-modal: var(--shadow-card-main);
+
+  /* =========================
+     Status
+  ========================= */
+  --status-success-bg: var(--color-success-200);
+  --status-success-text: var(--color-success-500);
+
+  --status-danger-bg: var(--color-danger-100);
+  --status-danger-text: var(--color-danger-500);
+  --status-danger-hover: var(--color-danger-200);
+
+  /* =========================
+     Button
+  ========================= */
+  --button-primary-bg: var(--color-primary-500);
+  --button-primary-hover: var(--color-primary-600);
+  --button-primary-text: var(--color-white);
+
+  --button-secondary-bg: var(--color-primary-400);
+  --button-secondary-hover: var(--color-primary-500);
+  --button-secondary-text: var(--color-white);
+
+  --button-danger-bg: var(--color-danger-100);
+  --button-danger-hover: var(--color-danger-200);
+  --button-danger-text: var(--color-danger-500);
+
+  /* =========================
+     Tab
+  ========================= */
+  --tab-active-bg: var(--color-primary-100);
+  --tab-hover-bg: var(--color-primary-100);
+  --tab-active-text: var(--color-primary-500);
+
+  /* =========================
+     Ranking
+  ========================= */
+  --ranking-gold-bg: var(--color-rank-light-gold-bg);
+  --ranking-silver-bg: var(--color-rank-light-silver-bg);
+  --ranking-bronze-bg: var(--color-rank-light-bronze-bg);
+  --ranking-default-bg: var(--color-rank-light-default-bg);
+
+  --ranking-default-border: var(--color-rank-light-border);
+  --ranking-silver-border: var(--color-rank-light-border);
+  --ranking-bronze-border: var(--color-rank-light-border);
+
+  --text-ranking-gold: var(--color-rank-light-gold-text);
+  --text-ranking-silver: var(--color-rank-light-silver-text);
+  --text-ranking-bronze: var(--color-rank-light-bronze-text);
+
+  --ranking-shadow: var(--shadow-rank-light);
+
+  /* =========================
+     MyPage
+  ========================= */
+  --bg-mypage-stats-section: var(--color-mypage-stats-bg);
+  --border-mypage-stats-section: var(--color-mypage-stats-border);
+
+  --bg-mypage-stats-card-blue: var(--color-mypage-stats-card-blue-bg);
+  --bg-mypage-stats-card-mint: var(--color-mypage-stats-card-mint-bg);
+  --bg-mypage-stats-card-yellow: var(--color-mypage-stats-card-yellow-bg);
+
+  --border-mypage-stats-card-blue: transparent;
+  --border-mypage-stats-card-mint: transparent;
+  --border-mypage-stats-card-yellow: transparent;
+}
+
+@theme inline {
+  --font-sans: 'Pretendard', ui-sans-serif, system-ui, sans-serif;
+
+  --color-primary-100: var(--color-primary-100);
+  --color-primary-400: var(--color-primary-400);
+  --color-primary-500: var(--color-primary-500);
+  --color-primary-600: var(--color-primary-600);
+
+  --color-gray-100: var(--color-gray-100);
+  --color-gray-200: var(--color-gray-200);
+  --color-gray-300: var(--color-gray-300);
+  --color-gray-400: var(--color-gray-400);
+  --color-gray-500: var(--color-gray-500);
+  --color-gray-700: var(--color-gray-700);
+  --color-gray-750: var(--color-gray-750);
+  --color-gray-800: var(--color-gray-800);
+  --color-gray-900: var(--color-gray-900);
+  --color-gray-950: var(--color-gray-950);
+  --color-white: var(--color-white);
+
+  --color-success-200: var(--color-success-200);
+  --color-success-500: var(--color-success-500);
+  --color-danger-100: var(--color-danger-100);
+  --color-danger-200: var(--color-danger-200);
+  --color-danger-500: var(--color-danger-500);
+
+  --color-surface: var(--bg-surface);
+  --color-overlay: var(--bg-overlay);
+
+  --color-text-primary: var(--text-primary);
+  --color-text-muted: var(--text-muted);
+  --color-text-inverse: var(--text-inverse);
+
+  --color-border-subtle: var(--border-subtle);
+  --color-border-default: var(--border-default);
+  --color-border-strong: var(--border-strong);
+  --color-border-active: var(--border-active);
+
+  --color-card-border: var(--card-border);
+  --color-card-wrapper-border: var(--card-wrapper-border);
+
+  --color-input-border: var(--input-border);
+  --color-input-card-border: var(--input-card-border);
+  --color-textarea-border: var(--textarea-border);
+  --color-input-bg: var(--input-bg);
+  --color-textarea-bg: var(--textarea-bg);
+  --color-focus-border: var(--focus-border);
+
+  --color-status-success-bg: var(--status-success-bg);
+  --color-status-success-text: var(--status-success-text);
+  --color-status-danger-bg: var(--status-danger-bg);
+  --color-status-danger-text: var(--status-danger-text);
+  --color-status-danger-hover: var(--status-danger-hover);
+
+  --color-button-primary-bg: var(--button-primary-bg);
+  --color-button-primary-hover: var(--button-primary-hover);
+  --color-button-primary-text: var(--button-primary-text);
+  --color-button-secondary-bg: var(--button-secondary-bg);
+  --color-button-secondary-hover: var(--button-secondary-hover);
+  --color-button-secondary-text: var(--button-secondary-text);
+  --color-button-danger-bg: var(--button-danger-bg);
+  --color-button-danger-hover: var(--button-danger-hover);
+  --color-button-danger-text: var(--button-danger-text);
+
+  --color-tab-active-bg: var(--tab-active-bg);
+  --color-tab-hover-bg: var(--tab-hover-bg);
+  --color-tab-active-text: var(--tab-active-text);
+
+  --color-ranking-gold-bg: var(--ranking-gold-bg);
+  --color-ranking-silver-bg: var(--ranking-silver-bg);
+  --color-ranking-bronze-bg: var(--ranking-bronze-bg);
+  --color-ranking-default-bg: var(--ranking-default-bg);
+  --color-ranking-default-border: var(--ranking-default-border);
+  --color-ranking-silver-border: var(--ranking-silver-border);
+  --color-ranking-bronze-border: var(--ranking-bronze-border);
+  --color-text-ranking-gold: var(--text-ranking-gold);
+  --color-text-ranking-silver: var(--text-ranking-silver);
+  --color-text-ranking-bronze: var(--text-ranking-bronze);
+
+  --color-mypage-stats-section: var(--bg-mypage-stats-section);
+  --color-mypage-stats-card-blue: var(--bg-mypage-stats-card-blue);
+  --color-mypage-stats-card-mint: var(--bg-mypage-stats-card-mint);
+  --color-mypage-stats-card-yellow: var(--bg-mypage-stats-card-yellow);
+  --color-border-mypage-stats-section: var(--border-mypage-stats-section);
+  --color-border-mypage-stats-card-blue: var(--border-mypage-stats-card-blue);
+  --color-border-mypage-stats-card-mint: var(--border-mypage-stats-card-mint);
+  --color-border-mypage-stats-card-yellow: var(
+    --border-mypage-stats-card-yellow
+  );
+
+  --shadow-card-light: var(--shadow-card-light);
+  --shadow-card-main: var(--shadow-card-main);
+  --shadow-card-hover: var(--shadow-card-hover);
+  --shadow-rank-light: var(--shadow-rank-light);
+  --shadow-input: var(--input-shadow);
+  --shadow-input-card: var(--input-card-shadow);
+  --shadow-card-active: var(--shadow-card-active);
+  --shadow-modal: var(--shadow-modal);
+  --shadow-ranking: var(--ranking-shadow);
+}
