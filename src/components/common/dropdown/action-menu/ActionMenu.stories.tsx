@@ -27,7 +27,6 @@ const DotsIcon = () => (
 
 export const MyPage: Story = {
   args: {
-    trigger: <DotsIcon />,
     align: 'right',
     items: [
       { label: '마이페이지', onClick: () => {} },
@@ -36,11 +35,11 @@ export const MyPage: Story = {
       { label: '회원탈퇴', onClick: () => {} },
     ],
   },
+  render: (args) => <ActionMenu {...args} trigger={<DotsIcon />} />,
 }
 
 export const PostActions: Story = {
   args: {
-    trigger: <DotsIcon />,
     align: 'right',
     items: [
       { label: '수정', onClick: () => {} },
@@ -48,4 +47,5 @@ export const PostActions: Story = {
       { label: '신고', onClick: () => {} },
     ],
   },
+  render: (args) => <ActionMenu {...args} trigger={<DotsIcon />} />,
 }
