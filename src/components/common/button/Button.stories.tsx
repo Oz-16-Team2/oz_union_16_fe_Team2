@@ -1,18 +1,18 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 
-import { Button } from './Button'
+import Button from './Button'
 
-const meta = {
+const meta: Meta<typeof Button> = {
   title: 'Common/Button',
   component: Button,
+  parameters: { layout: 'centered' },
   tags: ['autodocs'],
   args: {
     children: '버튼',
     variant: 'primary',
     size: 'md',
-    rounded: 'default',
+    rounded: 'md',
     disabled: false,
-    fullWidth: false,
   },
   argTypes: {
     variant: {
@@ -22,10 +22,10 @@ const meta = {
         'secondary',
         'danger',
         'neutral',
-        'dark',
         'outline',
         'textDanger',
         'textPrimary',
+        'auth',
       ],
     },
     size: {
@@ -34,28 +34,23 @@ const meta = {
     },
     rounded: {
       control: 'select',
-      options: ['default', 'pill'],
+      options: ['md', 'full'],
     },
-    fullWidth: {
-      control: 'boolean',
-    },
-    leftIcon: {
-      control: false,
-    },
-    rightIcon: {
-      control: false,
-    },
+    leftIcon: { control: false },
+    rightIcon: { control: false },
   },
-} satisfies Meta<typeof Button>
+}
 
 export default meta
-type Story = StoryObj<typeof meta>
+
+type Story = StoryObj<typeof Button>
 
 export const Primary: Story = {
   args: {
     children: '투표하기',
     variant: 'primary',
     size: 'md',
+    rounded: 'md',
   },
 }
 
@@ -64,6 +59,7 @@ export const Secondary: Story = {
     children: '수정',
     variant: 'secondary',
     size: 'sm',
+    rounded: 'md',
   },
 }
 
@@ -72,6 +68,7 @@ export const Danger: Story = {
     children: '삭제',
     variant: 'danger',
     size: 'sm',
+    rounded: 'md',
   },
 }
 
@@ -80,15 +77,7 @@ export const Neutral: Story = {
     children: '취소',
     variant: 'neutral',
     size: 'sm',
-  },
-}
-
-export const Dark: Story = {
-  args: {
-    children: '로그인',
-    variant: 'dark',
-    rounded: 'pill',
-    className: 'w-[450px] py-[18px]',
+    rounded: 'md',
   },
 }
 
@@ -97,7 +86,7 @@ export const Outline: Story = {
     children: '인증',
     variant: 'outline',
     size: 'sm',
-    rounded: 'pill',
+    rounded: 'full',
   },
 }
 
@@ -106,6 +95,7 @@ export const TextDanger: Story = {
     children: '신고',
     variant: 'textDanger',
     size: 'md',
+    rounded: 'md',
   },
 }
 
@@ -114,6 +104,7 @@ export const TextPrimary: Story = {
     children: '회원가입',
     variant: 'textPrimary',
     size: 'md',
+    rounded: 'md',
     className: 'px-0 py-0',
   },
 }
@@ -123,13 +114,34 @@ export const Pill: Story = {
     children: '게시글 작성',
     variant: 'primary',
     size: 'md',
-    rounded: 'pill',
+    rounded: 'full',
   },
 }
 
 export const Disabled: Story = {
   args: {
     children: '투표하기',
+    variant: 'primary',
+    size: 'md',
+    rounded: 'md',
     disabled: true,
+  },
+}
+
+export const LoginButton: Story = {
+  args: {
+    children: '로그인',
+    variant: 'auth',
+    rounded: 'full',
+    className: 'w-[450px] py-[18px]',
+  },
+}
+
+export const SignupButton: Story = {
+  args: {
+    children: '회원가입',
+    variant: 'auth',
+    rounded: 'full',
+    className: 'w-[492px] py-[18px]',
   },
 }
