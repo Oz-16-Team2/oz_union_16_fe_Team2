@@ -1,7 +1,11 @@
 @import 'tailwindcss';
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 body {
   font-family: 'Pretendard', ui-sans-serif, system-ui, sans-serif;
+  color: var(--text-primary);
+  background-color: var(--bg-surface);
 }
 
 :root {
@@ -56,6 +60,7 @@ body {
   --shadow-card-light: 0px 2px 10px rgba(0, 0, 0, 0.25);
   --shadow-card-main: 0px 4px 10px rgba(0, 0, 0, 0.11);
   --shadow-card-hover: 0px 10px 30px rgba(0, 0, 0, 0.15);
+  --shadow-card-base: var(--shadow-card-light);
   --shadow-rank-light: 0 0 10px rgba(137, 137, 137, 0.5);
 
   /* mypage stats */
@@ -65,6 +70,25 @@ body {
   --color-mypage-stats-card-blue-bg: #eaf3ff;
   --color-mypage-stats-card-mint-bg: #eafbf3;
   --color-mypage-stats-card-yellow-bg: #fff9e5;
+
+  /* ranking background color - dark */
+  --color-rank-dark-gold-bg: #4d452e;
+  --color-rank-dark-silver-bg: #1f1f20;
+  --color-rank-dark-bronze-bg: #221b15;
+
+  /* ranking border color - dark */
+  --color-rank-dark-silver-border: #575757;
+  --color-rank-dark-bronze-border: #3e2b1e;
+
+  /* ranking text color - dark */
+  --color-rank-dark-gold-text: #ffd726;
+  --color-rank-dark-silver-text: #c7c7c7;
+  --color-rank-dark-bronze-text: #de8562;
+
+  /* mypage dark */
+  --color-mypage-stats-card-blue-border: #0194fc;
+  --color-mypage-stats-card-mint-border: #6fcf97;
+  --color-mypage-stats-card-yellow-border: #f1d26b;
 
   /* =========================
    Semantic Token
@@ -132,6 +156,10 @@ body {
   --button-secondary-hover: var(--color-primary-500);
   --button-secondary-text: var(--color-white);
 
+  --button-neutral-bg: var(--color-gray-200);
+  --button-neutral-hover: var(--color-gray-300);
+  --button-neutral-text: var(--color-gray-950);
+
   --button-danger-bg: var(--color-danger-100);
   --button-danger-hover: var(--color-danger-200);
   --button-danger-text: var(--color-danger-500);
@@ -174,6 +202,91 @@ body {
   --border-mypage-stats-card-blue: transparent;
   --border-mypage-stats-card-mint: transparent;
   --border-mypage-stats-card-yellow: transparent;
+}
+
+/* =========================
+   Dark Mode
+========================= */
+.dark {
+  /* =========================
+     Background / Text
+  ========================= */
+  --bg-surface: var(--color-gray-950);
+  --text-primary: var(--color-gray-100);
+
+  /* =========================
+     Border
+  ========================= */
+  --border-subtle: var(--color-gray-750);
+  --border-default: var(--color-gray-750);
+  --border-strong: var(--color-gray-750);
+
+  /* =========================
+     Input
+  ========================= */
+  --input-bg: var(--color-gray-800);
+  --input-border: var(--color-gray-750);
+
+  /* =========================
+     Ranking
+  ========================= */
+  --ranking-gold-bg: var(--color-rank-dark-gold-bg);
+  --ranking-silver-bg: var(--color-rank-dark-silver-bg);
+  --ranking-bronze-bg: var(--color-rank-dark-bronze-bg);
+  --ranking-default-bg: var(--color-rank-dark-silver-bg);
+
+  --ranking-default-border: var(--color-rank-dark-silver-border);
+  --ranking-silver-border: var(--color-rank-dark-silver-border);
+  --ranking-bronze-border: var(--color-rank-dark-bronze-border);
+
+  --text-ranking-gold: var(--color-rank-dark-gold-text);
+  --text-ranking-silver: var(--color-rank-dark-silver-text);
+  --text-ranking-bronze: var(--color-rank-dark-bronze-text);
+
+  --ranking-shadow: var(--shadow-rank-dark);
+
+  /* =========================
+     MyPage
+  ========================= */
+  --color-mypage-stats-bg: rgba(217, 217, 217, 0.05);
+  --color-mypage-stats-border: #454545;
+
+  --bg-mypage-stats-card-blue: transparent;
+  --bg-mypage-stats-card-mint: transparent;
+  --bg-mypage-stats-card-yellow: transparent;
+
+  --border-mypage-stats-card-blue: var(--color-mypage-stats-card-blue-border);
+  --border-mypage-stats-card-mint: var(--color-mypage-stats-card-mint-border);
+  --border-mypage-stats-card-yellow: var(
+    --color-mypage-stats-card-yellow-border
+  );
+
+  /* =========================
+     Button
+  ========================= */
+  --button-primary-bg: #4c6fb3;
+  --button-primary-hover: #5a7fcf;
+  --button-primary-text: #ffffff;
+
+  --button-secondary-bg: #4c6fb3;
+  --button-secondary-hover: #5a7fcf;
+  --button-secondary-text: #ffffff;
+
+  --button-neutral-bg: #2a2d34;
+  --button-neutral-hover: #3a3f4a;
+  --button-neutral-text: #e6eaf0;
+
+  --button-danger-bg: rgba(255, 107, 107, 0.15);
+  --button-danger-hover: rgba(255, 107, 107, 0.25);
+  --button-danger-text: #ff8a8a;
+
+  /* =========================
+     Shadow
+  ========================= */
+  --shadow-card-base: 0px 0px 10px rgba(255, 255, 255, 0.2);
+  --shadow-card-hover: var(--shadow-card-base);
+  --shadow-card-active: var(--shadow-card-base);
+  --shadow-rank-dark: 2px 1px 12px rgba(153, 127, 26, 0.5);
 }
 
 @theme inline {
@@ -230,6 +343,9 @@ body {
   --color-button-secondary-bg: var(--button-secondary-bg);
   --color-button-secondary-hover: var(--button-secondary-hover);
   --color-button-secondary-text: var(--button-secondary-text);
+  --color-button-neutral-bg: var(--button-neutral-bg);
+  --color-button-neutral-hover: var(--button-neutral-hover);
+  --color-button-neutral-text: var(--button-neutral-text);
   --color-button-danger-bg: var(--button-danger-bg);
   --color-button-danger-hover: var(--button-danger-hover);
   --color-button-danger-text: var(--button-danger-text);
@@ -262,6 +378,7 @@ body {
 
   --shadow-card-light: var(--shadow-card-light);
   --shadow-card-main: var(--shadow-card-main);
+  --shadow-card-base: var(--shadow-card-base);
   --shadow-card-hover: var(--shadow-card-hover);
   --shadow-rank-light: var(--shadow-rank-light);
   --shadow-input: var(--input-shadow);
