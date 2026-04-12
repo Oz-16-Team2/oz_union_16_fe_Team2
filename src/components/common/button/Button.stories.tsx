@@ -17,16 +17,7 @@ const meta: Meta<typeof Button> = {
   argTypes: {
     variant: {
       control: 'select',
-      options: [
-        'primary',
-        'secondary',
-        'danger',
-        'neutral',
-        'outline',
-        'textDanger',
-        'textPrimary',
-        'auth',
-      ],
+      options: ['primary', 'secondary', 'danger', 'neutral', 'outline'],
     },
     size: {
       control: 'select',
@@ -90,25 +81,6 @@ export const Outline: Story = {
   },
 }
 
-export const TextDanger: Story = {
-  args: {
-    children: '신고',
-    variant: 'textDanger',
-    size: 'md',
-    rounded: 'md',
-  },
-}
-
-export const TextPrimary: Story = {
-  args: {
-    children: '회원가입',
-    variant: 'textPrimary',
-    size: 'md',
-    rounded: 'md',
-    className: 'px-0 py-0',
-  },
-}
-
 export const Pill: Story = {
   args: {
     children: '게시글 작성',
@@ -125,23 +97,5 @@ export const Disabled: Story = {
     size: 'md',
     rounded: 'md',
     disabled: true,
-  },
-}
-
-export const LoginButton: Story = {
-  args: {
-    children: '로그인',
-    variant: 'auth',
-    rounded: 'full',
-    className: 'w-[450px] py-[18px]',
-  },
-}
-
-export const SignupButton: Story = {
-  args: {
-    children: '회원가입',
-    variant: 'auth',
-    rounded: 'full',
-    className: 'w-[492px] py-[18px]',
   },
 }
