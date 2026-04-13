@@ -8,7 +8,7 @@ import { FOOTER } from '@/constants/footer'
 
 export default function Footer() {
   return (
-    <footer className="bg-gray-950 py-14">
+    <footer className="bg-gray-950 py-14 border-t border-t-[#202020]">
       <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-4">
         <img src={DarklogoImage} className="w-14" alt="OZ Union 로고" />
         <div className="flex flex-col gap-2">
