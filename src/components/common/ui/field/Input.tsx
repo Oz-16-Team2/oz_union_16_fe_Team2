@@ -1,11 +1,11 @@
 import { cn } from '@/utils/cn'
 
-type InputProps = {
+export type InputProps = {
   error?: boolean
   errorMessage?: string
 } & React.ComponentProps<'input'>
 
-export default function Input({
+export function Input({
   className,
   error,
   errorMessage,
