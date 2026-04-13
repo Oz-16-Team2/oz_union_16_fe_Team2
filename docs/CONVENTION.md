@@ -12,7 +12,6 @@
 src
 ├── assets/images
 ├── components/common
-├── components/layouts
 ├── constants
 ├── features
 ├── hooks
@@ -28,7 +27,7 @@ src
 - 기능은 `features` 단위로 분리합니다.
 - `pages`는 라우트 진입점만 담당합니다.
 - 공통 UI는 `components/common`에 둡니다.
-- 레이아웃 컴포넌트는 `components/layouts`에 둡니다.
+- 레이아웃 컴포넌트는 `components/common/layout`에 둡니다.
 - `features`끼리는 직접 참조하지 않습니다.
 - 여러 곳에서 재사용되는 로직만 전역 폴더로 분리합니다.
 
@@ -37,8 +36,11 @@ src
 - `pages`: 라우트 단위 화면 컴포넌트
 - `router`: 라우팅 설정
 - `features`: 기능 단위 코드
-- `components/common`: 여러 곳에서 재사용하는 공통 UI
-- `components/layouts`: Header, Footer, RootLayout 같은 공통 레이아웃
+- `components/common`: 여러 곳에서 재사용하는 공통 UI, 오버레이, 레이아웃
+- `components/common/ui`: Badge, Input, Textarea ,Button 등 같은 기본 UI
+- `components/common/ui/field`: Input, Textarea 같은 입력 필드 UI
+- `components/common/overlay`: Modal, Dropdown 같은 화면 위에 뜨는 UI
+- `components/common/layout`: Header, Footer, RootLayout 같은 공통 레이아웃
 - `hooks`: 여러 곳에서 재사용하는 커스텀 훅
 - `hooks/queries`: 서버 상태, API 요청 관련 훅
 - `constants`: 여러 곳에서 공유하는 상수
@@ -64,6 +66,8 @@ src
 - 공통으로 필요해진 로직만 `hooks`, `utils`, `constants`로 분리합니다.
 - 프로젝트 내부 import는 `@/*` alias를 우선 사용합니다.
 - 공통 컴포넌트는 필요한 경우 같은 폴더에 `index.ts`를 두어 export합니다.
+- `Input`, `Textarea`처럼 입력 필드 성격의 UI는 `components/common/ui/field` 아래에 둡니다.
+- 공통 컴포넌트의 배럴 export는 각 영역의 `index.ts`에서만 관리합니다.
 
 ## features 작성 기준
 
@@ -94,15 +98,6 @@ src/features/post-create/
 
 - 공통 UI 컴포넌트는 가능하면 같은 폴더에 story를 작성합니다.
 - 스토리 파일명은 `*.stories.tsx` 형식을 사용합니다.
-
-예시
-
-```text
-src/components/common/badge/
-├── Badge.tsx
-├── Badge.stories.tsx
-└── index.ts
-```
 
 ## 커밋 전 체크
 
