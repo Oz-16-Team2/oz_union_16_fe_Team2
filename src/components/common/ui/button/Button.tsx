@@ -12,7 +12,7 @@ type ButtonProps = {
 } & React.ComponentProps<'button'> &
   VariantProps<typeof buttonVariants>
 
-export default function Button({
+export function Button({
   className,
   variant,
   size,
