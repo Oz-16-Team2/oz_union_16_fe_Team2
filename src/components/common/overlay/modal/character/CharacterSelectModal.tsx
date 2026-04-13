@@ -8,8 +8,7 @@ import {
 } from '@/assets/images'
 import { cn } from '@/utils/cn'
 
-import type { ModalProps } from '../base/Modal'
-import { Modal } from '../base/Modal'
+import { Modal, type ModalProps } from '../base/Modal'
 
 // 상수로 뺄지 일단 보류
 const CHARACTERS = [

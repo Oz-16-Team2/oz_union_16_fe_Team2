@@ -1,9 +1,7 @@
 import { useCallback, useState } from 'react'
 
-import type { DropdownOption } from '../../dropdown'
-import { Dropdown } from '../../dropdown'
-import type { ModalProps } from '../base/Modal'
-import { Modal } from '../base/Modal'
+import { Dropdown, type DropdownOption } from '../../dropdown/Dropdown'
+import { Modal, type ModalProps } from '../base/Modal'
 
 type ReportFormModalProps = {
   options: DropdownOption[]

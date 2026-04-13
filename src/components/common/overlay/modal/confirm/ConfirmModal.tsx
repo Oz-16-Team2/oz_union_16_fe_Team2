@@ -1,5 +1,4 @@
-import type { ModalProps } from '../base/Modal'
-import { Modal } from '../base/Modal'
+import { Modal, type ModalProps } from '../base/Modal'
 
 type ConfirmModalProps = {
   description: string

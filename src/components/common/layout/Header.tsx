@@ -9,7 +9,7 @@ const THEME_ICON = {
   system: Laptop,
 } as const
 
-export default function Header() {
+export function Header() {
   const { theme, setTheme } = useTheme()
 
   const ThemeIcon = THEME_ICON[theme]
