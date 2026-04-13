@@ -4,7 +4,7 @@
 
 import { Outlet } from 'react-router'
 
-import { Footer, Header } from '@/components'
+import { Footer, Header } from '@/components/layouts'
 
 export default function RootLayout() {
   return (

@@ -34,6 +34,8 @@ body {
   --color-danger-100: #ffe5e5;
   --color-danger-500: #ff4d4f;
   --color-danger-200: #fecaca;
+  /* error (brand) */
+  --color-error-500: #ec0037;
 
   /* overlay color */
   --color-overlay-50: rgba(0, 0, 0, 0.5);
@@ -84,28 +86,10 @@ body {
   /* =========================
      Border (base)
   ========================= */
-  --border-subtle: var(--color-gray-300); /* #D0CCCC */
-  --border-default: var(--color-gray-500); /* 기본 */
+  --border-default: var(--color-gray-200);
   --border-strong: var(--color-gray-700);
 
   --border-active: var(--color-primary-500);
-
-  /* =========================
-     Component - Card
-  ========================= */
-  --card-border: var(--border-default);
-  --card-wrapper-border: var(--border-default);
-
-  /* =========================
-     Component - Input / Form
-  ========================= */
-  --input-border: var(--border-default); /* 일반 input */
-  --input-card-border: var(--border-subtle); /* 카드 안 input */
-
-  --textarea-border: var(--border-default);
-
-  --input-bg: var(--color-white);
-  --textarea-bg: var(--bg-surface);
 
   /* =========================
      Focus
@@ -115,7 +99,7 @@ body {
   /* =========================
      Shadow
   ========================= */
-  --shadow-input: var(--shadow-card-main);
+  --shadow-input: var(--shadow-card-light);
   --shadow-none: none;
 
   --input-shadow: var(--shadow-input);
@@ -133,6 +117,9 @@ body {
   --status-danger-bg: var(--color-danger-100);
   --status-danger-text: var(--color-danger-500);
   --status-danger-hover: var(--color-danger-200);
+  /* error (semantic) */
+  --status-error-text: var(--color-error-500);
+  --status-error-border: var(--color-error-500);
 
   /* =========================
      Button
@@ -214,6 +201,7 @@ body {
   --color-danger-100: var(--color-danger-100);
   --color-danger-200: var(--color-danger-200);
   --color-danger-500: var(--color-danger-500);
+  --color-error-500: var(--color-error-500);
 
   --color-surface: var(--bg-surface);
   --color-overlay: var(--bg-overlay);
@@ -222,19 +210,10 @@ body {
   --color-text-muted: var(--text-muted);
   --color-text-inverse: var(--text-inverse);
 
-  --color-border-subtle: var(--border-subtle);
   --color-border-default: var(--border-default);
   --color-border-strong: var(--border-strong);
   --color-border-active: var(--border-active);
 
-  --color-card-border: var(--card-border);
-  --color-card-wrapper-border: var(--card-wrapper-border);
-
-  --color-input-border: var(--input-border);
-  --color-input-card-border: var(--input-card-border);
-  --color-textarea-border: var(--textarea-border);
-  --color-input-bg: var(--input-bg);
-  --color-textarea-bg: var(--textarea-bg);
   --color-focus-border: var(--focus-border);
 
   --color-status-success-bg: var(--status-success-bg);
@@ -242,6 +221,8 @@ body {
   --color-status-danger-bg: var(--status-danger-bg);
   --color-status-danger-text: var(--status-danger-text);
   --color-status-danger-hover: var(--status-danger-hover);
+  --color-status-error-text: var(--status-error-text);
+  --color-status-error-border: var(--status-error-border);
 
   --color-button-primary-bg: var(--button-primary-bg);
   --color-button-primary-hover: var(--button-primary-hover);
