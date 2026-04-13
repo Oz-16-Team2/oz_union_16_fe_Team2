@@ -1,5 +1,5 @@
 export type { BadgeProps } from './badge/Badge'
 export { Badge } from './badge/Badge'
 export { Input, type InputProps } from './field/Input'
+export { SearchBar, type SearchBarProps } from './field/SearchBar'
 export { Textarea, type TextareaProps } from './field/Textarea'
-export { SearchBar, type SearchBarProps } from './search-bar/SearchBar'

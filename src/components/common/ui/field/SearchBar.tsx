@@ -2,8 +2,9 @@ import { useRef } from 'react'
 
 import { Search } from 'lucide-react'
 
-import { Input } from '@/components/common/ui/field/Input'
 import { cn } from '@/utils/cn'
+
+import { Input } from './Input'
 
 export type SearchBarProps = {
   onSearch?: (value: string) => void
