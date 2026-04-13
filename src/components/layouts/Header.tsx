@@ -31,10 +31,14 @@ export default function Header() {
   return (
     <header className="max-w-7xl mx-auto w-full">
       <div className="flex items-center justify-between py-3 px-4">
-        <img src={logoImage} className="w-12 dark:hidden" alt="OZ Union 로고" />
+        <img
+          src={logoImage}
+          className="w-12 h-11 dark:hidden"
+          alt="OZ Union 로고"
+        />
         <img
           src={DarklogoImage}
-          className="hidden w-12 dark:block"
+          className="hidden w-12 h-11 dark:block"
           alt="OZ Union 로고"
         />
         <div className="flex items-center gap-2">
