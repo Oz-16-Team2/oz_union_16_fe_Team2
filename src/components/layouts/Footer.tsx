@@ -24,7 +24,7 @@ export default function Footer() {
                 className="flex items-center gap-2 rounded-full bg-white/5 px-4 py-2 text-sm text-gray-400 transition-all duration-200 hover:bg-white/10 hover:text-white hover:scale-105"
               >
                 <svg
-                  className="h-4 w-4"
+                  className="size-4 "
                   viewBox="0 0 19 19"
                   aria-hidden="true"
                   fill="none"

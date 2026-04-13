@@ -8,8 +8,7 @@ import {
 } from '@/assets/images'
 import { cn } from '@/utils/cn'
 
-import type { ModalProps } from '../base/Modal'
-import { Modal } from '../base/Modal'
+import { Modal, type ModalProps } from '../base/Modal'
 
 // 상수로 뺄지 일단 보류
 const CHARACTERS = [
@@ -47,7 +46,7 @@ export function CharacterSelectModal({
     >
       <Modal.Header
         description={
-          <p className="text-[10px] text-red-400">
+          <p className="text-2xs text-red-400">
             프로필 캐릭터는 한 번 선택하면 변경할 수 없습니다.
           </p>
         }
@@ -63,15 +62,11 @@ export function CharacterSelectModal({
               aria-label={label}
               onClick={() => setSelectedId(id)}
               className={cn(
-                'relative flex size-[70px] cursor-pointer transition-transform duration-300',
+                'relative flex size-17.5 cursor-pointer transition-transform duration-300',
                 selectedId === id && 'scale-110'
               )}
             >
-              <img
-                src={src}
-                alt={label}
-                className="h-full w-full object-contain"
-              />
+              <img src={src} alt={label} className="size-full object-contain" />
               {selectedId !== id && (
                 <div className="pointer-events-none absolute inset-0 rounded-full bg-gray-200/70" />
               )}

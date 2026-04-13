@@ -279,6 +279,8 @@ body {
     --border-mypage-stats-card-yellow
   );
 
+  --text-2xs: 0.625rem;
+
   --shadow-card-light: var(--shadow-card-light);
   --shadow-card-main: var(--shadow-card-main);
   --shadow-card-hover: var(--shadow-card-hover);
