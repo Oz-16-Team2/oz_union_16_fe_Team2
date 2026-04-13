@@ -1,12 +1,13 @@
 import { DarklogoImage } from '@/assets/images'
-import { FOOTER } from '@/constants/footer'
+
+import { FOOTER_GITHUB_LINKS } from './constants/footer'
 
 /**
  * TODO: Footer 디자인 임시 구현
  * - 현재는 기본 레이아웃만 구성된 상태
  */
 
-export default function Footer() {
+export function Footer() {
   return (
     <footer className="bg-gray-950 py-14 border-t border-t-[#202020]">
       <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-4">
@@ -14,7 +15,7 @@ export default function Footer() {
         <div className="flex flex-col gap-2">
           <span className="text-xs text-gray-500">GitHub</span>
           <div className="flex items-center gap-3">
-            {FOOTER.githubLinks.map(({ href, label, text }) => (
+            {FOOTER_GITHUB_LINKS.map(({ href, label, text }) => (
               <a
                 key={href}
                 href={href}

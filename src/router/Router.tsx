@@ -1,6 +1,6 @@
 import { createBrowserRouter } from 'react-router'
 
-import { RootLayout } from '@/components/layouts'
+import { RootLayout } from '@/components/common/layout'
 import { Main } from '@/pages'
 
 /*

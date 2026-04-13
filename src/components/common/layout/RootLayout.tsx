@@ -4,9 +4,9 @@
 
 import { Outlet } from 'react-router'
 
-import { Footer, Header } from '@/components/layouts'
+import { Footer, Header } from '@/components/common/layout'
 
-export default function RootLayout() {
+export function RootLayout() {
   return (
     <div className="flex min-h-screen flex-col">
       <Header />

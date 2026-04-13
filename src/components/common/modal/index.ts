@@ -1,5 +1,0 @@
-export type { ModalProps } from './base'
-export { Modal, ModalContent, ModalFooter, ModalHeader } from './base'
-export { CharacterSelectModal } from './character'
-export { ConfirmModal } from './confirm'
-export { ReportFormModal } from './form'

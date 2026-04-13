@@ -1,1 +1,0 @@
-export { CharacterSelectModal } from './CharacterSelectModal'
