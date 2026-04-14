@@ -1,20 +1,19 @@
 import { cn } from '@/utils/cn'
 
-import type { LoadingProps } from './Loading.type'
+import type { LoadingProps, LoadingSize } from './Loading.type'
 
-const sizeClassMap = {
+const sizeClassMap: Record<LoadingSize, string> = {
   sm: 'h-4 w-4 border-2',
   md: 'h-6 w-6 border-2',
   lg: 'h-8 w-8 border-[3px]',
 }
 
-const textSizeClassMap = {
+const textSizeClassMap: Record<LoadingSize, string> = {
   sm: 'text-xs',
   md: 'text-sm',
   lg: 'text-base',
 }
 
-// 로딩 인디케이터 컴포넌트
 export function Loading({
   size = 'md',
   label = '로딩 중',
@@ -39,7 +38,7 @@ export function Loading({
         <span
           aria-hidden="true"
           className={cn(
-            'inline-block animate-spin rounded-full border-[var(--color-gray-300)] border-t-[var(--color-primary-500)]',
+            'inline-block animate-spin rounded-full border-[var(--color-border-default)] border-t-[var(--color-button-primary-bg)]',
             sizeClassMap[size]
           )}
         />
