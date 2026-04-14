@@ -38,14 +38,14 @@ export function Loading({
         <span
           aria-hidden="true"
           className={cn(
-            'inline-block animate-spin rounded-full border-[var(--color-border-default)] border-t-[var(--color-button-primary-bg)]',
+            'inline-block animate-spin rounded-full border-border-default border-t-button-primary-bg',
             sizeClassMap[size]
           )}
         />
         {showLabel ? (
           <span
             className={cn(
-              'font-medium text-[var(--color-text-muted)]',
+              'font-medium text-text-muted',
               textSizeClassMap[size]
             )}
           >
