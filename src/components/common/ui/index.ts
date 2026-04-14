@@ -1,5 +1,7 @@
 export type { BadgeProps } from './badge/Badge'
 export { Badge } from './badge/Badge'
+export { Button } from './button/Button'
+export { Calendar } from './calendar/Calendar'
 export { Input, type InputProps } from './field/Input'
 export { SearchBar, type SearchBarProps } from './field/SearchBar'
 export { Textarea, type TextareaProps } from './field/Textarea'
