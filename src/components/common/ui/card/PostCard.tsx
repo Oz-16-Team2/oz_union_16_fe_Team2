@@ -20,12 +20,12 @@ export function PostCard({
   preview,
   likeCount,
   commentCount,
-  isBookmarked = false,
-  isLiked = false,
-  onClick,
-  onLike,
-  onShare,
-  onBookmark,
+  isBookmarked = false, // 스크랩 여부
+  isLiked = false, // 좋아요 여부
+  onClick, // 게시글 클릭 시 이동할 페이지로 이동
+  onLike, // 좋아요 버튼 클릭 시
+  onShare, // 공유 버튼 클릭 시
+  onBookmark, // 스크랩 버튼 클릭 시
 }: PostCardProps) {
   const [bookmarked, setBookmarked] = useState(isBookmarked)
   const [liked, setLiked] = useState(isLiked)
