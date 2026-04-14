@@ -18,7 +18,7 @@ export function Input({
         ref={ref}
         {...props}
         className={cn(
-          'w-full rounded-xl border border-border-default bg-white px-4.5 py-3.5 text-text-primary outline-none placeholder:text-text-muted transition-colors disabled:cursor-not-allowed disabled:opacity-50',
+          'w-full rounded-xl border border-border-default bg-input-bg px-4.5 py-3.5 text-text-primary outline-none placeholder:text-text-muted transition-colors disabled:cursor-not-allowed disabled:opacity-50',
           error
             ? 'border-status-error-border focus:border-status-error-border'
             : 'focus:border-focus-border',
