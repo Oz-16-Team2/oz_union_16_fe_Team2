@@ -19,16 +19,21 @@ export const buttonVariants = cva(
         outline: 'border border-border-subtle bg-gray-100 text-text-muted',
 
         ghost: 'bg-transparent text-text-muted hover:bg-gray-100',
+
+        modal:
+          'bg-button-modal-cancel-bg text-white hover:bg-button-modal-cancel-hover',
       },
 
       size: {
         sm: 'py-1 text-xs',
         md: 'py-1.5 text-sm',
+        lg: 'py-2 text-base',
       },
 
       rounded: {
         md: 'rounded-md',
         full: 'rounded-full',
+        lg: 'rounded-lg',
       },
     },
 
