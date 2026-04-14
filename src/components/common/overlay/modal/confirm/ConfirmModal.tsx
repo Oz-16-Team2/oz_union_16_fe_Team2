@@ -1,3 +1,5 @@
+import { Button } from '@/components/common/ui'
+
 import { Modal, type ModalProps } from '../base/Modal'
 
 type ConfirmModalProps = {
@@ -27,25 +29,28 @@ export function ConfirmModal({
       className={className}
     >
       <div className="flex flex-col gap-7">
-        <Modal.Content className="text-base leading-[1.4] tracking-[-0.03em] text-gray-800">
+        <Modal.Content className="text-base leading-[1.4] tracking-[-0.03em] text-text-primary">
           {description}
         </Modal.Content>
         <Modal.Footer className="justify-end gap-3">
-          {/* TODO: 버튼 공통 컴포넌트 만들면 적용 */}
-          <button
-            type="button"
+          <Button
+            variant="modal"
+            size="lg"
+            rounded="full"
             onClick={onClose}
-            className="rounded-[100px] bg-gray-950 px-6 py-2 text-base font-semibold text-white"
+            className="px-6 font-semibold"
           >
             {cancelLabel}
-          </button>
-          <button
-            type="button"
+          </Button>
+          <Button
+            variant="primary"
+            size="lg"
+            rounded="full"
             onClick={onConfirm}
-            className="rounded-[100px] bg-primary-500 px-6 py-2 text-base font-semibold text-white"
+            className="px-6 font-semibold"
           >
             {confirmLabel}
-          </button>
+          </Button>
         </Modal.Footer>
       </div>
     </Modal>

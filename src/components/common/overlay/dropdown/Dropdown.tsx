@@ -11,7 +11,7 @@ const MAX_VISIBLE_ITEMS = 4
 const LIST_MAX_HEIGHT = ITEM_HEIGHT * MAX_VISIBLE_ITEMS
 
 const dropdownTriggerVariants = cva(
-  'flex w-full items-center justify-between border border-border-default bg-white text-sm text-text-muted transition-colors cursor-pointer',
+  'flex w-full items-center justify-between border border-border-default bg-surface text-sm text-text-muted transition-colors cursor-pointer',
   {
     variants: {
       size: {
@@ -26,7 +26,7 @@ const dropdownTriggerVariants = cva(
 )
 
 const dropdownListVariants = cva(
-  'absolute left-0 right-0 z-50 mt-2 overflow-hidden bg-white',
+  'absolute left-0 right-0 z-50 mt-2 overflow-hidden bg-surface',
   {
     variants: {
       size: {
@@ -89,7 +89,6 @@ export function Dropdown({
 
   return (
     <div ref={ref} className="relative w-full min-w-64">
-      {/* TODO: 버튼 공통 컴포넌트 만들면 적용 */}
       <button
         id={id}
         type="button"
@@ -97,7 +96,7 @@ export function Dropdown({
         className={cn(
           dropdownTriggerVariants({ size }),
           (isOpen || value) && 'border-border-active',
-          value && 'text-gray-900 cursor-pointer'
+          value && 'text-text-primary cursor-pointer'
         )}
       >
         <span>{selectedLabel ?? placeholder}</span>
@@ -105,7 +104,7 @@ export function Dropdown({
           size={16}
           strokeWidth={1.5}
           className={cn(
-            'text-gray-700 transition-transform duration-200',
+            'text-text-muted transition-transform duration-200',
             isOpen && 'rotate-180'
           )}
         />
@@ -137,7 +136,7 @@ export function Dropdown({
                     'w-full p-4 text-left text-sm rounded-sm transition-colors cursor-pointer',
                     value === opt.value
                       ? 'bg-primary-500 text-white'
-                      : 'hover:bg-primary-100/21 hover:text-primary-600 hover:font-semibold'
+                      : 'text-text-primary hover:bg-dropdown-item-hover-bg hover:text-dropdown-item-hover-text hover:font-semibold'
                   )}
                 >
                   {opt.label}

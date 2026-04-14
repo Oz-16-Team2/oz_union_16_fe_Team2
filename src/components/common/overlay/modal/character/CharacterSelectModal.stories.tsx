@@ -43,3 +43,18 @@ export const Default: Story = {
     onClose: () => {},
   },
 }
+
+export const Dark: Story = {
+  decorators: [
+    (Story) => (
+      <div className="dark">
+        <Story />
+      </div>
+    ),
+  ],
+  render: (args) => <CharacterSelectModal {...args} />,
+  args: {
+    onSelect: () => {},
+    onClose: () => {},
+  },
+}

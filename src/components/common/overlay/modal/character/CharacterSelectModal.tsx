@@ -6,6 +6,7 @@ import {
   pinkCharacterImage,
   yellowCharacterImage,
 } from '@/assets/images'
+import { Button } from '@/components/common/ui'
 import { cn } from '@/utils/cn'
 
 import { Modal, type ModalProps } from '../base/Modal'
@@ -72,30 +73,31 @@ export function CharacterSelectModal({
                 className="h-full w-full object-contain"
               />
               {selectedId !== id && (
-                <div className="pointer-events-none absolute inset-0 rounded-full bg-gray-200/70" />
+                <div className="pointer-events-none absolute inset-0 rounded-full bg-gray-200/70 dark:bg-gray-950/50" />
               )}
             </button>
           ))}
         </div>
       </Modal.Content>
-      <Modal.Footer className="mt-7 gap-3 font-light text-white text-xs">
-        {/* TODO: 버튼 공통 컴포넌트 만들면 적용 */}
-        <button
-          type="button"
+      <Modal.Footer className="mt-7 gap-3">
+        <Button
+          variant="modal"
+          rounded="lg"
           onClick={onClose}
-          className="rounded-lg bg-gray-950 px-5 py-1.5 cursor-pointer"
+          className="px-5 py-1.5 text-xs font-light"
         >
           닫기
-        </button>
-        <button
-          type="button"
+        </Button>
+        <Button
+          variant="primary"
+          rounded="lg"
           onClick={handleSelect}
           disabled={!selectedId}
           aria-disabled={!selectedId}
-          className="rounded-lg bg-primary-500 px-5 py-1.5 cursor-pointer"
+          className="px-5 py-1.5 text-xs font-light"
         >
           선택
-        </button>
+        </Button>
       </Modal.Footer>
     </Modal>
   )

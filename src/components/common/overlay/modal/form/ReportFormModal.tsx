@@ -1,4 +1,6 @@
-import { useCallback, useState } from 'react'
+import { useState } from 'react'
+
+import { Button, Textarea } from '@/components/common/ui'
 
 import { Dropdown, type DropdownOption } from '../../dropdown/Dropdown'
 import { Modal, type ModalProps } from '../base/Modal'
@@ -22,20 +24,10 @@ export function ReportFormModal({
   const [reason, setReason] = useState('')
   const [content, setContent] = useState('')
 
-  const handleContentChange = useCallback(
-    (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-      setContent(e.target.value)
-    },
-    []
-  )
-
-  const handleSubmit = useCallback(
-    (e: React.FormEvent<HTMLFormElement>) => {
-      e.preventDefault()
-      onSubmit({ reason, content })
-    },
-    [onSubmit, reason, content]
-  )
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    onSubmit({ reason, content })
+  }
 
   return (
     <Modal
@@ -51,7 +43,7 @@ export function ReportFormModal({
           <div className="grid grid-cols-[auto_1fr] items-center gap-x-4 gap-y-3">
             <label
               htmlFor="reason"
-              className="whitespace-nowrap text-sm text-gray-700"
+              className="whitespace-nowrap text-sm text-text-muted"
             >
               사유 선택
             </label>
@@ -64,35 +56,35 @@ export function ReportFormModal({
             />
             <label
               htmlFor="content"
-              className="whitespace-nowrap text-sm text-gray-700"
+              className="whitespace-nowrap text-sm text-text-muted"
             >
               직접 입력
             </label>
-            {/* TODO: 텍스트 에어리어 공통 컴포넌트 만들면 적용 */}
-            <textarea
+            <Textarea
               id="content"
-              rows={3}
+              size="sm"
               value={content}
-              onChange={handleContentChange}
-              className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+              onChange={(e) => setContent(e.target.value)}
             />
           </div>
         </Modal.Content>
-        <Modal.Footer className="mt-7 gap-3 font-light text-white text-xs">
-          {/* TODO: 버튼 공통 컴포넌트 만들면 적용 */}
-          <button
-            type="button"
+        <Modal.Footer className="mt-7 gap-3">
+          <Button
+            variant="modal"
+            rounded="lg"
             onClick={onClose}
-            className="rounded-lg bg-gray-950 px-5 py-1.5 cursor-pointer"
+            className="px-5 py-1.5 text-xs font-light"
           >
             닫기
-          </button>
-          <button
+          </Button>
+          <Button
+            variant="primary"
+            rounded="lg"
             type="submit"
-            className="rounded-lg bg-primary-500 px-5 py-1.5 cursor-pointer"
+            className="px-5 py-1.5 text-xs font-light"
           >
             등록
-          </button>
+          </Button>
         </Modal.Footer>
       </form>
     </Modal>

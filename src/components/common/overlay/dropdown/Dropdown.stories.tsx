@@ -30,3 +30,14 @@ export const Default: Story = {
     )
   },
 }
+
+export const DarkDefault: Story = {
+  render: () => {
+    const [value, setValue] = useState('')
+    return (
+      <div className="dark bg-surface p-6 rounded-lg w-[340px]">
+        <Dropdown options={reportOptions} value={value} onChange={setValue} />
+      </div>
+    )
+  },
+}
