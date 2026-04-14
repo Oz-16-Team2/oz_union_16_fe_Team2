@@ -49,6 +49,18 @@ export const Completed: GoalCardStory = {
   ),
 }
 
+export const NotAchieved: GoalCardStory = {
+  render: () => (
+    <GoalCard
+      title="운동하기"
+      status="미달성"
+      startDate="2026.04.01"
+      endDate="2026.08.09"
+      onDelete={() => alert('삭제')}
+    />
+  ),
+}
+
 export const DarkDefault: GoalCardStory = {
   render: () => (
     <div className="dark bg-surface p-6 rounded-lg">
