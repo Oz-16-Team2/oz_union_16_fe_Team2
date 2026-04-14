@@ -14,6 +14,7 @@ body {
   ======================== */
 
   /* primary */
+  --color-primary-50: #e8f1ff;
   --color-primary-100: #e3eef7;
   --color-primary-400: #6b94ff;
   --color-primary-500: #3c7dff;
@@ -164,6 +165,15 @@ body {
   --button-danger-hover: var(--color-danger-200);
   --button-danger-text: var(--color-danger-500);
 
+  --button-modal-cancel-bg: var(--color-gray-950);
+  --button-modal-cancel-hover: var(--color-gray-700);
+
+  /* =========================
+     Dropdown
+  ========================= */
+  --dropdown-item-hover-bg: var(--color-primary-50);
+  --dropdown-item-hover-text: var(--color-primary-600);
+
   /* =========================
      Tab
   ========================= */
@@ -280,6 +290,15 @@ body {
   --button-danger-hover: rgba(255, 107, 107, 0.25);
   --button-danger-text: #ff8a8a;
 
+  --button-modal-cancel-bg: var(--color-gray-700);
+  --button-modal-cancel-hover: var(--color-gray-500);
+
+  /* =========================
+     Dropdown
+  ========================= */
+  --dropdown-item-hover-bg: transparent;
+  --dropdown-item-hover-text: var(--color-primary-400);
+
   /* =========================
      Shadow
   ========================= */
@@ -291,6 +310,8 @@ body {
 
 @theme inline {
   --font-sans: 'Pretendard', ui-sans-serif, system-ui, sans-serif;
+
+  --text-2xs: 0.625rem;
 
   --color-primary-100: var(--color-primary-100);
   --color-primary-400: var(--color-primary-400);
@@ -349,6 +370,12 @@ body {
   --color-button-danger-bg: var(--button-danger-bg);
   --color-button-danger-hover: var(--button-danger-hover);
   --color-button-danger-text: var(--button-danger-text);
+
+  --color-button-modal-cancel-bg: var(--button-modal-cancel-bg);
+  --color-button-modal-cancel-hover: var(--button-modal-cancel-hover);
+
+  --color-dropdown-item-hover-bg: var(--dropdown-item-hover-bg);
+  --color-dropdown-item-hover-text: var(--dropdown-item-hover-text);
 
   --color-tab-active-bg: var(--tab-active-bg);
   --color-tab-hover-bg: var(--tab-hover-bg);
