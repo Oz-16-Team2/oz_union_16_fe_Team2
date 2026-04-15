@@ -29,6 +29,10 @@ export function ReportFormModal({
     onSubmit({ reason, content })
   }
 
+  const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setContent(e.target.value)
+  }
+
   return (
     <Modal
       onClose={onClose}
@@ -64,7 +68,7 @@ export function ReportFormModal({
               id="content"
               size="sm"
               value={content}
-              onChange={(e) => setContent(e.target.value)}
+              onChange={handleContentChange}
             />
           </div>
         </Modal.Content>
