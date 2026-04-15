@@ -50,7 +50,7 @@ export function ActionMenu({
       {(isOpen || isClosing) && (
         <ul
           className={cn(
-            'absolute z-10 mt-1 min-w-30 rounded-xl shadow-card-main px-4 py-3.5',
+            'absolute z-10 mt-1 min-w-30 rounded-xl shadow-card-main bg-surface px-4 py-3.5',
             align === 'right' ? 'right-0' : 'left-0',
             isClosing
               ? 'animate-[dropdown-out_0.2s_ease-in_forwards]'
@@ -66,7 +66,7 @@ export function ActionMenu({
                   onClick()
                   close()
                 }}
-                className="w-full px-1.5 py-1 text-center text-sm rounded-sm cursor-pointer hover:bg-primary-100 hover:text-primary-600 hover:font-semibold"
+                className="w-full px-1.5 py-1 text-center text-sm rounded-sm cursor-pointer text-text-primary hover:bg-dropdown-item-hover-bg hover:text-dropdown-item-hover-text hover:font-semibold"
               >
                 {label}
               </button>

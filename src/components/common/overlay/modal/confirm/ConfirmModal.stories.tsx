@@ -88,3 +88,40 @@ export const Register: Story = {
     cancelLabel: '취소',
   },
 }
+
+export const DarkDelete: Story = {
+  decorators: [
+    (Story) => (
+      <div className="dark">
+        <Story />
+      </div>
+    ),
+  ],
+  render: (args) => <ConfirmModal {...args} />,
+  args: {
+    description:
+      '삭제된 내용은 복구할 수 없습니다.\n게시글을 정말로 삭제하시겠습니까?',
+    confirmLabel: '삭제',
+    cancelLabel: '취소',
+    onConfirm: () => {},
+    onClose: () => {},
+  },
+}
+
+export const DarkRegister: Story = {
+  decorators: [
+    (Story) => (
+      <div className="dark">
+        <Story />
+      </div>
+    ),
+  ],
+  render: (args) => <ConfirmModal {...args} />,
+  args: {
+    description: '게시글을 등록하시겠습니까?',
+    confirmLabel: '등록',
+    cancelLabel: '취소',
+    onConfirm: () => {},
+    onClose: () => {},
+  },
+}

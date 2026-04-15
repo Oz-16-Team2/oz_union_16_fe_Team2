@@ -9,7 +9,7 @@ import { ModalContent } from './ModalContent'
 import { ModalFooter } from './ModalFooter'
 import { ModalHeader } from './ModalHeader'
 
-const modalVariants = cva('w-full bg-white shadow-card-active', {
+const modalVariants = cva('w-full bg-surface shadow-card-active', {
   variants: {
     size: {
       default: 'max-w-100 text-sm p-7',
@@ -22,7 +22,7 @@ const modalVariants = cva('w-full bg-white shadow-card-active', {
     },
     border: {
       none: '',
-      default: 'border border-gray-200',
+      default: 'border border-border-default',
       // 추가 가능
     },
   },

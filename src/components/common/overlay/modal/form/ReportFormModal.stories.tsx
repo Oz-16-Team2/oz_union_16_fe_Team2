@@ -48,3 +48,19 @@ export const Report: Story = {
     options: REPORT_REASONS,
   },
 }
+
+export const Dark: Story = {
+  decorators: [
+    (Story) => (
+      <div className="dark">
+        <Story />
+      </div>
+    ),
+  ],
+  render: (args) => <ReportFormModal {...args} title="신고 선택 및 작성" />,
+  args: {
+    options: REPORT_REASONS,
+    onClose: () => {},
+    onSubmit: () => {},
+  },
+}
