@@ -20,3 +20,12 @@ export { TabButton } from './tab-button/TabButton'
 export { GlobalToast } from './toast/GlobalToast'
 export { Toast } from './toast/Toast'
 export { type ToastProps, type ToastType, useToast } from './toast/useToast'
+export type {
+  VoteDisplayOption,
+  VoteDisplayProps,
+  VoteEditorMode,
+  VoteEditorProps,
+  VoteViewerMode,
+} from './vote/Vote.type'
+export { VoteDisplay } from './vote/VoteDisplay'
+export { VoteEditor } from './vote/VoteEditor'
