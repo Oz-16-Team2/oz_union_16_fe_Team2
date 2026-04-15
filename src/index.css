@@ -116,6 +116,7 @@ body {
 
   --border-active: var(--color-primary-500);
 
+  --input-bg: var(--color-white);
   /* =========================
      Focus
   ========================= */
@@ -376,6 +377,8 @@ body {
 
   --color-dropdown-item-hover-bg: var(--dropdown-item-hover-bg);
   --color-dropdown-item-hover-text: var(--dropdown-item-hover-text);
+
+  --color-input-bg: var(--input-bg);
 
   --color-tab-active-bg: var(--tab-active-bg);
   --color-tab-hover-bg: var(--tab-hover-bg);
