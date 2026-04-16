@@ -3,11 +3,10 @@ import { CalendarDays, Users } from 'lucide-react'
 import { Button } from '@/components/common/ui'
 import { cn } from '@/utils/cn'
 
-import { voteButtonVariants } from './Vote.style'
-import type { VoteEditorProps } from './Vote.type'
+import { VoteEditorMode, type VoteEditorProps } from './Vote.type'
 
 function getSubmitLabel(mode: VoteEditorProps['mode']) {
-  return mode === 'edit' ? '투표 수정 하기' : '투표 생성 하기'
+  return mode === VoteEditorMode.EDIT ? '투표 수정하기' : '투표 생성하기'
 }
 
 const inputVariants = {
@@ -33,7 +32,7 @@ export function VoteEditor({
   onClickPeriod,
 }: VoteEditorProps) {
   const hasPeriod = Boolean(startDate && endDate)
-  const hasValidOptions = options.every((opt) => opt.trim() !== '')
+  const hasValidOptions = options.every((option) => option.trim() !== '')
   const isSubmitDisabled = disabled || !hasPeriod || !hasValidOptions
   const submitLabel = getSubmitLabel(mode)
 
@@ -95,19 +94,15 @@ export function VoteEditor({
         </div>
 
         <div className="mt-8 flex justify-center">
-          <button
+          <Button
             type="button"
+            variant="primary"
             onClick={onSubmit}
             disabled={isSubmitDisabled}
-            className={cn(
-              voteButtonVariants.base,
-              isSubmitDisabled
-                ? voteButtonVariants.disabled
-                : voteButtonVariants.enabled
-            )}
+            className="h-10 w-full max-w-md"
           >
             {submitLabel}
-          </button>
+          </Button>
         </div>
       </section>
 
