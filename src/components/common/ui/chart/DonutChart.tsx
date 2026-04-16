@@ -9,7 +9,7 @@ export function DonutChart({
   progressRate,
   status = 'progress',
 }: DonutChartProps) {
-  const percentage = Math.min(100, Math.max(0, Math.round(progressRate)))
+  const percentage = Math.min(100, Math.max(0, progressRate))
 
   // 상태별 색상
   const gaugeColor =
