@@ -439,3 +439,17 @@ body {
     transform: translateY(-6px);
   }
 }
+
+/* =========================
+   Autofill override (Chrome/Safari)
+   ========================= */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+  /* remove default autofill background */
+  -webkit-box-shadow: 0 0 0px 1000px transparent inset;
+  /* ensure text color matches theme (dark mode visible) */
+  -webkit-text-fill-color: var(--text-primary);
+  /* prevent flash of default color */
+  transition: background-color 9999s ease-out 0s;
+}
