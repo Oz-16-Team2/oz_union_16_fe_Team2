@@ -1,4 +1,4 @@
-import { CalendarDays, Users } from 'lucide-react'
+import { CalendarDays, Check, Users } from 'lucide-react'
 
 import { cn } from '@/utils/cn'
 
@@ -17,6 +17,12 @@ const optionVariants = {
   gauge: {
     first: 'bg-gray-300',
     second: 'bg-primary-100',
+  },
+
+  indicator: {
+    selected:
+      'flex size-4 items-center justify-center rounded-sm bg-primary-400 text-white',
+    default: 'flex size-4 items-center justify-center rounded-sm bg-gray-300',
   },
 }
 
@@ -67,7 +73,11 @@ export function VoteDisplay({
         {(showMoreButton || actionSlot) && (
           <div className="mb-4 flex justify-end">
             {actionSlot ?? (
-              <button type="button" className="text-xl text-text-muted">
+              <button
+                type="button"
+                aria-label="더보기"
+                className="text-xl text-text-muted"
+              >
                 ...
               </button>
             )}
@@ -77,6 +87,10 @@ export function VoteDisplay({
         <div className="flex flex-col gap-4">
           {options.map((option, index) => {
             const isSelected = Boolean(option.checked)
+            const percentage = Math.min(
+              100,
+              Math.max(0, option.percentage ?? 0)
+            )
 
             const textColor = isSelected
               ? optionVariants.text.selected
@@ -93,7 +107,15 @@ export function VoteDisplay({
                 className={optionVariants.base}
               >
                 <span className="flex items-center justify-center">
-                  <span className="h-[11px] w-[12px] rounded-sm bg-gray-300" />
+                  <span
+                    className={cn(
+                      isSelected
+                        ? optionVariants.indicator.selected
+                        : optionVariants.indicator.default
+                    )}
+                  >
+                    {isSelected && <Check className="size-3" strokeWidth={3} />}
+                  </span>
                 </span>
 
                 <span className={cn('text-sm font-medium', textColor)}>
@@ -109,7 +131,7 @@ export function VoteDisplay({
                         : optionVariants.gauge.second
                     )}
                     style={{
-                      width: showResult ? `${option.percentage ?? 0}%` : '100%',
+                      width: showResult ? `${percentage}%` : '100%',
                     }}
                   >
                     <span className="truncate">{option.valueLabel}</span>
@@ -117,7 +139,7 @@ export function VoteDisplay({
                 </div>
 
                 <span className={cn('text-right text-xs', textColor)}>
-                  {showResult ? `${option.percentage ?? 0}%` : ''}
+                  {showResult ? `${percentage}%` : ''}
                 </span>
               </button>
             )
