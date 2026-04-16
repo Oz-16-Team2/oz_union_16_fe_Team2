@@ -3,6 +3,7 @@ import { CalendarDays, Users } from 'lucide-react'
 import { Button } from '@/components/common/ui'
 import { cn } from '@/utils/cn'
 
+import { voteButtonVariants } from './Vote.style'
 import type { VoteEditorProps } from './Vote.type'
 
 function getSubmitLabel(mode: VoteEditorProps['mode']) {
@@ -10,7 +11,7 @@ function getSubmitLabel(mode: VoteEditorProps['mode']) {
 }
 
 const inputVariants = {
-  base: 'h-[54px] w-full rounded-full px-5 text-[14px] outline-none placeholder:text-text-muted',
+  base: 'h-14 w-full rounded-full px-5 text-sm outline-none placeholder:text-text-muted',
 
   enabled: {
     first: 'border border-gray-300 bg-gray-300 text-text-primary',
@@ -18,15 +19,6 @@ const inputVariants = {
   },
 
   disabled: 'border border-border-default bg-gray-100 text-text-muted',
-}
-
-const buttonVariants = {
-  base: 'h-[42px] w-[464px] rounded-lg text-[16px] font-medium',
-
-  enabled:
-    'bg-button-primary-bg text-button-primary-text hover:bg-button-primary-hover',
-
-  disabled: 'cursor-not-allowed bg-gray-400 text-white',
 }
 
 export function VoteEditor({
@@ -47,7 +39,6 @@ export function VoteEditor({
 
   return (
     <>
-      {/* 기간 */}
       <Button
         type="button"
         variant="ghost"
@@ -57,7 +48,7 @@ export function VoteEditor({
         <CalendarDays className="h-4 w-4 text-text-muted" />
         <span
           className={cn(
-            'text-[14px]',
+            'text-sm',
             hasPeriod ? 'text-text-primary' : 'text-text-muted'
           )}
         >
@@ -65,7 +56,6 @@ export function VoteEditor({
         </span>
       </Button>
 
-      {/* 카드 */}
       <section className="w-full rounded-2xl border border-border-default bg-gray-100 px-6 py-6">
         <div className="flex flex-col gap-4">
           {options.map((option, index) => {
@@ -82,7 +72,7 @@ export function VoteEditor({
               >
                 <span
                   className={cn(
-                    'text-[14px]',
+                    'text-sm',
                     hasPeriod ? 'text-text-primary' : 'text-text-muted'
                   )}
                 >
@@ -104,17 +94,16 @@ export function VoteEditor({
           })}
         </div>
 
-        {/* 버튼 */}
         <div className="mt-8 flex justify-center">
           <button
             type="button"
             onClick={onSubmit}
             disabled={isSubmitDisabled}
             className={cn(
-              buttonVariants.base,
+              voteButtonVariants.base,
               isSubmitDisabled
-                ? buttonVariants.disabled
-                : buttonVariants.enabled
+                ? voteButtonVariants.disabled
+                : voteButtonVariants.enabled
             )}
           >
             {submitLabel}
@@ -122,8 +111,7 @@ export function VoteEditor({
         </div>
       </section>
 
-      {/* 참여 */}
-      <div className="mt-4 flex items-center gap-2 text-[14px] text-text-muted">
+      <div className="mt-4 flex items-center gap-2 text-sm text-text-muted">
         <Users className="h-4 w-4" />
         <span>{participantCount}명 참여중</span>
       </div>
