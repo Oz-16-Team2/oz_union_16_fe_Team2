@@ -1,18 +1,15 @@
 import { Pie, PieChart } from 'recharts'
 
 type DonutChartProps = {
-  completedCount: number
-  totalCount: number
+  progressRate: number
   status?: 'progress' | 'done' | 'fail'
 }
 
 export function DonutChart({
-  completedCount,
-  totalCount,
+  progressRate,
   status = 'progress',
 }: DonutChartProps) {
-  const percentage =
-    totalCount === 0 ? 0 : Math.round((completedCount / totalCount) * 100)
+  const percentage = Math.min(100, Math.max(0, Math.round(progressRate)))
 
   // 상태별 색상
   const gaugeColor =
@@ -47,7 +44,7 @@ export function DonutChart({
       </PieChart>
 
       {/* 가운데 텍스트 */}
-      <span className="absolute min-w-15 text-center text-4xl font-medium text-text-primary">
+      <span className="absolute min-w-16 text-center text-4xl font-medium text-text-primary">
         {percentage}%
       </span>
     </div>
