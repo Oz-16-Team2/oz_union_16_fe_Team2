@@ -63,6 +63,12 @@ body {
   --shadow-card-hover: 0px 10px 30px rgba(0, 0, 0, 0.15);
   --shadow-card-base: var(--shadow-card-light);
   --shadow-rank-light: 0 0 10px rgba(137, 137, 137, 0.5);
+  --color-rank-gold-shadow: 0 0 6px 0 rgba(232, 188, 15, 0.5);
+  --color-rank-silver-shadow: 0 0 6px 0 rgba(155, 155, 163, 0.5);
+  --color-rank-bronze-shadow: 0 0 6px 0 rgba(210, 130, 80, 0.5);
+  --color-rank-dark-gold-shadow: 0 0 6px 0 rgba(255, 215, 38, 0.5);
+  --color-rank-dark-silver-shadow: 0 0 6px 0 rgba(199, 199, 199, 0.4);
+  --color-rank-dark-bronze-shadow: 0 0 6px 0 rgba(222, 133, 98, 0.5);
 
   /* mypage stats */
   --color-mypage-stats-bg: #ffffff;
@@ -78,8 +84,9 @@ body {
   --color-rank-dark-bronze-bg: #221b15;
 
   /* ranking border color - dark */
-  --color-rank-dark-silver-border: #575757;
-  --color-rank-dark-bronze-border: #3e2b1e;
+  --color-rank-gold-border: #fff7de;
+  --color-rank-silver-border: #575757;
+  --color-rank-bronze-border: #3e2b1e;
 
   /* ranking text color - dark */
   --color-rank-dark-gold-text: #ffd726;
@@ -191,6 +198,8 @@ body {
   --ranking-default-bg: var(--color-rank-light-default-bg);
 
   --ranking-default-border: var(--color-rank-light-border);
+
+  --ranking-gold-border: var(--color-rank-light-border);
   --ranking-silver-border: var(--color-rank-light-border);
   --ranking-bronze-border: var(--color-rank-light-border);
 
@@ -199,6 +208,9 @@ body {
   --text-ranking-bronze: var(--color-rank-light-bronze-text);
 
   --ranking-shadow: var(--shadow-rank-light);
+  --ranking-gold-shadow: var(--color-rank-gold-shadow);
+  --ranking-silver-shadow: var(--color-rank-silver-shadow);
+  --ranking-bronze-shadow: var(--color-rank-bronze-shadow);
 
   /* =========================
      MyPage
@@ -247,14 +259,18 @@ body {
   --ranking-default-bg: var(--color-rank-dark-silver-bg);
 
   --ranking-default-border: var(--color-rank-dark-silver-border);
-  --ranking-silver-border: var(--color-rank-dark-silver-border);
-  --ranking-bronze-border: var(--color-rank-dark-bronze-border);
+  --ranking-gold-border: var(--color-rank-gold-border);
+  --ranking-silver-border: var(--color-rank-silver-border);
+  --ranking-bronze-border: var(--color-rank-bronze-border);
 
   --text-ranking-gold: var(--color-rank-dark-gold-text);
   --text-ranking-silver: var(--color-rank-dark-silver-text);
   --text-ranking-bronze: var(--color-rank-dark-bronze-text);
 
   --ranking-shadow: var(--shadow-rank-dark);
+  --ranking-gold-shadow: var(--color-rank-dark-gold-shadow);
+  --ranking-silver-shadow: var(--color-rank-dark-silver-shadow);
+  --ranking-bronze-shadow: var(--color-rank-dark-bronze-shadow);
 
   /* =========================
      MyPage
@@ -389,6 +405,7 @@ body {
   --color-ranking-bronze-bg: var(--ranking-bronze-bg);
   --color-ranking-default-bg: var(--ranking-default-bg);
   --color-ranking-default-border: var(--ranking-default-border);
+  --color-ranking-gold-border: var(--ranking-gold-border);
   --color-ranking-silver-border: var(--ranking-silver-border);
   --color-ranking-bronze-border: var(--ranking-bronze-border);
   --color-text-ranking-gold: var(--text-ranking-gold);
@@ -416,6 +433,9 @@ body {
   --shadow-card-active: var(--shadow-card-active);
   --shadow-modal: var(--shadow-modal);
   --shadow-ranking: var(--ranking-shadow);
+  --shadow-ranking-gold: var(--ranking-gold-shadow);
+  --shadow-ranking-silver: var(--ranking-silver-shadow);
+  --shadow-ranking-bronze: var(--ranking-bronze-shadow);
 }
 
 @keyframes dropdown-in {
