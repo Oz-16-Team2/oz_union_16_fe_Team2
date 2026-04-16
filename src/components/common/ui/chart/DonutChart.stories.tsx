@@ -5,7 +5,7 @@ import { DonutChart } from './DonutChart'
 const meta: Meta<typeof DonutChart> = {
   title: 'Common/UI/Chart/DonutChart',
   component: DonutChart,
-  tags: ['autodocs'], // ⭐ 이거 추가
+  tags: ['autodocs'],
   parameters: {
     layout: 'centered',
   },
@@ -17,21 +17,24 @@ type Story = StoryObj<typeof DonutChart>
 
 export const InProgress: Story = {
   args: {
-    completedCount: 3,
-    totalCount: 10,
+    progressRate: 30,
   },
 }
 
 export const Zero: Story = {
   args: {
-    completedCount: 0,
-    totalCount: 10,
+    progressRate: 0,
   },
 }
 
 export const Full: Story = {
   args: {
-    completedCount: 10,
-    totalCount: 10,
+    progressRate: 100,
+  },
+}
+
+export const Over: Story = {
+  args: {
+    progressRate: 120,
   },
 }
