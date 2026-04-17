@@ -2,6 +2,9 @@ import { createRoot } from 'react-dom/client'
 
 import App from './App.tsx'
 
+import '@fontsource/pretendard/400.css'
+import '@fontsource/pretendard/500.css'
+import '@fontsource/pretendard/700.css'
 import './index.css'
 
 async function enableMocking() {
