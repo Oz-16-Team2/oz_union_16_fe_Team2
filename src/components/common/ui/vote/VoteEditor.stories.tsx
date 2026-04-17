@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 
+import { VoteEditorMode } from './Vote.type'
 import { VoteEditor } from './VoteEditor'
 
 const meta = {
@@ -14,14 +15,14 @@ type Story = StoryObj<typeof meta>
 
 export const Create: Story = {
   args: {
-    mode: 'create',
+    mode: VoteEditorMode.CREATE,
     options: ['운동하기', '공부하기'],
   },
 }
 
 export const CreateWithPeriod: Story = {
   args: {
-    mode: 'create',
+    mode: VoteEditorMode.CREATE,
     startDate: '2026.04.01',
     endDate: '2026.04.06',
     options: ['운동하기', '공부하기'],
@@ -30,7 +31,7 @@ export const CreateWithPeriod: Story = {
 
 export const Edit: Story = {
   args: {
-    mode: 'edit',
+    mode: VoteEditorMode.EDIT,
     startDate: '2026.04.01',
     endDate: '2026.04.06',
     options: ['운동하기', '공부하기'],

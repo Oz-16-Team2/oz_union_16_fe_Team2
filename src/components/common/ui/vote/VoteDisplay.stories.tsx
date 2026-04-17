@@ -1,5 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 
+import { ActionMenu } from '@/components/common/overlay/dropdown/action-menu/ActionMenu'
+
+import { VoteViewerMode } from './Vote.type'
 import { VoteDisplay } from './VoteDisplay'
 
 const meta = {
@@ -24,14 +27,24 @@ const baseOptions = [
     id: '2',
     optionLabel: '옵션 2',
     valueLabel: '공부하기',
-    percentage: 80,
+    percentage: 20,
     checked: false,
   },
 ]
 
+const actionMenu = (
+  <ActionMenu
+    trigger={<span className="text-xl text-text-muted">...</span>}
+    items={[
+      { label: '수정', onClick: () => {} },
+      { label: '삭제', onClick: () => {} },
+    ]}
+  />
+)
+
 export const Guest: Story = {
   args: {
-    mode: 'guest',
+    mode: VoteViewerMode.GUEST,
     options: baseOptions,
     actionLabel: '투표하기',
   },
@@ -39,7 +52,7 @@ export const Guest: Story = {
 
 export const Member: Story = {
   args: {
-    mode: 'member',
+    mode: VoteViewerMode.MEMBER,
     options: [
       { ...baseOptions[0], checked: true },
       { ...baseOptions[1], checked: false },
@@ -50,7 +63,7 @@ export const Member: Story = {
 
 export const Voted: Story = {
   args: {
-    mode: 'voted',
+    mode: VoteViewerMode.VOTED,
     options: [
       { ...baseOptions[0], checked: true },
       { ...baseOptions[1], checked: false },
@@ -61,24 +74,24 @@ export const Voted: Story = {
 
 export const Closed: Story = {
   args: {
-    mode: 'closed',
+    mode: VoteViewerMode.CLOSED,
     options: [
       { ...baseOptions[0], checked: true },
       { ...baseOptions[1], checked: false },
     ],
     actionLabel: '투표하기',
-    showMoreButton: true,
+    actionSlot: actionMenu,
   },
 }
 
 export const InProgressWithMore: Story = {
   args: {
-    mode: 'member',
+    mode: VoteViewerMode.MEMBER,
     options: [
       { ...baseOptions[0], checked: false },
       { ...baseOptions[1], checked: true },
     ],
     actionLabel: '투표하기',
-    showMoreButton: true,
+    actionSlot: actionMenu,
   },
 }

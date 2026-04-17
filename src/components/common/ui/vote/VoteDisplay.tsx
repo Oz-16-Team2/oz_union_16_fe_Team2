@@ -1,30 +1,10 @@
-import { CalendarDays, Check, Users } from 'lucide-react'
+import { CalendarDays, Users } from 'lucide-react'
 
+import { Button } from '@/components/common/ui'
 import { cn } from '@/utils/cn'
 
-import { voteButtonVariants } from './Vote.style'
-import type { VoteDisplayProps } from './Vote.type'
-
-const optionVariants = {
-  base: 'grid w-full grid-cols-[24px_64px_minmax(0,1fr)_56px] items-center gap-2 text-left',
-
-  text: {
-    selected: 'text-primary-400',
-    result: 'text-text-primary',
-    default: 'text-text-muted',
-  },
-
-  gauge: {
-    first: 'bg-gray-300',
-    second: 'bg-primary-100',
-  },
-
-  indicator: {
-    selected:
-      'flex size-4 items-center justify-center rounded-sm bg-primary-400 text-white',
-    default: 'flex size-4 items-center justify-center rounded-sm bg-gray-300',
-  },
-}
+import { VoteOptionItem } from './components/VoteOptionItem'
+import { type VoteDisplayProps, VoteViewerMode } from './Vote.type'
 
 export function VoteDisplay({
   mode,
@@ -38,12 +18,13 @@ export function VoteDisplay({
   onSelectOption,
   onActionClick,
 }: VoteDisplayProps) {
-  const isClosed = mode === 'closed'
-  const isVoted = mode === 'voted'
+  const isClosed = mode === VoteViewerMode.CLOSED
+  const isVoted = mode === VoteViewerMode.VOTED
   const showResult = isVoted || isClosed
 
-  const hasCheckedOption = options.some((o) => o.checked)
-  const isActionDisabled = isClosed || (mode === 'member' && !hasCheckedOption)
+  const hasCheckedOption = options.some((option) => option.checked)
+  const isActionDisabled =
+    isClosed || (mode === VoteViewerMode.MEMBER && !hasCheckedOption)
 
   const buttonLabel = isClosed ? '투표 마감' : (actionLabel ?? '투표하기')
   const statusLabel = isClosed ? '투표 마감' : '투표 진행중'
@@ -70,96 +51,32 @@ export function VoteDisplay({
           isClosed && 'opacity-50'
         )}
       >
-        {(showMoreButton || actionSlot) && (
-          <div className="mb-4 flex justify-end">
-            {actionSlot ?? (
-              <button
-                type="button"
-                aria-label="더보기"
-                className="text-xl text-text-muted"
-              >
-                ...
-              </button>
-            )}
-          </div>
+        {(showMoreButton || actionSlot) && actionSlot && (
+          <div className="mb-4 flex justify-end">{actionSlot}</div>
         )}
 
         <div className="flex flex-col gap-4">
-          {options.map((option, index) => {
-            const isSelected = Boolean(option.checked)
-            const percentage = Math.min(
-              100,
-              Math.max(0, option.percentage ?? 0)
-            )
-
-            const textColor = isSelected
-              ? optionVariants.text.selected
-              : showResult
-                ? optionVariants.text.result
-                : optionVariants.text.default
-
-            return (
-              <button
-                key={option.id}
-                type="button"
-                disabled={isClosed}
-                onClick={() => onSelectOption?.(option.id)}
-                className={optionVariants.base}
-              >
-                <span className="flex items-center justify-center">
-                  <span
-                    className={cn(
-                      isSelected
-                        ? optionVariants.indicator.selected
-                        : optionVariants.indicator.default
-                    )}
-                  >
-                    {isSelected && <Check className="size-3" strokeWidth={3} />}
-                  </span>
-                </span>
-
-                <span className={cn('text-sm font-medium', textColor)}>
-                  {option.optionLabel}
-                </span>
-
-                <div className="h-14 overflow-hidden rounded-full bg-gray-100 shadow-sm">
-                  <div
-                    className={cn(
-                      'flex h-full items-center rounded-full px-6 text-xs',
-                      index === 0
-                        ? optionVariants.gauge.first
-                        : optionVariants.gauge.second
-                    )}
-                    style={{
-                      width: showResult ? `${percentage}%` : '100%',
-                    }}
-                  >
-                    <span className="truncate">{option.valueLabel}</span>
-                  </div>
-                </div>
-
-                <span className={cn('text-right text-xs', textColor)}>
-                  {showResult ? `${percentage}%` : ''}
-                </span>
-              </button>
-            )
-          })}
+          {options.map((option, index) => (
+            <VoteOptionItem
+              key={option.id}
+              option={option}
+              index={index}
+              isClosed={isClosed}
+              showResult={showResult}
+              onSelectOption={onSelectOption}
+            />
+          ))}
         </div>
 
         <div className="mt-8 flex justify-center">
-          <button
+          <Button
             type="button"
+            variant="primary"
             onClick={onActionClick}
             disabled={isActionDisabled}
-            className={cn(
-              voteButtonVariants.base,
-              isActionDisabled
-                ? voteButtonVariants.disabled
-                : voteButtonVariants.enabled
-            )}
           >
             {buttonLabel}
-          </button>
+          </Button>
         </div>
       </section>
 
