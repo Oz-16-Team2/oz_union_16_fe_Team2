@@ -1,7 +1,7 @@
 import { createBrowserRouter } from 'react-router'
 
 import { RootLayout } from '@/components/common/layout'
-import { Main } from '@/pages'
+import { Main, NotFoundPage } from '@/pages'
 
 /*
  * 라우터 설정 파일
@@ -20,5 +20,9 @@ export const router = createBrowserRouter([
         element: <Main />,
       },
     ],
+  },
+  {
+    path: '*',
+    element: <NotFoundPage />,
   },
 ])
