@@ -1,11 +1,7 @@
 import { createRoot } from 'react-dom/client'
-import { RouterProvider } from 'react-router-dom'
 
-import { router } from './router/Router'
+import App from './App.tsx'
 
-import '@fontsource/pretendard/400.css'
-import '@fontsource/pretendard/500.css'
-import '@fontsource/pretendard/700.css'
 import './index.css'
 
 async function enableMocking() {
@@ -14,9 +10,6 @@ async function enableMocking() {
     await worker.start()
   }
 }
-
 enableMocking().then(() => {
-  createRoot(document.getElementById('root')!).render(
-    <RouterProvider router={router} />
-  )
+  createRoot(document.getElementById('root')!).render(<App />)
 })

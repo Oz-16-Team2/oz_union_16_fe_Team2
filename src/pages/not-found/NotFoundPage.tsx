@@ -1,19 +1,16 @@
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router'
 
+import NotFoundImage from '@/assets/images/404.png'
 import { Button } from '@/components/common/ui'
 
 export function NotFoundPage() {
   const navigate = useNavigate()
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-surface px-4 text-center">
-      <h1 className="text-8xl font-bold tracking-tight text-text-primary">
-        404
-      </h1>
+    <div className="flex min-h-screen flex-col items-center justify-center bg-surface px-4">
+      <img src={NotFoundImage} alt="404" className="w-32 md:w-40 h-auto" />
 
-      <h2 className="mt-4 text-2xl font-semibold text-text-primary">
-        페이지를 찾을 수 없어요
-      </h2>
+      <h2 className="mt-6 text-2xl font-semibold">페이지를 찾을 수 없어요</h2>
 
       <p className="mt-3 text-sm text-text-muted">
         요청하신 페이지가 없거나 이동되었어요.
