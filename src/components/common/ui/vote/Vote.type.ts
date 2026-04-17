@@ -1,5 +1,7 @@
 import type { ReactNode } from 'react'
 
+import type { DateRange } from '@/components/common/ui/calendar/Calendar.type'
+
 // 조회 모드 (enum 대신 const object 사용)
 export const VoteViewerMode = {
   GUEST: 'guest',
@@ -31,8 +33,7 @@ export type VoteDisplayOption = {
 
 // 공통 필드
 type VoteBaseProps = {
-  startDate?: string
-  endDate?: string
+  period?: DateRange
   participantCount?: number
 }
 
@@ -54,5 +55,5 @@ export type VoteEditorProps = {
   disabled?: boolean
   onChangeOption?: (index: number, value: string) => void
   onSubmit?: () => void
-  onClickPeriod?: () => void
+  onChangePeriod?: (date: DateRange | null) => void
 } & VoteBaseProps

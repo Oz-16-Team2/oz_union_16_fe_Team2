@@ -23,8 +23,10 @@ export const Create: Story = {
 export const CreateWithPeriod: Story = {
   args: {
     mode: VoteEditorMode.CREATE,
-    startDate: '2026.04.01',
-    endDate: '2026.04.06',
+    period: {
+      start: new Date('2026-04-01'),
+      end: new Date('2026-04-06'),
+    },
     options: ['운동하기', '공부하기'],
   },
 }
@@ -32,8 +34,10 @@ export const CreateWithPeriod: Story = {
 export const Edit: Story = {
   args: {
     mode: VoteEditorMode.EDIT,
-    startDate: '2026.04.01',
-    endDate: '2026.04.06',
+    period: {
+      start: new Date('2026-04-01'),
+      end: new Date('2026-04-06'),
+    },
     options: ['운동하기', '공부하기'],
   },
 }

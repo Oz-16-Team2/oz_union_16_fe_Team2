@@ -6,12 +6,17 @@ import { cn } from '@/utils/cn'
 import { VoteOptionItem } from './components/VoteOptionItem'
 import { type VoteDisplayProps, VoteViewerMode } from './Vote.type'
 
+function formatDate(date: Date | null) {
+  if (!date) return ''
+
+  return date.toLocaleDateString('ko-KR')
+}
+
 export function VoteDisplay({
   mode,
   options,
   participantCount = 0,
-  startDate,
-  endDate,
+  period,
   actionLabel,
   showMoreButton = false,
   actionSlot,
@@ -28,7 +33,7 @@ export function VoteDisplay({
 
   const buttonLabel = isClosed ? '투표 마감' : (actionLabel ?? '투표하기')
   const statusLabel = isClosed ? '투표 마감' : '투표 진행중'
-  const hasPeriod = Boolean(startDate && endDate)
+  const hasPeriod = Boolean(period?.start && period?.end)
 
   return (
     <>
@@ -39,7 +44,8 @@ export function VoteDisplay({
           <>
             <CalendarDays className="h-4 w-4 text-text-muted" />
             <span className="text-text-primary">
-              {startDate} ~ {endDate}
+              {formatDate(period?.start ?? null)} ~{' '}
+              {formatDate(period?.end ?? null)}
             </span>
           </>
         )}
@@ -74,6 +80,7 @@ export function VoteDisplay({
             variant="primary"
             onClick={onActionClick}
             disabled={isActionDisabled}
+            className="h-10 w-full max-w-md text-md"
           >
             {buttonLabel}
           </Button>

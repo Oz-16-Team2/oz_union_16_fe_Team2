@@ -81,6 +81,10 @@ export const Closed: Story = {
     ],
     actionLabel: '투표하기',
     actionSlot: actionMenu,
+    period: {
+      start: new Date('2026-04-01'),
+      end: new Date('2026-04-06'),
+    },
   },
 }
 
