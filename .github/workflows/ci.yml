@@ -57,6 +57,6 @@ jobs:
       - name: Push to fork repo
         run: |
           git remote remove fork || true
-          git remote add fork https://${{ secrets.FORK_TOKEN }}@github.com/alstmd9902/oz_union_16_fe_Team2.git
+          git remote add fork https://x-access-token:${{ secrets.FORK_TOKEN }}@github.com/alstmd9902/oz_union_16_fe_Team2.git
           git fetch --all
           git push fork HEAD:${{ github.ref_name }} --force
