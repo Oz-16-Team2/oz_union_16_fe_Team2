@@ -1,6 +1,6 @@
-import { CalendarDays, Users } from 'lucide-react'
+import { Users } from 'lucide-react'
 
-import { Button } from '@/components/common/ui'
+import { Button, Calendar } from '@/components/common/ui'
 import { cn } from '@/utils/cn'
 
 import { VoteEditorMode, type VoteEditorProps } from './Vote.type'
@@ -22,38 +22,28 @@ const inputVariants = {
 
 export function VoteEditor({
   mode,
-  startDate,
-  endDate,
+  period,
   options,
   participantCount = 0,
   disabled = false,
   onChangeOption,
   onSubmit,
-  onClickPeriod,
+  onChangePeriod,
 }: VoteEditorProps) {
-  const hasPeriod = Boolean(startDate && endDate)
+  const hasPeriod = Boolean(period?.start && period?.end)
   const hasValidOptions = options.every((option) => option.trim() !== '')
   const isSubmitDisabled = disabled || !hasPeriod || !hasValidOptions
   const submitLabel = getSubmitLabel(mode)
 
   return (
     <>
-      <Button
-        type="button"
-        variant="ghost"
-        onClick={onClickPeriod}
-        className="mb-4 flex items-center gap-2 p-0"
-      >
-        <CalendarDays className="h-4 w-4 text-text-muted" />
-        <span
-          className={cn(
-            'text-sm',
-            hasPeriod ? 'text-text-primary' : 'text-text-muted'
-          )}
-        >
-          {hasPeriod ? `${startDate} ~ ${endDate}` : '투표 기간을 선택하세요'}
-        </span>
-      </Button>
+      <div className="mb-4">
+        <Calendar
+          value={period}
+          onChange={onChangePeriod}
+          label="투표 기간을 선택하세요"
+        />
+      </div>
 
       <section className="w-full rounded-2xl border border-border-default bg-gray-100 px-6 py-6">
         <div className="flex flex-col gap-4">
