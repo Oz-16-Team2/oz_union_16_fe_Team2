@@ -13,12 +13,23 @@ type FormFieldProps = {
   error?: string
 } & ComponentProps<'input'>
 
-export function FormField({ label, id, error, ...props }: FormFieldProps) {
+export function FormField({
+  label,
+  id,
+  error,
+  className,
+  ...props
+}: FormFieldProps) {
   const generatedId = useId()
   const inputId = id ?? generatedId
 
   return (
-    <div className={cn('grid w-full grid-cols-[108px_1fr] items-center')}>
+    <div
+      className={cn(
+        label ? 'grid grid-cols-[108px_1fr] items-center' : 'block',
+        'w-full'
+      )}
+    >
       {label && (
         <label htmlFor={inputId} className="text-sm">
           {label}
@@ -29,7 +40,8 @@ export function FormField({ label, id, error, ...props }: FormFieldProps) {
         error={Boolean(error)}
         errorMessage={error}
         className={cn(
-          'placeholder:text-sm py-1 px-1.5 w-full rounded-none border-t-0 border-x-0 border-border-strong bg-transparent'
+          'placeholder:text-sm py-1 px-1.5 w-full rounded-none border-t-0 border-x-0 border-border-strong bg-transparent',
+          className
         )}
         {...props}
       />

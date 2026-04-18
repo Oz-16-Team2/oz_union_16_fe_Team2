@@ -1,7 +1,7 @@
 import { createBrowserRouter } from 'react-router'
 
 import { RootLayout } from '@/components/common/layout'
-import { Main, NotFoundPage } from '@/pages'
+import { LoginPage, Main, NotFoundPage, SignupPage } from '@/pages'
 
 /*
  * 라우터 설정 파일
@@ -20,6 +20,14 @@ export const router = createBrowserRouter([
         element: <Main />,
       },
     ],
+  },
+  {
+    path: '/login',
+    element: <LoginPage />,
+  },
+  {
+    path: '/signup',
+    element: <SignupPage />,
   },
   {
     path: '*',

@@ -13,7 +13,7 @@ type AuthFormProps = {
  */
 export function AuthForm({ className, children, ...props }: AuthFormProps) {
   return (
-    <form className={cn('space-y-8 gap-4 w-full', className)} {...props}>
+    <form className={cn('space-y-8 mt-8 w-full', className)} {...props}>
       {children}
     </form>
   )

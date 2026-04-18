@@ -1,3 +1,5 @@
+import { useNavigate } from 'react-router'
+
 import { Laptop, Moon, Sun } from 'lucide-react'
 
 import { DarklogoImage, logoImage } from '@/assets/images'
@@ -11,7 +13,7 @@ const THEME_ICON = {
 
 export function Header() {
   const { theme, setTheme } = useTheme()
-
+  const navigate = useNavigate()
   const ThemeIcon = THEME_ICON[theme]
 
   const handleClickTheme = () => {
@@ -52,7 +54,9 @@ export function Header() {
             <ThemeIcon className="text-text-primary" />
           </button>
 
-          <button className="text-lg">로그인</button>
+          <button onClick={() => navigate('/login')} className="text-lg">
+            로그인
+          </button>
         </div>
       </div>
     </header>

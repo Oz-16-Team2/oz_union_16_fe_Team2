@@ -22,7 +22,7 @@ export function AuthPageLayout({
   return (
     <div className="flex min-h-screen items-center justify-center">
       <div
-        className={cn('w-full max-w-sm flex flex-col px-3 gap-8', className)}
+        className={cn('w-full max-w-md flex flex-col px-3 gap-8', className)}
       >
         <div className="flex flex-col items-center gap-2">
           <h1 className="text-center text-2xl font-semibold">{title}</h1>
