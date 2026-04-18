@@ -1,16 +1,11 @@
 import { CalendarDays, Users } from 'lucide-react'
 
 import { Button } from '@/components/common/ui'
+import { formatSelectedDate } from '@/components/common/ui/calendar/Calendar.util'
 import { cn } from '@/utils/cn'
 
 import { VoteOptionItem } from './components/VoteOptionItem'
 import { type VoteDisplayProps, VoteViewerMode } from './Vote.type'
-
-function formatDate(date: Date | null) {
-  if (!date) return ''
-
-  return date.toLocaleDateString('ko-KR')
-}
 
 export function VoteDisplay({
   mode,
@@ -44,8 +39,7 @@ export function VoteDisplay({
           <>
             <CalendarDays className="h-4 w-4 text-text-muted" />
             <span className="text-text-primary">
-              {formatDate(period?.start ?? null)} ~{' '}
-              {formatDate(period?.end ?? null)}
+              {formatSelectedDate(period ?? { start: null, end: null }, '')}
             </span>
           </>
         )}
