@@ -1,3 +1,3 @@
-export { AuthForm } from './components/AuthForm'
-export { AuthPageLayout } from './components/AuthPageLayout'
-export { FormField } from './components/FormField'
+export { AuthForm } from './AuthForm'
+export { AuthPageLayout } from './AuthPageLayout'
+export { ProfileImageSelectField } from './signup'
