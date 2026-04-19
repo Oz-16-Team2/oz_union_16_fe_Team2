@@ -1,7 +1,3 @@
-import { http, HttpResponse } from 'msw'
+import { loginHandler } from './handlers/loginHandler'
 
-export const handlers = [
-  http.get('/api/hello', () => {
-    return HttpResponse.json({ message: 'Hello, world!', code: 200 })
-  }),
-]
+export const handlers = [...loginHandler]
