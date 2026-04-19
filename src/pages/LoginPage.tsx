@@ -6,9 +6,9 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@/components/common/ui'
 import { AuthForm, AuthPageLayout } from '@/features/auth'
 import {
-  type EmailLoginRequestSchema,
-  emailLoginRequestSchema,
-} from '@/schemas/auth/login'
+  type LoginFormSchema,
+  loginFormSchema,
+} from '@/schemas/auth/authForm.schema'
 import { cn } from '@/utils/cn'
 
 const socialLoginButtons = [
@@ -33,9 +33,9 @@ const socialLoginButtons = [
 ] as const
 
 export function LoginPage() {
-  const methods = useForm<EmailLoginRequestSchema>({
+  const methods = useForm<LoginFormSchema>({
     mode: 'onChange',
-    resolver: zodResolver(emailLoginRequestSchema),
+    resolver: zodResolver(loginFormSchema),
     defaultValues: {
       email: '',
       password: '',
@@ -47,7 +47,7 @@ export function LoginPage() {
     formState: { isValid, isDirty },
   } = methods
 
-  const LoginField = AuthForm.FormField<EmailLoginRequestSchema>
+  const LoginField = AuthForm.FormField<LoginFormSchema>
 
   // 로그인 API 연결 전 임시 제출 함수입니다.
   const handleLoginSubmit = () => {}

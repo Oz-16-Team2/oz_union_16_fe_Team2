@@ -10,29 +10,31 @@ import {
   AuthPageLayout,
   ProfileImageSelectField,
 } from '@/features/auth'
-import { type SignupSchema, signupSchema } from '@/schemas/auth/signup'
+import {
+  type SignupFormSchema,
+  signupFormSchema,
+} from '@/schemas/auth/authForm.schema'
 import { cn } from '@/utils/cn'
 
 /*
  * TODO:
  * 1. 이메일 인증 요청 API 연결 (이메일 입력 후 '이메일확인' 버튼 클릭)
- * 2. 이메일 인증 코드 검증 → email_token 설정
+ * 2. 이메일 인증 코드 검증 → email_token은 form state가 아닌 API/auth 상태로 관리 검토
  * 3. 닉네임 중복확인 API 연결 ('중복확인' 버튼 클릭 시)
  * 4. TanStack Query로 mutation 분리 (emailVerify, nicknameCheck)
- * 5. 검증 성공 상태를 form 상태와 연동 (ex. isEmailVerified, isNicknameChecked)
+ * 5. 검증 성공 상태를 Zustand 등 별도 상태와 연동 (ex. emailToken, isEmailVerified, isNicknameChecked)
  */
 
 export function SignupPage() {
-  const methods = useForm<SignupSchema>({
+  const methods = useForm<SignupFormSchema>({
     mode: 'onChange',
-    resolver: zodResolver(signupSchema),
+    resolver: zodResolver(signupFormSchema),
     defaultValues: {
       email: '',
       nickname: '',
       password: '',
       passwordConfirm: '',
       profile_image_url: yellowCharacterImage,
-      email_token: '',
     },
   })
 
@@ -43,7 +45,7 @@ export function SignupPage() {
   } = methods
   const profileImageUrl = useWatch({ control, name: 'profile_image_url' })
 
-  const SignupField = AuthForm.FormField<SignupSchema>
+  const SignupField = AuthForm.FormField<SignupFormSchema>
 
   // API 연결 전 임시 제출 함수입니다. 회원가입 API가 붙으면 여기서 요청을 보냅니다.
   const handleSignupSubmit = () => {}
@@ -66,17 +68,7 @@ export function SignupPage() {
           </SignupField>
 
           <SignupField control={control} name="email" label="이메일">
-            <Button
-              type="button"
-              onClick={() =>
-                setValue('email_token', 'verified', {
-                  shouldDirty: true,
-                  shouldValidate: true,
-                })
-              }
-            >
-              이메일확인
-            </Button>
+            <Button type="button">이메일확인</Button>
           </SignupField>
 
           <SignupField
