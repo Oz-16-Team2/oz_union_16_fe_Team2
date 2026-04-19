@@ -26,7 +26,7 @@ export function PostVoteSection({
   onChangePeriod,
   onConfirm,
 }: PostVoteSectionProps) {
-  // PostFormMode('create'|'edit')와 VoteEditorMode('create'|'edit')는 값이 동일하므로 안전하게 캐스팅
+  // 일단 생성 페이지에서 투표 생성 , 수정 페이지에선 투표 수정 한다는 가정
   const voteEditorMode = mode as VoteEditorMode
 
   return (

@@ -20,46 +20,43 @@ export function usePostForm(
   mode: PostFormMode,
   defaultValues?: Partial<PostFormData>
 ) {
-  // ── 기본 필드 ─────────────────────────────────────────────
+  // 기본 필드
   const [title, setTitle] = useState(defaultValues?.title ?? '')
   const [content, setContent] = useState(defaultValues?.content ?? '')
   const [images, setImages] = useState<string[]>(defaultValues?.images ?? [])
 
-  // ── 태그 ─────────────────────────────────────────────────
+  // 태그
   const [selectedTagIds, setSelectedTagIds] = useState<number[]>(
     defaultValues?.tagIds ?? []
   )
 
-  // ── 투표 ─────────────────────────────────────────────────
+  // 투표
   const [voteQuestion, setVoteQuestion] = useState(
     defaultValues?.vote?.question ?? ''
   )
   const [voteOptions, setVoteOptions] = useState<string[]>(
     defaultValues?.vote?.options.map((o) => o.content) ?? ['', '']
   )
-  // TODO: 투표 선생성 플로우 확정 시 votePeriod를 PostFormData.vote에 포함시켜야 함
-  // 현재는 VoteEditor UI 표시 전용으로만 사용되며 buildFormData()에 포함되지 않음
-  // → post.types.ts의 VoteFormData에 startAt/endAt 추가 및 buildFormData() 수정 필요
   const [votePeriod, setVotePeriod] = useState<DateRange | undefined>()
   const [voteConfirmed, setVoteConfirmed] = useState(
     mode === 'edit' && !!defaultValues?.vote
   )
 
-  // ── 목표 ─────────────────────────────────────────────────
+  // 목표
   const [selectedGoalId, setSelectedGoalId] = useState<number | undefined>(
     mode === 'edit' ? defaultValues?.goalId : undefined
   )
 
-  // ── 기타 — 마운트 시 확정되는 값이므로 상태가 아닌 상수로 관리 ──
+  // 기타 — 마운트 시 확정되는 값이므로 상태가 아닌 상수로 관리
   const postId = defaultValues?.postId
 
-  // ── 파생 값 ──────────────────────────────────────────────
+  // 파생 값
   const titleLen = charLen(title)
   const contentLen = charLen(content)
   const isSubmitDisabled = title.trim() === '' || content.trim() === ''
   const canAddImage = images.length < MAX_IMAGES
 
-  // ── 액션: 제목 / 내용 ─────────────────────────────────────
+  // 제목 / 내용
   function changeTitle(val: string) {
     if (charLen(val) <= MAX_TITLE) setTitle(val)
   }
@@ -68,7 +65,7 @@ export function usePostForm(
     if (charLen(val) <= MAX_CONTENT) setContent(val)
   }
 
-  // ── 액션: 이미지 ──────────────────────────────────────────
+  // 이미지
   function addImages(files: File[]) {
     const remaining = MAX_IMAGES - images.length
     const urls = files.slice(0, remaining).map(URL.createObjectURL)
@@ -84,7 +81,7 @@ export function usePostForm(
     })
   }
 
-  // ── 액션: 태그 ────────────────────────────────────────────
+  // 태그
   function toggleTag(id: number) {
     setSelectedTagIds((prev) => {
       if (prev.includes(id)) return prev.filter((t) => t !== id)
@@ -93,7 +90,7 @@ export function usePostForm(
     })
   }
 
-  // ── 액션: 투표 ────────────────────────────────────────────
+  // 투표
   function changeVoteQuestion(question: string) {
     if (charLen(question) <= MAX_VOTE_QUESTION) {
       setVoteQuestion(question)
@@ -117,12 +114,12 @@ export function usePostForm(
     setVoteConfirmed(true)
   }
 
-  // ── 액션: 목표 ────────────────────────────────────────────
+  // 목표
   function changeGoal(goalId: number | undefined) {
     setSelectedGoalId(goalId)
   }
 
-  // ── 최종 payload 빌드 ─────────────────────────────────────
+  // 최종 payload 빌드
   function buildFormData(): PostFormData {
     const base: Omit<PostFormData, 'postId' | 'vote'> = {
       title: title.trim(),

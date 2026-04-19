@@ -55,7 +55,7 @@ export function PostFormLayout({
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+    <form onSubmit={handleSubmit} className="flex flex-col gap-6 p-6">
       {/* 제목 */}
       <div className="flex flex-col gap-2">
         <SectionLabel label="제목" required />

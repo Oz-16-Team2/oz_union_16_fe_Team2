@@ -33,7 +33,7 @@ export type ApiPostCreateRequest = {
   tagIds: number[]
 }
 
-// ── POST /api/v1/posts/votes 요청 ────────────────────────────
+// POST /api/v1/posts/votes 요청
 // TODO: 백엔드 엔드포인트 확정 후 타입 추가
 // 투표는 게시글 생성 전에 먼저 독립적으로 생성됨 (post_id 없이 요청)
 // 요청 body 예시: { question, options: string[], start_at: datetime, end_at: datetime }
@@ -44,7 +44,7 @@ export type ApiPostCreateRequest = {
 //   end_at: string    // ISO datetime
 // }
 
-// ── POST /api/v1/posts/votes 응답 ────────────────────────────
+// POST /api/v1/posts/votes 응답
 // TODO: 백엔드 응답 확정 후 타입 추가
 // 생성된 vote_id와 options를 게시글 생성 요청(vote 필드)에 활용
 // export type ApiVoteCreateResponse = {
