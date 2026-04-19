@@ -1,10 +1,4 @@
 import { useMemo, useState } from 'react'
-import {
-  type Control,
-  type FieldErrors,
-  type UseFormSetValue,
-  useWatch,
-} from 'react-hook-form'
 
 import {
   blueCharacterImage,
@@ -14,7 +8,6 @@ import {
 } from '@/assets/images'
 import { CharacterSelectModal } from '@/components/common/overlay'
 import { Button } from '@/components/common/ui'
-import type { SignupSchema } from '@/schemas/auth/signup'
 
 // API 연결 전 임시 캐릭터 목록입니다. 추후 백엔드에서 받은 이미지 URL 목록으로 교체합니다.
 const CHARACTER_IMAGES = [
@@ -25,35 +18,29 @@ const CHARACTER_IMAGES = [
 ]
 
 type ProfileImageSelectFieldProps = {
-  control: Control<SignupSchema>
-  errors: FieldErrors<SignupSchema>
-  setValue: UseFormSetValue<SignupSchema>
+  value?: string
+  onChange: (value: string) => void
 }
 
 export function ProfileImageSelectField({
-  control,
-  setValue,
+  value,
+  onChange,
 }: ProfileImageSelectFieldProps) {
   const [isOpen, setIsOpen] = useState(false)
-  const profileImageUrl = useWatch({ control, name: 'profile_image_url' })
 
-  // 선택값이 없을 때는 임시 기본 캐릭터를 보여줍니다.
+  // 선택값이 없으면 기본 캐릭터를 보여줍니다.
   const selectedCharacter = useMemo(
     () =>
-      CHARACTER_IMAGES.find((character) => character.src === profileImageUrl) ??
+      CHARACTER_IMAGES.find((character) => character.src === value) ??
       CHARACTER_IMAGES[0],
-    [profileImageUrl]
+    [value]
   )
 
   const handleSelectCharacter = (id: string) => {
     const character = CHARACTER_IMAGES.find((item) => item.id === id)
     if (!character) return
 
-    // 폼 값은 profile_image_url로 유지합니다. 추후 character.src는 백엔드 이미지 URL이 됩니다.
-    setValue('profile_image_url', character.src, {
-      shouldDirty: true,
-      shouldValidate: true,
-    })
+    onChange(character.src)
     setIsOpen(false)
   }
 

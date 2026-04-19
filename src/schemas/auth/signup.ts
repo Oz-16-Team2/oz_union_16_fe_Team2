@@ -4,23 +4,21 @@ const email = z.email('이메일 형식이 올바르지 않습니다.')
 const password = z.string().min(8, '비밀번호는 8자 이상이어야 합니다.')
 const nickname = z.string().min(1, '닉네임을 입력해주세요')
 const profileImageUrl = z.string().optional()
-const emailToken = z.string().min(1, '이메일 인증이 필요합니다')
+const emailToken = z.string().min(1, '이메일 인증을 완료해주세요')
 const code = z.string().min(1, '인증번호를 입력해주세요')
+const passwordConfirm = z.string().min(1, '비밀번호 확인을 입력해주세요')
 
 // REQ-AUTH-001: 회원가입 API 요청값
 export const signupRequestSchema = z.object({
-  email,
   password,
   nickname,
   profile_image_url: profileImageUrl,
   email_token: emailToken,
 })
 
-// 회원가입 폼 검증값: API 요청값 + 비밀번호 확인
+// 회원가입 화면 폼값: API 요청값 + 이메일 인증 입력값 + 비밀번호 확인
 export const signupSchema = signupRequestSchema
-  .extend({
-    passwordConfirm: z.string().min(1, '비밀번호 확인을 입력해주세요'),
-  })
+  .extend({ code, email, passwordConfirm })
   .refine((data) => data.password === data.passwordConfirm, {
     path: ['passwordConfirm'],
     message: '비밀번호가 일치하지 않습니다',
