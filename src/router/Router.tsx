@@ -1,7 +1,14 @@
 import { createBrowserRouter } from 'react-router'
 
 import { RootLayout } from '@/components/common/layout'
-import { LoginPage, Main, NotFoundPage, SignupPage } from '@/pages'
+import {
+  LoginPage,
+  Main,
+  NotFoundPage,
+  PostCreatePage,
+  PostEditPage,
+  SignupPage,
+} from '@/pages'
 
 /*
  * 라우터 설정 파일
@@ -18,6 +25,14 @@ export const router = createBrowserRouter([
       {
         index: true,
         element: <Main />,
+      },
+      {
+        path: 'posts/create',
+        element: <PostCreatePage />,
+      },
+      {
+        path: 'posts/:id/edit',
+        element: <PostEditPage />,
       },
     ],
   },
