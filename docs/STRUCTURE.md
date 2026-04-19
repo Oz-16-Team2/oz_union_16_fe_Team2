@@ -22,6 +22,7 @@
 
 ```text
 src
+├── apis
 ├── assets
 │   └── images
 ├── components
@@ -33,13 +34,13 @@ src
 ├── mocks
 ├── pages
 ├── router
+├── schemas
 └── utils
 ```
 
-`features`는 도입 예정 폴더입니다.
-
 ## 폴더 설명
 
+- `src/apis`: axios client, API endpoint, 도메인별 API 호출 함수와 API 요청/응답 스키마 또는 타입
 - `src/assets/images`: 이미지 리소스
 - `src/components/common`: 여러 곳에서 재사용하는 공통 UI, 오버레이, 레이아웃
 - `src/constants`: 여러 곳에서 공유하는 상수
@@ -49,7 +50,33 @@ src
 - `src/mocks`: MSW mock handler와 설정
 - `src/pages`: 라우트 단위 화면 컴포넌트
 - `src/router`: 라우팅 설정
+- `src/schemas`: 화면 폼 검증용 Zod 스키마
 - `src/utils`: 공통 유틸 함수
+
+## API / MSW 구조
+
+API와 MSW 작성 방식은 `docs/API_MSW.md`를 기준으로 합니다.
+
+```text
+src/apis/
+├── apiPath.ts
+├── apiClient.ts
+└── {domain}/
+    ├── {domain}.api.ts
+    ├── {domain}.schema.ts or {domain}.types.ts
+    ├── endpoints.ts
+    └── index.ts
+```
+
+```text
+src/mocks/
+├── browser.ts
+├── handlers.ts
+├── data/
+│   └── {domain}.ts
+└── handlers/
+    └── {domain}Handler.ts
+```
 
 ## feature 구조 예시
 

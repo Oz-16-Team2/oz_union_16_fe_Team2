@@ -8,6 +8,7 @@
 - [BRANCH.md](./BRANCH.md): 브랜치 생성 및 운영 규칙
 - [COMMIT.md](./COMMIT.md): 커밋 메시지 규칙
 - [STRUCTURE.md](./STRUCTURE.md): 현재 프로젝트 폴더 구조 설명
+- [API_MSW.md](./API_MSW.md): API/MSW 폴더 구조와 작성 방식
 - [TROUBLESHOOTING.md](./TROUBLESHOOTING.md): 자주 만나는 문제와 해결 방법
 
 ## 추천 확인 순서
@@ -16,7 +17,8 @@
 2. `BRANCH.md`
 3. `COMMIT.md`
 4. `STRUCTURE.md`
-5. `TROUBLESHOOTING.md`
+5. `API_MSW.md`
+6. `TROUBLESHOOTING.md`
 
 ## 빠른 시작
 
