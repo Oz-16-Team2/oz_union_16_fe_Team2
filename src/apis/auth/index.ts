@@ -17,6 +17,7 @@ export type {
   SessionExpiredResponse,
   SignupRequest,
   SignupResponse,
+  SocialLoginResponse,
   VerifyEmailRequest,
   VerifyEmailResponse,
 } from './auth.schema'

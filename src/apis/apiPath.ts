@@ -1,5 +1,6 @@
 export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
-export const MSW_BASE_URL = 'https://msw.local/api/v1'
+export const MSW_BASE_URL = '/api/v1'
 
-// MSW handler에서 절대 경로를 일관되게 만들기 위한 헬퍼
-export const toMswApiUrl = (path: string) => `${MSW_BASE_URL}${path}`
+// .env의 API_BASE_URL이 있으면 요청 도메인이 달라질 수 있어서,
+// MSW handler는 어떤 도메인이든 /api/v1 경로만 맞으면 잡도록 wildcard를 씁니다.
+export const toMswApiUrl = (path: string) => `*${MSW_BASE_URL}${path}`
