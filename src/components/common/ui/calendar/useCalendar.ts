@@ -49,7 +49,7 @@ export function useCalendar({
   const [currentDate, setCurrentDate] = useState<Date>(
     selectedDate.start ?? new Date()
   )
-  const [isOpen, setIsOpen] = useState(true)
+  const [isOpen, setIsOpen] = useState(false)
   const [viewMode, setViewMode] = useState<CalendarViewMode>('day')
 
   // minDate가 없으면 오늘 이전 날짜를 선택하지 못하게 막음
