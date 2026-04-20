@@ -1,9 +1,16 @@
-import { useEffect } from 'react'
+import { lazy, Suspense, useEffect } from 'react'
 
 import { Dropdown } from '@/components/common/overlay'
 import { useToast } from '@/components/common/ui'
-import { DonutChart } from '@/components/common/ui/chart/DonutChart'
 import { useGoalsQuery } from '@/query/post'
+
+import { SkeletonBox } from './PostFormSkeleton'
+
+const DonutChart = lazy(() =>
+  import('@/components/common/ui/chart/DonutChart').then((m) => ({
+    default: m.DonutChart,
+  }))
+)
 
 type PostGoalSectionProps = {
   selectedGoalId?: number
@@ -53,10 +60,14 @@ export function PostGoalSection({
           </div>
 
           <div className="flex justify-center">
-            <DonutChart
-              progressRate={selectedGoal.progressRate}
-              status="progress"
-            />
+            <Suspense
+              fallback={<SkeletonBox className="h-35 w-35 rounded-full" />}
+            >
+              <DonutChart
+                progressRate={selectedGoal.progressRate}
+                status="progress"
+              />
+            </Suspense>
           </div>
         </div>
       )}
