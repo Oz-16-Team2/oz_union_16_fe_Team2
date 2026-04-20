@@ -1,4 +1,4 @@
-export { PostFormLayout } from './components/PostFormLayout'
+export * from './components'
 
 // 프론트 전용 타입
 export type {
@@ -6,6 +6,7 @@ export type {
   GoalStatus,
   PostFormData,
   PostFormMode,
+  PostImageItem,
   TagOption,
   VoteFormData,
   VoteOptionFormData,
@@ -15,6 +16,8 @@ export type {
 export type {
   ApiGoalResponse,
   ApiPostCreateRequest,
+  ApiPostCreateResponse,
+  ApiPostResponse,
   ApiPostUpdateRequest,
   ApiTagResponse,
 } from './post.api.types'
@@ -24,4 +27,5 @@ export {
   toApiCreateRequest,
   toApiUpdateRequest,
   toGoalOption,
+  toPostFormData,
 } from './post.mappers'
