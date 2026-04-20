@@ -2,28 +2,22 @@ import { FormProvider, useForm, useWatch } from 'react-hook-form'
 import { Link } from 'react-router'
 
 import { zodResolver } from '@hookform/resolvers/zod'
+import { LoaderCircle } from 'lucide-react'
 
-import { yellowCharacterImage } from '@/assets/images'
 import { Button } from '@/components/common/ui'
 import {
   AuthForm,
   AuthPageLayout,
   ProfileImageSelectField,
 } from '@/features/auth'
+import { useEmailVerification } from '@/features/auth/signup/hook/useEmailVerification'
+import { useNicknameCheck } from '@/features/auth/signup/hook/useNicknameCheck'
+import { useSignupMutation } from '@/query/auth'
 import {
   type SignupFormSchema,
   signupFormSchema,
 } from '@/schemas/auth/authForm.schema'
 import { cn } from '@/utils/cn'
-
-/*
- * TODO:
- * 1. 이메일 인증 요청 API 연결 (이메일 입력 후 '이메일확인' 버튼 클릭)
- * 2. 이메일 인증 코드 검증 → email_token은 form state가 아닌 API/auth 상태로 관리 검토
- * 3. 닉네임 중복확인 API 연결 ('중복확인' 버튼 클릭 시)
- * 4. TanStack Query로 mutation 분리 (emailVerify, nicknameCheck)
- * 5. 검증 성공 상태를 Zustand 등 별도 상태와 연동 (ex. emailToken, isEmailVerified, isNicknameChecked)
- */
 
 export function SignupPage() {
   const methods = useForm<SignupFormSchema>({
@@ -31,24 +25,47 @@ export function SignupPage() {
     resolver: zodResolver(signupFormSchema),
     defaultValues: {
       email: '',
+      code: '',
       nickname: '',
       password: '',
       passwordConfirm: '',
-      profile_image_url: yellowCharacterImage,
+      profile_image_url: '',
+      email_token: '',
     },
   })
 
   const {
     control,
     formState: { isValid, isDirty },
+    setError,
     setValue,
   } = methods
   const profileImageUrl = useWatch({ control, name: 'profile_image_url' })
 
   const SignupField = AuthForm.FormField<SignupFormSchema>
 
-  // API 연결 전 임시 제출 함수입니다. 회원가입 API가 붙으면 여기서 요청을 보냅니다.
-  const handleSignupSubmit = () => {}
+  const nicknameCheck = useNicknameCheck(methods)
+  const emailVerification = useEmailVerification(methods)
+  const signupMutation = useSignupMutation(setError)
+  const canSignup =
+    isDirty &&
+    isValid &&
+    nicknameCheck.isChecked &&
+    emailVerification.isVerified
+
+  const handleSignupSubmit = ({
+    email_token,
+    password,
+    nickname,
+    profile_image_url,
+  }: SignupFormSchema) => {
+    signupMutation.mutate({
+      password,
+      nickname,
+      profile_image_url,
+      email_token,
+    })
+  }
 
   return (
     <AuthPageLayout
@@ -64,27 +81,99 @@ export function SignupPage() {
             type="text"
             placeholder="닉네임을 입력해주세요"
           >
-            <Button>중복확인</Button>
-          </SignupField>
-
-          <SignupField control={control} name="email" label="이메일">
-            <Button type="button">이메일확인</Button>
+            <Button
+              className={cn(
+                'h-7 min-w-20 bg-transparent hover:text-white disabled:bg-transparent disabled:text-white',
+                nicknameCheck.isChecked && 'text-white'
+              )}
+              size={'sm'}
+              variant="outline"
+              disabled={nicknameCheck.isPending}
+              onClick={nicknameCheck.check}
+            >
+              {nicknameCheck.isPending ? (
+                <LoaderCircle size={14} className="animate-spin" />
+              ) : nicknameCheck.isChecked ? (
+                '사용가능'
+              ) : (
+                '중복확인'
+              )}
+            </Button>
           </SignupField>
 
           <SignupField
+            name="email"
+            label="이메일"
             control={control}
+            type="email"
+            placeholder="이메일을 입력해주세요"
+          >
+            <Button
+              className={cn(
+                'h-7 min-w-20 bg-transparent hover:text-white disabled:bg-transparent disabled:text-white',
+                emailVerification.isVerified && 'text-white'
+              )}
+              size={'sm'}
+              variant="outline"
+              disabled={emailVerification.isSending}
+              onClick={emailVerification.send}
+            >
+              {emailVerification.isSending ? (
+                <LoaderCircle size={14} className="animate-spin" />
+              ) : emailVerification.isVerified ? (
+                '인증완료'
+              ) : emailVerification.isSent ? (
+                '재전송'
+              ) : (
+                '인증'
+              )}
+            </Button>
+          </SignupField>
+
+          {emailVerification.isCodeFieldOpen ? (
+            <SignupField
+              name="code"
+              label="인증번호"
+              control={control}
+              type="text"
+              placeholder="인증번호를 입력해주세요"
+            >
+              <div className="flex items-center gap-2">
+                <span className="text-xs text-primary-500">
+                  {emailVerification.timerText}
+                </span>
+                <Button
+                  type="button"
+                  className="h-7 min-w-16 bg-transparent hover:text-white disabled:bg-transparent disabled:text-white"
+                  size={'sm'}
+                  variant="outline"
+                  disabled={emailVerification.isVerifying}
+                  onClick={emailVerification.verify}
+                >
+                  {emailVerification.isVerifying ? (
+                    <LoaderCircle size={14} className="animate-spin" />
+                  ) : (
+                    '확인'
+                  )}
+                </Button>
+              </div>
+            </SignupField>
+          ) : null}
+
+          <SignupField
             name="password"
             label="비밀번호"
+            control={control}
             type="password"
-            placeholder="비밀번호"
+            placeholder="비밀번호를 입력해주세요"
           />
 
           <SignupField
-            control={control}
             name="passwordConfirm"
             label="비밀번호 확인"
+            control={control}
             type="password"
-            placeholder="비밀번호 재입력"
+            placeholder="비밀번호 재입력해주세요"
           />
 
           <ProfileImageSelectField
@@ -99,19 +188,32 @@ export function SignupPage() {
 
           <div className="flex flex-col gap-3">
             <Button
+              variant={'neutral'}
               type="submit"
+              rounded={'lg'}
               className={cn(
-                'text-xl',
-                isValid ? 'bg-black hover:bg-[#121212]' : 'disabled:opacity-10'
+                'min-h-13 text-xl py-3 w-full',
+                signupMutation.isPending
+                  ? 'disabled:bg-black disabled:text-white'
+                  : canSignup
+                    ? 'bg-black hover:bg-[#121212]'
+                    : 'disabled:bg-black/30 disabled:text-white/20'
               )}
               size="lg"
-              disabled={!isDirty || !isValid}
+              disabled={!canSignup || signupMutation.isPending}
             >
-              회원가입
+              {signupMutation.isPending ? (
+                <LoaderCircle size={18} className="animate-spin" />
+              ) : (
+                '회원가입'
+              )}
             </Button>
-            <Link to="/login" className="text-center text-sm text-text-muted">
-              이미 계정이 있으신가요? 로그인
-            </Link>
+            <p className="flex justify-center items-center gap-3 mt-2 text-sm text-text-muted">
+              이미 계정이 있으신가요 ?
+              <Link to="/login" className="font-medium text-primary-600">
+                로그인
+              </Link>
+            </p>
           </div>
         </AuthForm>
       </FormProvider>
