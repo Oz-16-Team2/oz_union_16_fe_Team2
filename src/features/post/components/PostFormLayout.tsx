@@ -8,10 +8,12 @@ import { cn } from '@/utils/cn'
 import { usePostForm } from '../hooks/usePostForm'
 import { MAX_CONTENT, MAX_IMAGES, MAX_TITLE } from '../post.constants'
 import type { PostFormData, PostFormMode } from '../post.types'
-import { PostGoalSection } from './PostGoalSection'
-import { PostTagSection } from './PostTagSection'
-import { PostVoteSection } from './PostVoteSection'
-import { SectionLabel } from './SectionLabel'
+import {
+  PostGoalSection,
+  PostTagSection,
+  PostVoteSection,
+  SectionLabel,
+} from '.'
 
 type PostFormLayoutProps = {
   mode: PostFormMode
@@ -48,60 +50,23 @@ export function PostFormLayout({
     form.addImages(files)
   }
 
-  function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
-    if (form.isSubmitDisabled || isPending) return
+  function handleSubmit() {
     onSubmit(form.buildFormData())
   }
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-6 p-6">
-      {/* 제목 */}
-      <div className="flex flex-col gap-2">
-        <SectionLabel label="제목" required />
-        <Input
-          placeholder="제목을 입력하세요"
-          value={form.title}
-          onChange={(e) => form.changeTitle(e.target.value)}
-        />
-        <p
-          className={cn(
-            'self-end text-xs',
-            form.titleLen >= MAX_TITLE
-              ? 'text-status-error-text'
-              : 'text-text-muted'
-          )}
-        >
-          {form.titleLen}/{MAX_TITLE}
-        </p>
-      </div>
-
-      {/* 이미지 업로드 (hidden input) */}
-      <input
-        ref={imageInputRef}
-        type="file"
-        accept="image/*"
-        multiple
-        className="hidden"
-        onChange={handleImageSelect}
-      />
-
       {/* 이미지 업로드 */}
       <div className="flex flex-col gap-2">
         <SectionLabel label="이미지 선택" />
         <div
           role="button"
-          tabIndex={0}
           aria-label={`이미지 업로드 (최대 ${MAX_IMAGES}장)`}
           onClick={() => form.canAddImage && imageInputRef.current?.click()}
-          onKeyDown={(e) =>
-            (e.key === 'Enter' || e.key === ' ') &&
-            imageInputRef.current?.click()
-          }
           onDrop={handleDrop}
           onDragOver={(e) => {
             e.preventDefault()
-            setIsDragging(true)
+            if (form.canAddImage) setIsDragging(true)
           }}
           onDragLeave={() => setIsDragging(false)}
           className={cn(
@@ -113,7 +78,7 @@ export function PostFormLayout({
               'cursor-pointer hover:border-focus-border hover:bg-gray-100 dark:hover:bg-gray-750'
           )}
         >
-          {form.images.length === 0 ? (
+          {form.imageItems.length === 0 ? (
             <div className="flex flex-1 flex-col items-center justify-center gap-2 text-text-muted">
               <ImagePlus className="size-8" />
               <span className="text-sm">
@@ -126,10 +91,13 @@ export function PostFormLayout({
           ) : (
             <div className="flex flex-col gap-3">
               <div className="flex flex-wrap gap-3">
-                {form.images.map((src, i) => (
-                  <div key={i} className="relative size-32 shrink-0">
+                {form.imageItems.map((item, i) => (
+                  <div
+                    key={item.previewUrl}
+                    className="relative size-32 shrink-0"
+                  >
                     <img
-                      src={src}
+                      src={item.previewUrl}
                       alt={`첨부한 이미지 ${i + 1} 번째`}
                       className="size-full rounded-xl object-cover"
                     />
@@ -148,13 +116,42 @@ export function PostFormLayout({
               </div>
               {form.canAddImage && (
                 <p className="text-text-muted">
-                  {form.images.length}/{MAX_IMAGES}장 · 클릭하거나 드래그하여
-                  추가
+                  {form.imageItems.length}/{MAX_IMAGES}장
                 </p>
               )}
             </div>
           )}
         </div>
+      </div>
+
+      {/* 이미지 업로드 실제 input (hidden) */}
+      <input
+        ref={imageInputRef}
+        type="file"
+        accept="image/*"
+        multiple
+        className="hidden"
+        onChange={handleImageSelect}
+      />
+
+      {/* 제목 */}
+      <div className="flex flex-col gap-2">
+        <SectionLabel label="제목" required />
+        <Input
+          placeholder="제목을 입력하세요"
+          value={form.title}
+          onChange={(e) => form.changeTitle(e.target.value)}
+        />
+        <p
+          className={cn(
+            'self-end text-xs',
+            form.titleLen >= MAX_TITLE
+              ? 'text-status-error-text'
+              : 'text-text-muted'
+          )}
+        >
+          {form.titleLen}/{MAX_TITLE}
+        </p>
       </div>
 
       {/* 내용 */}
@@ -179,31 +176,32 @@ export function PostFormLayout({
       </div>
 
       {/* 태그 선택 */}
-      <div className="flex flex-wrap items-center gap-2">
+      <div className="flex flex-wrap items-center gap-2 min-h-8">
         <SectionLabel label="태그 선택" />
         <PostTagSection
           selectedTagIds={form.selectedTagIds}
           onToggle={form.toggleTag}
+          defaultTagNames={defaultValues?.tagNames}
+          onInitialize={form.initializeTags}
         />
       </div>
 
       {/* 투표 생성 */}
-      <PostVoteSection
-        mode={mode}
-        question={form.voteQuestion}
-        options={form.voteOptions}
-        period={form.votePeriod}
-        onChangeQuestion={form.changeVoteQuestion}
-        onChangeOption={form.changeVoteOption}
-        onChangePeriod={form.changeVotePeriod}
-        onConfirm={form.confirmVote}
-      />
+      <div className="flex flex-col gap-3">
+        <SectionLabel label="투표 관리" />
+        <PostVoteSection
+          mode={mode}
+          options={form.voteOptions}
+          period={form.votePeriod}
+          onChangeOption={form.changeVoteOption}
+          onChangePeriod={form.changeVotePeriod}
+        />
+      </div>
 
       {/* 목표 선택 */}
       <div className="flex flex-col gap-3">
         <SectionLabel label="목표 선택" />
         <PostGoalSection
-          mode={mode}
           selectedGoalId={form.selectedGoalId}
           onChange={form.changeGoal}
         />
