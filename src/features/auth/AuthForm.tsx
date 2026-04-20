@@ -55,7 +55,7 @@ function FormField<TFieldValues extends FieldValues = FieldValues>({
   return (
     <div
       className={cn(
-        label ? 'grid grid-cols-[108px_1fr] items-center' : 'block',
+        label ? 'grid grid-cols-[120px_1fr] items-center' : 'block',
         'w-full'
       )}
     >
@@ -78,13 +78,13 @@ function FormField<TFieldValues extends FieldValues = FieldValues>({
             {...props}
           />
           {children && (
-            <div className="absolute right-2 top-1/2 -translate-y-1/2">
+            <div className="absolute right-0 pb-3 top-1/2 -translate-y-1/2">
               {children}
             </div>
           )}
         </div>
         {fieldState.error?.message && (
-          <p className="text-xs text-red-500">{fieldState.error?.message}</p>
+          <p className="text-xs text-red-500">{fieldState.error.message}</p>
         )}
       </div>
     </div>

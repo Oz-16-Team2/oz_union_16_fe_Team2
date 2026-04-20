@@ -5,7 +5,6 @@
 import { Outlet } from 'react-router'
 
 import { Footer, Header } from '@/components/common/layout'
-import { GlobalToast } from '@/components/common/ui'
 
 export function RootLayout() {
   return (
@@ -16,7 +15,6 @@ export function RootLayout() {
         <Outlet />
       </div>
       <Footer />
-      <GlobalToast />
     </div>
   )
 }

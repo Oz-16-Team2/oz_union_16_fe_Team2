@@ -13,6 +13,7 @@ const accessToken = z.string()
 const fieldError = z.record(z.string(), z.array(z.string()))
 
 // REQ-AUTH-001: 이메일 회원가입
+// POST /api/v1/accounts/signup
 export const signupRequestSchema = z.object({
   password,
   nickname,
@@ -25,6 +26,7 @@ export const signupResponseSchema = z.object({
 })
 
 // REQ-AUTH-002: 이메일 인증 발송
+// POST /api/v1/accounts/verification/send-email
 export const sendEmailVerificationRequestSchema = z.object({
   email,
 })
@@ -34,6 +36,7 @@ export const sendEmailVerificationResponseSchema = z.object({
 })
 
 // REQ-AUTH-003: 이메일 인증 확인
+// GET /api/v1/accounts/verification/verify-email
 export const verifyEmailRequestSchema = z.object({
   email,
   code,
@@ -45,21 +48,29 @@ export const verifyEmailResponseSchema = z.object({
 })
 
 // REQ-AUTH-004~006: 소셜 로그인 콜백
+// POST /api/v1/accounts/social-login/kakao/callback
 export const kakaoLoginCallbackRequestSchema = z.object({
   code,
 })
 
+// POST /api/v1/accounts/social-login/naver/callback
 export const naverLoginCallbackRequestSchema = z.object({
   code,
   state,
 })
 
+// POST /api/v1/accounts/social-login/google/callback
 export const googleLoginCallbackRequestSchema = z.object({
   code,
   state: state.optional(),
 })
 
+export const socialLoginResponseSchema = z.object({
+  access_token: accessToken,
+})
+
 // REQ-AUTH-007: 이메일 로그인
+// POST /api/v1/accounts/login
 export const loginRequestSchema = z.object({
   email,
   password,
@@ -78,11 +89,13 @@ export const loginUnauthorizedResponseSchema = z.object({
 })
 
 // REQ-AUTH-008: 로그아웃
+// POST /api/v1/accounts/logout
 export const logoutResponseSchema = z.object({
   detail,
 })
 
 // REQ-AUTH-009: JWT 토큰 재발급
+// POST /api/v1/accounts/token/refresh
 export const refreshTokenRequestSchema = z.object({
   refresh_token: refreshToken,
 })
@@ -98,6 +111,7 @@ export const sessionExpiredResponseSchema = z.object({
 })
 
 // REQ-AUTH-010: 닉네임 중복 확인
+// GET /api/v1/accounts/check-nickname
 export const checkNicknameRequestSchema = z.object({
   nickname,
 })
@@ -105,6 +119,15 @@ export const checkNicknameRequestSchema = z.object({
 export const checkNicknameResponseSchema = z.object({
   detail,
 })
+
+// Zod 스키마 기반 타입 추론
+// z.infer<typeof schema>를 사용하면,
+// Zod로 정의한 스키마를 기준으로 TypeScript 타입을 자동 생성
+// 목적:
+// 1. 타입을 따로 정의하지 않아도 됨 (중복 제거)
+// 2. API 스펙 변경 시 스키마만 수정하면 타입도 자동 반영됨
+// 3. 폼/응답/요청 구조를 하나의 기준(Zod)으로 통일 가능
+// 즉, "타입 정의 + 런타임 검증"을 동시에 가져가기 위한 구조
 
 export type SignupRequest = z.infer<typeof signupRequestSchema>
 export type SignupResponse = z.infer<typeof signupResponseSchema>
@@ -114,6 +137,7 @@ export type SendEmailVerificationRequest = z.infer<
 export type SendEmailVerificationResponse = z.infer<
   typeof sendEmailVerificationResponseSchema
 >
+
 export type VerifyEmailRequest = z.infer<typeof verifyEmailRequestSchema>
 export type VerifyEmailResponse = z.infer<typeof verifyEmailResponseSchema>
 export type KakaoLoginCallbackRequest = z.infer<
@@ -125,6 +149,7 @@ export type NaverLoginCallbackRequest = z.infer<
 export type GoogleLoginCallbackRequest = z.infer<
   typeof googleLoginCallbackRequestSchema
 >
+export type SocialLoginResponse = z.infer<typeof socialLoginResponseSchema>
 export type LoginRequest = z.infer<typeof loginRequestSchema>
 export type LoginResponse = z.infer<typeof loginResponseSchema>
 export type FieldErrorResponse = z.infer<typeof fieldErrorResponseSchema>

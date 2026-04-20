@@ -7,7 +7,6 @@ export const AUTH_ENDPOINTS = {
   verifyEmail: '/accounts/verification/verify-email',
   checkNickname: '/accounts/check-nickname',
   refreshToken: '/accounts/token/refresh',
-  changePassword: '/accounts/change-password',
   socialLoginCallback: (provider: SocialLoginProvider) =>
     `/accounts/social-login/${provider}/callback`,
 } as const
