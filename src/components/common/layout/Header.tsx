@@ -3,18 +3,23 @@ import { useNavigate } from 'react-router'
 import { Laptop, Moon, Sun } from 'lucide-react'
 
 import { DarklogoImage, logoImage } from '@/assets/images'
+import { ActionMenu } from '@/components/common/overlay'
+import { Button } from '@/components/common/ui'
 import { useTheme } from '@/lib/theme/ThemeProvider'
+import { useAuthStore } from '@/store/authStore'
 
-const THEME_ICON = {
-  light: Sun,
-  dark: Moon,
-  system: Laptop,
+const THEME_META = {
+  light: { label: '라이트 테마', display: 'Light', Icon: Sun },
+  dark: { label: '다크 테마', display: 'Dark', Icon: Moon },
+  system: { label: '시스템 테마', display: 'System', Icon: Laptop },
 } as const
 
 export function Header() {
   const { theme, setTheme } = useTheme()
   const navigate = useNavigate()
-  const ThemeIcon = THEME_ICON[theme]
+  const user = useAuthStore((state) => state.user)
+  const clearSession = useAuthStore((state) => state.clearSession)
+  const { label, display, Icon } = THEME_META[theme]
 
   const handleClickTheme = () => {
     if (theme === 'light') {
@@ -30,6 +35,11 @@ export function Header() {
     setTheme('light')
   }
 
+  const handleLogout = () => {
+    clearSession()
+    navigate('/')
+  }
+
   return (
     <header className="max-w-7xl mx-auto w-full">
       <div className="flex items-center justify-between py-3 px-4">
@@ -43,20 +53,51 @@ export function Header() {
           className="hidden w-12 h-11 dark:block"
           alt="OZ Union 로고"
         />
-        <div className="flex items-center gap-2">
-          {/* TODO: 레이아웃 확정 후 로그인 상태와 공통 버튼 컴포넌트에 맞춰 헤더 props 분리 */}
-          <button
-            type="button"
-            className="relative flex size-9 items-center justify-center"
+        <div className="flex items-center gap-6">
+          <Button
+            variant={'ghost'}
+            rounded={'full'}
             onClick={handleClickTheme}
-            aria-label={`현재 테마: ${theme}`}
+            aria-label={`${label} 사용 중. 클릭하면 다음 테마로 변경됩니다.`}
+            className="relative h-9 justify-start border border-border-default bg-transparent py-0 pl-4 pr-12 text-text-primary transition-shadow duration-300 hover:bg-transparent shadow-card-main"
           >
-            <ThemeIcon className="text-text-primary" />
-          </button>
+            <span className="text-sm font-medium leading-none">{display}</span>
+            <span className="absolute right-0 top-1/2 flex size-9 -translate-y-1/2 items-center justify-center rounded-full border border-white/30 bg-white/30 text-text-primary backdrop-blur-md shadow-[0_3px_10px_rgba(151,151,151,0.18),inset_0_1px_2px_rgba(255,255,255,0.8)] transition-transform duration-300 hover:scale-110 dark:border-white/15 dark:bg-white/5 dark:shadow-[0_10px_30px_rgba(0,0,0,0.18),inset_0_1px_1px_rgba(255,255,255,0.55),inset_0_-1px_2px_rgba(255,255,255,0.12)]">
+              <Icon className="size-4.5" aria-hidden="true" />
+            </span>
+          </Button>
 
-          <button onClick={() => navigate('/login')} className="text-lg">
-            로그인
-          </button>
+          {user ? (
+            <ActionMenu
+              className="flex items-center"
+              align="right"
+              items={[
+                { label: '마이페이지', onClick: () => navigate('/mypage') },
+                { label: '로그아웃', onClick: handleLogout },
+              ]}
+              trigger={
+                <div className="flex items-center gap-2">
+                  <img
+                    src={user.profileImageUrl}
+                    alt={`${user.nickname} 프로필`}
+                    className="size-8 rounded-full object-contain"
+                  />
+                  <span className="max-w-24 truncate text-sm font-medium leading-none">
+                    {user.nickname}
+                  </span>
+                </div>
+              }
+            />
+          ) : (
+            <Button
+              variant="ghost"
+              onClick={() => navigate('/login')}
+              rounded="full"
+              className="ml-3 h-9 bg-transparent px-0 py-0 text-sm text-text-primary hover:bg-transparent hover:text-primary-600 dark:hover:text-primary-400"
+            >
+              로그인
+            </Button>
+          )}
         </div>
       </div>
     </header>
