@@ -1,10 +1,14 @@
+import { useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 import { Link } from 'react-router'
 
 import { zodResolver } from '@hookform/resolvers/zod'
+import { LoaderCircle } from 'lucide-react'
 
 import { Button } from '@/components/common/ui'
 import { AuthForm, AuthPageLayout } from '@/features/auth'
+import { mockSocialLoginPayload } from '@/mocks/data/auth'
+import { useLoginMutation, useSocialLoginMutation } from '@/query/auth'
 import {
   type LoginFormSchema,
   loginFormSchema,
@@ -33,6 +37,10 @@ const socialLoginButtons = [
 ] as const
 
 export function LoginPage() {
+  const [pendingSocialProvider, setPendingSocialProvider] = useState<
+    (typeof socialLoginButtons)[number]['provider'] | null
+  >(null)
+
   const methods = useForm<LoginFormSchema>({
     mode: 'onChange',
     resolver: zodResolver(loginFormSchema),
@@ -45,17 +53,65 @@ export function LoginPage() {
   const {
     control,
     formState: { isValid, isDirty },
+    setError,
   } = methods
 
   const LoginField = AuthForm.FormField<LoginFormSchema>
+  const loginMutation = useLoginMutation(setError)
+  const socialLoginMutation = useSocialLoginMutation()
+  const isSocialLoginPending = socialLoginMutation.isPending
 
-  // 로그인 API 연결 전 임시 제출 함수입니다.
-  const handleLoginSubmit = () => {}
+  const handleLoginSubmit = (formValues: LoginFormSchema) => {
+    // 로그인 폼 제출 시 authApi.login -> MSW login handler 순서로 요청이 흐릅니다.
+    // 실제 API가 개발되면 같은 mutation을 유지한 채 baseURL만 실제 서버로 연결하면 됩니다.
+    loginMutation.mutate(formValues)
+  }
   const handleSocialLogin = (
     provider: (typeof socialLoginButtons)[number]['provider']
   ) => {
-    // TODO: 소셜 로그인 시작 API 또는 OAuth URL 연결
-    void provider
+    // 현재는 OAuth redirect가 없어서 MSW callback endpoint를 직접 호출합니다.
+    // 추후 실제 소셜 로그인 연동 시 provider 로그인 URL로 이동하거나 callback 페이지에서 이 요청을 실행하도록 교체합니다.
+    setPendingSocialProvider(provider)
+
+    const mutationOptions = {
+      onSettled: () => {
+        // 소셜 버튼별 loading 표시를 끝내기 위한 로컬 상태입니다.
+        // 실제 OAuth redirect 방식으로 바뀌면 이 상태는 삭제될 수 있습니다.
+        setPendingSocialProvider(null)
+      },
+    }
+
+    // provider별 callback payload 모양이 달라서 분기별로 mutation 변수를 넘깁니다.
+    // 이렇게 두면 스키마 타입과 provider가 어긋나는 실수를 TypeScript가 잡아줍니다.
+    if (provider === 'kakao') {
+      socialLoginMutation.mutate(
+        {
+          provider,
+          payload: mockSocialLoginPayload.kakao,
+        },
+        mutationOptions
+      )
+      return
+    }
+
+    if (provider === 'naver') {
+      socialLoginMutation.mutate(
+        {
+          provider,
+          payload: mockSocialLoginPayload.naver,
+        },
+        mutationOptions
+      )
+      return
+    }
+
+    socialLoginMutation.mutate(
+      {
+        provider,
+        payload: mockSocialLoginPayload.google,
+      },
+      mutationOptions
+    )
   }
 
   return (
@@ -86,14 +142,20 @@ export function LoginPage() {
             rounded={'lg'}
             className={cn(
               'text-xl py-3 w-full',
-              isValid
-                ? 'bg-black hover:bg-[#121212]'
-                : 'disabled:bg-black/30 disabled:text-white/20'
+              loginMutation.isPending
+                ? 'disabled:bg-black disabled:text-white'
+                : isValid
+                  ? 'bg-black hover:bg-[#121212]'
+                  : 'disabled:bg-black/30 disabled:text-white/20'
             )}
             size="lg"
-            disabled={!isDirty || !isValid}
+            disabled={!isDirty || !isValid || loginMutation.isPending}
           >
-            로그인
+            {loginMutation.isPending ? (
+              <LoaderCircle size={18} className="animate-spin" />
+            ) : (
+              '로그인'
+            )}
           </Button>
 
           <div className="flex items-center gap-3 py-1">
@@ -114,9 +176,14 @@ export function LoginPage() {
                     'flex size-14 items-center justify-center text-xl font-bold transition-colors',
                     className
                   )}
+                  disabled={isSocialLoginPending}
                   onClick={() => handleSocialLogin(provider)}
                 >
-                  <span aria-hidden="true">{iconLabel}</span>
+                  {pendingSocialProvider === provider ? (
+                    <LoaderCircle size={18} className="animate-spin" />
+                  ) : (
+                    <span aria-hidden="true">{iconLabel}</span>
+                  )}
                 </Button>
               )
             )}
