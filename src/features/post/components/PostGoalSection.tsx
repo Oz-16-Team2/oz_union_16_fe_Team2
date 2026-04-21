@@ -4,8 +4,6 @@ import { Dropdown } from '@/components/common/overlay'
 import { useToast } from '@/components/common/ui'
 import { useGoalsQuery } from '@/query/post'
 
-import { SkeletonBox } from './PostFormSkeleton'
-
 const DonutChart = lazy(() =>
   import('@/components/common/ui/chart/DonutChart').then((m) => ({
     default: m.DonutChart,
@@ -61,11 +59,15 @@ export function PostGoalSection({
 
           <div className="flex justify-center">
             <Suspense
-              fallback={<SkeletonBox className="h-35 w-35 rounded-full" />}
+              fallback={
+                <div className="flex size-35 items-center justify-center mx-auto">
+                  <div className="size-32.5 rounded-full border-15 border-gray-200 animate-pulse" />
+                </div>
+              }
             >
               <DonutChart
                 progressRate={selectedGoal.progressRate}
-                status="progress"
+                status={selectedGoal.status}
               />
             </Suspense>
           </div>
