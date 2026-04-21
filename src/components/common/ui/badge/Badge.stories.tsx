@@ -19,16 +19,16 @@ export const Success: Story = {
   },
 }
 
-export const Warning: Story = {
+export const InProgress: Story = {
   args: {
     children: '진행중',
-    variant: 'warning',
+    variant: 'inProgress',
   },
 }
 
-export const Error: Story = {
+export const Failed: Story = {
   args: {
     children: '미달성',
-    variant: 'error',
+    variant: 'failed',
   },
 }

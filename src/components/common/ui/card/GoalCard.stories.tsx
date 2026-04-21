@@ -17,9 +17,9 @@ export const Default: GoalCardStory = {
   render: () => (
     <GoalCard
       title="운동하기"
-      status="진행중"
-      startDate="2026.04.01"
-      endDate="2026.08.09"
+      status="IN_PROGRESS"
+      progressRate={30}
+      period={{ start: new Date('2026-04-01'), end: new Date('2026-08-09') }}
       onDelete={() => alert('삭제')}
     />
   ),
@@ -29,9 +29,9 @@ export const TitleOverflow: GoalCardStory = {
   render: () => (
     <GoalCard
       title="운동하기ddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
-      status="진행중"
-      startDate="2026.04.01"
-      endDate="2026.08.09"
+      status="IN_PROGRESS"
+      progressRate={30}
+      period={{ start: new Date('2026-04-01'), end: new Date('2026-08-09') }}
       onDelete={() => alert('삭제')}
     />
   ),
@@ -41,9 +41,9 @@ export const Completed: GoalCardStory = {
   render: () => (
     <GoalCard
       title="운동하기"
-      status="완료"
-      startDate="2026.04.01"
-      endDate="2026.08.09"
+      status="COMPLETED"
+      progressRate={100}
+      period={{ start: new Date('2026-04-01'), end: new Date('2026-08-09') }}
       onDelete={() => alert('삭제')}
     />
   ),
@@ -53,9 +53,9 @@ export const NotAchieved: GoalCardStory = {
   render: () => (
     <GoalCard
       title="운동하기"
-      status="미달성"
-      startDate="2026.04.01"
-      endDate="2026.08.09"
+      status="FAILED"
+      progressRate={45}
+      period={{ start: new Date('2026-04-01'), end: new Date('2026-08-09') }}
       onDelete={() => alert('삭제')}
     />
   ),
@@ -66,9 +66,9 @@ export const DarkDefault: GoalCardStory = {
     <div className="dark bg-surface p-6 rounded-lg">
       <GoalCard
         title="운동하기"
-        status="진행중"
-        startDate="2026.04.01"
-        endDate="2026.08.09"
+        status="IN_PROGRESS"
+        progressRate={30}
+        period={{ start: new Date('2026-04-01'), end: new Date('2026-08-09') }}
         onDelete={() => alert('삭제')}
       />
     </div>
@@ -79,6 +79,10 @@ export const Create: GoalCardEditStory = {
   render: () => (
     <GoalCardEdit
       mode="create"
+      initialTitle=""
+      initialDateRange={{ start: null, end: null }}
+      initialProgressRate={0}
+      initialStatus="IN_PROGRESS"
       onClose={() => alert('닫기')}
       onSubmit={(data) => alert(JSON.stringify(data))}
     />
@@ -90,6 +94,12 @@ export const Edit: GoalCardEditStory = {
     <GoalCardEdit
       mode="edit"
       initialTitle="운동하기"
+      initialDateRange={{
+        start: new Date('2026-04-01'),
+        end: new Date('2026-08-09'),
+      }}
+      initialProgressRate={45}
+      initialStatus="IN_PROGRESS"
       onClose={() => alert('닫기')}
       onSubmit={(data) => alert(JSON.stringify(data))}
     />
@@ -101,6 +111,10 @@ export const DarkCreate: GoalCardEditStory = {
     <div className="dark bg-surface p-6 rounded-lg">
       <GoalCardEdit
         mode="create"
+        initialTitle=""
+        initialDateRange={{ start: null, end: null }}
+        initialProgressRate={0}
+        initialStatus="IN_PROGRESS"
         onClose={() => alert('닫기')}
         onSubmit={(data) => alert(JSON.stringify(data))}
       />

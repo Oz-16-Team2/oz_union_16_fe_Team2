@@ -3,13 +3,13 @@ import { useState } from 'react'
 import { Bookmark, Heart, MessageCircle, Share2 } from 'lucide-react'
 
 import { Button } from '@/components/common/ui'
+import { cn } from '@/utils/cn'
 
 import { Card } from './Card'
 import type { PostCardProps } from './PostCard.types'
 
 export type { PostCardProps } from './PostCard.types'
 
-// 추후 hook으로 정리 필요
 export function PostCard({
   image,
   profileImage,
@@ -60,6 +60,7 @@ export function PostCard({
         <img
           src={image}
           alt={`${title} 이미지`}
+          loading="lazy"
           className="w-full h-32 object-cover shrink-0"
         />
       )}
@@ -71,6 +72,7 @@ export function PostCard({
           <img
             src={profileImage}
             alt={nickname}
+            loading="lazy"
             className="size-7 rounded-full object-cover shrink-0"
           />
           <div className="min-w-0 text-2xs">
@@ -101,52 +103,72 @@ export function PostCard({
       </div>
 
       {/* 하단 액션 */}
-      <div className="flex items-center border-t border-border-default px-5 py-2">
+      <div className="flex items-center border-t border-border-default px-3 py-1.5">
         <div className="flex items-center gap-3">
-          <div className="flex items-center gap-1 text-xs text-text-muted">
+          {/* 좋아요 */}
+          <div className="flex items-center gap-1">
             <Button
               variant="ghost"
               size="sm"
               aria-label="좋아요"
               aria-pressed={liked}
-              className="p-0 hover:bg-transparent"
+              className="group p-0 hover:bg-transparent"
               onClick={toggleLike}
             >
               <Heart
-                size={16}
-                className={
-                  liked ? 'fill-current text-error-500' : 'text-text-muted'
-                }
+                size={20}
+                className={cn(
+                  liked ? 'fill-current text-error-500' : 'text-text-primary',
+                  'transition-transform duration-200 group-hover:scale-110'
+                )}
               />
             </Button>
-            <span className="tabular-nums min-w-[1ch]">{localLikeCount}</span>
+            <span className="tabular-nums text-sm text-text-primary">
+              {localLikeCount}
+            </span>
           </div>
-          <span className="flex items-center gap-1 text-xs text-text-muted">
-            <MessageCircle size={16} />
-            <span className="tabular-nums min-w-[1ch]">{commentCount}</span>
-          </span>
+
+          {/* 댓글 */}
+          <div className="flex items-center gap-1">
+            <MessageCircle
+              size={20}
+              className="text-text-primary hover:scale-110 transition-transform duration-200"
+            />
+            <span className="tabular-nums text-sm text-text-primary">
+              {commentCount}
+            </span>
+          </div>
+
+          {/* 공유 */}
           <Button
             variant="ghost"
             size="sm"
             aria-label="공유하기"
-            className="p-0 hover:bg-transparent"
+            className="group p-0 hover:bg-transparent"
             onClick={handleShare}
           >
-            <Share2 size={16} />
+            <Share2
+              size={20}
+              className="text-text-primary transition-transform duration-200 group-hover:scale-110"
+            />
           </Button>
+
           <Button
             variant="ghost"
             size="sm"
             aria-label={bookmarked ? '스크랩 취소' : '스크랩'}
             aria-pressed={bookmarked}
-            className="p-0 hover:bg-transparent"
+            className="group p-0 hover:bg-transparent"
             onClick={toggleBookmark}
           >
             <Bookmark
-              size={16}
-              className={
-                bookmarked ? 'fill-current text-primary-600' : 'text-text-muted'
-              }
+              size={20}
+              className={cn(
+                bookmarked
+                  ? 'fill-current text-primary-600'
+                  : 'text-text-primary',
+                'transition-transform duration-200 group-hover:scale-110'
+              )}
             />
           </Button>
         </div>

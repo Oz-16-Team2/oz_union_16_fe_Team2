@@ -1,19 +1,21 @@
 import { Pie, PieChart } from 'recharts'
 
+import type { GoalStatus } from '@/components/common/ui/card'
+
 type DonutChartProps = {
   progressRate: number
-  status?: 'progress' | 'done' | 'fail'
+  status?: GoalStatus
 }
 
 export function DonutChart({
   progressRate,
-  status = 'progress',
+  status = 'IN_PROGRESS',
 }: DonutChartProps) {
   const percentage = Math.min(100, Math.max(0, progressRate))
 
   // 상태별 색상
   const gaugeColor =
-    status === 'fail' ? 'var(--color-danger-500)' : 'var(--color-primary-500)'
+    status === 'FAILED' ? 'var(--color-danger-500)' : 'var(--color-primary-500)'
 
   return (
     <div className="relative flex items-center justify-center">
