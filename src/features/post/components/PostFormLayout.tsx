@@ -50,7 +50,8 @@ export function PostFormLayout({
     form.addImages(files)
   }
 
-  function handleSubmit() {
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault()
     onSubmit(form.buildFormData())
   }
 
