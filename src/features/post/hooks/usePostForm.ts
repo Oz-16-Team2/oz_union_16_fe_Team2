@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import type { DateRange } from '@/components/common/ui/calendar/Calendar.type'
 
@@ -8,9 +8,8 @@ import {
   MAX_TAGS,
   MAX_TITLE,
   MAX_VOTE_OPTION,
-  MAX_VOTE_QUESTION,
 } from '../post.constants'
-import type { PostFormData, PostFormMode } from '../post.types'
+import type { PostFormData, PostFormMode, PostImageItem } from '../post.types'
 
 function charLen(str: string) {
   return Array.from(str).length
@@ -23,25 +22,40 @@ export function usePostForm(
   // 기본 필드
   const [title, setTitle] = useState(defaultValues?.title ?? '')
   const [content, setContent] = useState(defaultValues?.content ?? '')
-  const [images, setImages] = useState<string[]>(defaultValues?.images ?? [])
 
-  // 태그
-  const [selectedTagIds, setSelectedTagIds] = useState<number[]>(
-    defaultValues?.tagIds ?? []
+  // 이미지: 서버 이미지는 file 없이 previewUrl만 보유
+  const [imageItems, setImageItems] = useState<PostImageItem[]>(
+    (defaultValues?.images ?? []).map((url) => ({ previewUrl: url }))
   )
+  // 언마운트 시 revoke할 blob URL 추적
+  const blobUrlsRef = useRef<string[]>([])
+
+  useEffect(() => {
+    return () => {
+      blobUrlsRef.current.forEach((url) => URL.revokeObjectURL(url))
+    }
+  }, [])
+
+  // 태그 — 초기 선택은 PostTagSection이 tagNames를 보고 initializeTags로 설정
+  const [selectedTagIds, setSelectedTagIds] = useState<number[]>([])
+  const tagInitializedRef = useRef(false)
+
+  function initializeTags(ids: number[]) {
+    if (tagInitializedRef.current) return
+    tagInitializedRef.current = true
+    setSelectedTagIds(ids)
+  }
 
   // 투표
-  const [voteQuestion, setVoteQuestion] = useState(
-    defaultValues?.vote?.question ?? ''
-  )
   const [voteOptions, setVoteOptions] = useState<string[]>(
     defaultValues?.vote?.options.map((o) => o.content) ?? ['', '']
   )
-  const [votePeriod, setVotePeriod] = useState<DateRange | undefined>()
-  const [voteConfirmed, setVoteConfirmed] = useState(
-    mode === 'edit' && !!defaultValues?.vote
-  )
-
+  const [votePeriod, setVotePeriod] = useState<DateRange | undefined>(() => {
+    if (mode !== 'edit' || !defaultValues?.vote) return undefined
+    const { startDate, endDate } = defaultValues.vote
+    if (!startDate || !endDate) return undefined
+    return { start: new Date(startDate), end: new Date(endDate) }
+  })
   // 목표
   const [selectedGoalId, setSelectedGoalId] = useState<number | undefined>(
     mode === 'edit' ? defaultValues?.goalId : undefined
@@ -54,7 +68,7 @@ export function usePostForm(
   const titleLen = charLen(title)
   const contentLen = charLen(content)
   const isSubmitDisabled = title.trim() === '' || content.trim() === ''
-  const canAddImage = images.length < MAX_IMAGES
+  const canAddImage = imageItems.length < MAX_IMAGES
 
   // 제목 / 내용
   function changeTitle(val: string) {
@@ -67,18 +81,24 @@ export function usePostForm(
 
   // 이미지
   function addImages(files: File[]) {
-    const remaining = MAX_IMAGES - images.length
-    const urls = files.slice(0, remaining).map(URL.createObjectURL)
-    setImages((prev) => [...prev, ...urls])
+    const remaining = MAX_IMAGES - imageItems.length
+    const newItems = files.slice(0, remaining).map((file) => {
+      const previewUrl = URL.createObjectURL(file)
+      blobUrlsRef.current.push(previewUrl)
+      return { file, previewUrl }
+    })
+    setImageItems((prev) => [...prev, ...newItems])
   }
 
   function removeImage(index: number) {
-    setImages((prev) => {
-      const url = prev[index]
-      // blob URL인 경우에만 revoke (서버 URL은 no-op 방지)
-      if (url.startsWith('blob:')) URL.revokeObjectURL(url)
-      return prev.filter((_, i) => i !== index)
-    })
+    const item = imageItems[index]
+    if (item?.file) {
+      URL.revokeObjectURL(item.previewUrl)
+      blobUrlsRef.current = blobUrlsRef.current.filter(
+        (u) => u !== item.previewUrl
+      )
+    }
+    setImageItems((prev) => prev.filter((_, i) => i !== index))
   }
 
   // 태그
@@ -91,74 +111,64 @@ export function usePostForm(
   }
 
   // 투표
-  function changeVoteQuestion(question: string) {
-    if (charLen(question) <= MAX_VOTE_QUESTION) {
-      setVoteQuestion(question)
-      setVoteConfirmed(false)
-    }
-  }
-
   function changeVoteOption(index: number, value: string) {
     if (charLen(value) <= MAX_VOTE_OPTION) {
       setVoteOptions((prev) => prev.map((o, i) => (i === index ? value : o)))
-      setVoteConfirmed(false)
     }
   }
 
   function changeVotePeriod(date: DateRange | null) {
     setVotePeriod(date ?? undefined)
-    setVoteConfirmed(false)
-  }
-
-  function confirmVote() {
-    setVoteConfirmed(true)
-  }
-
-  // 목표
-  function changeGoal(goalId: number | undefined) {
-    setSelectedGoalId(goalId)
   }
 
   // 최종 payload 빌드
+  // images: 서버 URL(이미 업로드됨)만 포함. 새 파일은 S3 업로드 후 URL이 확정되면 추가
   function buildFormData(): PostFormData {
-    const base: Omit<PostFormData, 'postId' | 'vote'> = {
+    const uploadedImages = imageItems
+      .filter((item) => !item.file)
+      .map((item) => item.previewUrl)
+
+    const hasActiveVote =
+      Boolean(votePeriod?.start && votePeriod?.end) &&
+      voteOptions.filter((opt) => opt.trim() !== '').length >= 2
+
+    const vote: PostFormData['vote'] = hasActiveVote
+      ? {
+          options: voteOptions
+            .filter((c) => c.trim() !== '')
+            .map((c, i) => ({ content: c.trim(), sortOrder: i + 1 })),
+          startDate: votePeriod?.start?.toISOString().split('T')[0],
+          endDate: votePeriod?.end?.toISOString().split('T')[0],
+        }
+      : undefined
+
+    const base: Omit<PostFormData, 'postId'> = {
       title: title.trim(),
       content: content.trim(),
-      images,
+      images: uploadedImages,
       hasGoal: selectedGoalId !== undefined,
       goalId: selectedGoalId,
-      hasVote: voteConfirmed,
+      hasVote: hasActiveVote,
+      vote,
       tagIds: selectedTagIds,
     }
 
     if (mode === 'edit') {
-      // edit 모드에서 postId가 없는 것은 프로그래밍 오류
       if (postId === undefined) {
         throw new Error('[usePostForm] edit 모드에서 postId는 필수입니다.')
       }
-      // PATCH 스펙: vote 필드 미포함. API 변환(post_id 등)은 호출부(Page)에서 처리
       return { postId, ...base }
     }
 
-    // POST 스펙: vote 포함
-    return {
-      ...base,
-      vote: voteConfirmed
-        ? {
-            question: voteQuestion,
-            options: voteOptions.map((c, i) => ({ content: c, sortOrder: i })),
-          }
-        : undefined,
-    }
+    return base
   }
 
   return {
     // state
     title,
     content,
-    images,
+    imageItems,
     selectedTagIds,
-    voteQuestion,
     voteOptions,
     votePeriod,
     selectedGoalId,
@@ -172,12 +182,11 @@ export function usePostForm(
     changeContent,
     addImages,
     removeImage,
+    initializeTags,
     toggleTag,
-    changeVoteQuestion,
     changeVoteOption,
     changeVotePeriod,
-    confirmVote,
-    changeGoal,
+    changeGoal: setSelectedGoalId,
     buildFormData,
   }
 }

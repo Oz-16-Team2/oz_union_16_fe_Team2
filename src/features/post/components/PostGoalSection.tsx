@@ -1,69 +1,51 @@
+import { lazy, Suspense, useEffect } from 'react'
+
 import { Dropdown } from '@/components/common/overlay'
-import { DonutChart } from '@/components/common/ui/chart/DonutChart'
+import { useToast } from '@/components/common/ui'
+import { useGoalsQuery } from '@/query/post'
 
-import type { GoalOption, PostFormMode } from '../post.types'
+import { SkeletonBox } from './PostFormSkeleton'
 
-// TODO: 레이아웃 테스트용 mock 데이터 -> MSW 연동 필요
-// 실제 데이터는 GET lazy fetch 예정
-const MOCK_GOALS: GoalOption[] = [
-  {
-    id: 1,
-    title: '매일 1시간 운동',
-    startDate: '2026.04.01',
-    endDate: '2026.06.30',
-    progressRate: 48,
-    status: 'IN_PROGRESS',
-  },
-  {
-    id: 2,
-    title: '매일 독서 30분',
-    startDate: '2026.04.01',
-    endDate: '2026.04.30',
-    progressRate: 70,
-    status: 'IN_PROGRESS',
-  },
-  {
-    id: 3,
-    title: '코딩 스터디',
-    startDate: '2026.03.01',
-    endDate: '2026.05.31',
-    progressRate: 30,
-    status: 'IN_PROGRESS',
-  },
-]
+const DonutChart = lazy(() =>
+  import('@/components/common/ui/chart/DonutChart').then((m) => ({
+    default: m.DonutChart,
+  }))
+)
 
 type PostGoalSectionProps = {
-  mode: PostFormMode
   selectedGoalId?: number
   onChange: (goalId: number | undefined) => void
 }
 
 export function PostGoalSection({
-  mode,
   selectedGoalId,
   onChange,
 }: PostGoalSectionProps) {
-  // TODO: API 연동 시 MOCK_GOALS를 useQuery 또는 fetch 결과로 교체
-  // GET /api/v1/goals?status=IN_PROGRESS
-  const goals = MOCK_GOALS
+  const toast = useToast()
+  const { data: goals = [], isError } = useGoalsQuery()
 
-  const selectedGoal = goals.find((g) => g.id === selectedGoalId)
-  const placeholder =
-    mode === 'create'
-      ? '목표를 선택해주세요.'
-      : '해당되는 항목을 선택해 주세요.'
+  useEffect(() => {
+    if (isError) toast.error('목표 목록을 불러오지 못했습니다.')
+  }, [isError, toast])
+
+  const selectedGoal = goals.find((g) => g.goalId === selectedGoalId)
 
   return (
     <div className="flex flex-col gap-4 rounded-2xl border border-border-default bg-surface p-4">
       <Dropdown
-        options={goals.map((g) => ({ value: String(g.id), label: g.title }))}
+        options={goals.map((goal) => ({
+          value: String(goal.goalId),
+          label: goal.title,
+        }))}
         value={
           selectedGoalId !== undefined ? String(selectedGoalId) : undefined
         }
-        onChange={(val) =>
-          onChange(val !== undefined ? Number(val) : undefined)
-        }
-        placeholder={placeholder}
+        onChange={(val) => {
+          if (val === undefined) return onChange(undefined)
+          const id = Number(val)
+          onChange(Number.isNaN(id) ? undefined : id)
+        }}
+        placeholder="목표를 선택해주세요."
       />
 
       {selectedGoal && (
@@ -78,10 +60,14 @@ export function PostGoalSection({
           </div>
 
           <div className="flex justify-center">
-            <DonutChart
-              progressRate={selectedGoal.progressRate}
-              status="progress"
-            />
+            <Suspense
+              fallback={<SkeletonBox className="h-35 w-35 rounded-full" />}
+            >
+              <DonutChart
+                progressRate={selectedGoal.progressRate}
+                status="progress"
+              />
+            </Suspense>
           </div>
         </div>
       )}

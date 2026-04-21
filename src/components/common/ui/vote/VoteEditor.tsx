@@ -83,17 +83,19 @@ export function VoteEditor({
           })}
         </div>
 
-        <div className="mt-8 flex justify-center">
-          <Button
-            type="button"
-            variant="primary"
-            onClick={onSubmit}
-            disabled={isSubmitDisabled}
-            className="h-10 w-full max-w-md"
-          >
-            {submitLabel}
-          </Button>
-        </div>
+        {onSubmit && (
+          <div className="mt-8 flex justify-center">
+            <Button
+              type="button"
+              variant="primary"
+              onClick={onSubmit}
+              disabled={isSubmitDisabled}
+              className="h-10 w-full max-w-md"
+            >
+              {submitLabel}
+            </Button>
+          </div>
+        )}
       </section>
 
       <div className="mt-4 flex items-center gap-2 text-sm text-text-muted">

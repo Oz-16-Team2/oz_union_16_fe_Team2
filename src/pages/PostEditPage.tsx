@@ -1,25 +1,41 @@
-import { useNavigate, useParams } from 'react-router'
+import { Navigate, useNavigate, useParams } from 'react-router'
 
-import type { PostFormData } from '@/features/post'
-import { PostFormLayout, toApiUpdateRequest } from '@/features/post'
+import { useToast } from '@/components/common/ui'
+import {
+  PostFormLayout,
+  PostFormSkeleton,
+  toPostFormData,
+} from '@/features/post'
+import { usePostQuery, useUpdatePostMutation } from '@/query/post'
 
 export function PostEditPage() {
   const navigate = useNavigate()
+  const toast = useToast()
   const { id } = useParams<{ id: string }>()
+  const postId = Number(id)
 
-  function handleSubmit(data: PostFormData) {
-    if (data.postId === undefined) return
-    const body = toApiUpdateRequest(data)
-    // TODO: PATCH /api/v1/posts/:id 연동
-    // defaultValues는 GET /api/v1/posts/:id 응답 후 PostFormLayout에 전달 (로딩 중 렌더링 보류)
-    console.log(`edit post ${id}:`, body)
-  }
+  const { data: post, isLoading, isError } = usePostQuery(postId)
+
+  const { mutate: updatePost, isPending } = useUpdatePostMutation(postId, {
+    onSuccess: () => {
+      navigate(-1)
+    }, // TODO: 추후 게시글 목록으로 이동하도록 변경 필요
+    onError: () => toast.error('게시글 수정에 실패했습니다.'),
+  })
+
+  if (isNaN(postId)) return <Navigate to="/not-found" replace />
+  if (isLoading) return <PostFormSkeleton />
+  if (isError || !post) return <Navigate to="/not-found" replace />
+
+  const defaultValues = toPostFormData(post)
 
   return (
     <PostFormLayout
       mode="edit"
-      onSubmit={handleSubmit}
+      defaultValues={defaultValues}
+      onSubmit={updatePost}
       onCancel={() => navigate(-1)}
+      isPending={isPending}
     />
   )
 }
