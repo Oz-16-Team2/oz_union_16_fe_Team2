@@ -9,6 +9,8 @@ export type {
   PostCardProps,
 } from './card'
 export { Card, type CardProps, GoalCard, GoalCardEdit, PostCard } from './card'
+export type { Comment } from './comment'
+export { CommentInput, CommentItem, CommentList } from './comment'
 export { Input, type InputProps } from './field/Input'
 export { SearchBar, type SearchBarProps } from './field/SearchBar'
 export { Textarea, type TextareaProps } from './field/Textarea'

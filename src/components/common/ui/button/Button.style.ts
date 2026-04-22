@@ -22,6 +22,8 @@ export const buttonVariants = cva(
 
         modal:
           'bg-button-modal-cancel-bg text-white hover:bg-button-modal-cancel-hover',
+
+        submit: 'bg-gray-400 text-white hover:bg-button-primary-bg',
       },
 
       size: {
