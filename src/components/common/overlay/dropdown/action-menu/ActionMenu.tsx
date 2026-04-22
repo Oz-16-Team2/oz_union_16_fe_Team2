@@ -12,12 +12,14 @@ type ActionMenuProps = {
   trigger: React.ReactNode
   items: ActionMenuItem[]
   align?: 'left' | 'right'
+  className?: string
 }
 
 export function ActionMenu({
   trigger,
   items,
   align = 'right',
+  className,
 }: ActionMenuProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [isClosing, setIsClosing] = useState(false)
@@ -41,7 +43,7 @@ export function ActionMenu({
       <button
         type="button"
         onClick={() => (isOpen ? close() : setIsOpen(true))}
-        className="cursor-pointer"
+        className={cn('cursor-pointer', className)}
         aria-label="메뉴 열기"
       >
         {trigger}

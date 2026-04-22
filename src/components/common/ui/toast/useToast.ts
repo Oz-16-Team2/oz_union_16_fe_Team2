@@ -1,6 +1,6 @@
 import { createElement } from 'react'
 
-import { toast } from 'sonner'
+import { type ExternalToast, toast } from 'sonner'
 
 import { Toast } from './Toast'
 
@@ -11,15 +11,23 @@ export type ToastProps = {
   type?: ToastType
 }
 
-const showCustomToast = (type: ToastType, message: string) => {
-  return toast.custom(() => createElement(Toast, { type, message }))
+const showCustomToast = (
+  type: ToastType,
+  message: string,
+  options?: ExternalToast
+) => {
+  return toast.custom(() => createElement(Toast, { type, message }), options)
 }
 
 export const useToast = () => {
   return {
-    success: (message: string) => showCustomToast('success', message),
-    error: (message: string) => showCustomToast('error', message),
-    warning: (message: string) => showCustomToast('warning', message),
-    info: (message: string) => showCustomToast('info', message),
+    success: (message: string, options?: ExternalToast) =>
+      showCustomToast('success', message, options),
+    error: (message: string, options?: ExternalToast) =>
+      showCustomToast('error', message, options),
+    warning: (message: string, options?: ExternalToast) =>
+      showCustomToast('warning', message, options),
+    info: (message: string, options?: ExternalToast) =>
+      showCustomToast('info', message, options),
   }
 }

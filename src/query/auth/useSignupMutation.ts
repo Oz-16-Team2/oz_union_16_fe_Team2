@@ -25,9 +25,11 @@ export function useSignupMutation(setError: UseFormSetError<SignupFormSchema>) {
   >({
     mutationFn: authApi.signup,
     onSuccess: (data) => {
-      // 회원가입 API가 성공하면 전역 토스트를 띄우고 로그인 페이지로 이동합니다.
-      toast.success(data.detail)
-      navigate('/login')
+      // 성공 토스트가 사라진 뒤 로그인 페이지로 이동하도록 짧은 지연을 둡니다.
+      toast.success(data.detail, { duration: 2000 })
+      window.setTimeout(() => {
+        navigate('/login')
+      }, 2000)
     },
     onError: (error) => {
       const errorDetail = error.response?.data?.error_detail
