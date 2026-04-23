@@ -11,7 +11,7 @@ export function RootLayout() {
     <div className="flex min-h-screen flex-col">
       <Header />
 
-      <div className="max-w-300 mx-auto mt-7.5 w-full flex-1 px-8">
+      <div className="max-w-300 mx-auto py-7.5 w-full flex-1 px-8">
         <Outlet />
       </div>
       <Footer />

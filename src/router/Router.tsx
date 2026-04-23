@@ -1,9 +1,10 @@
 import { createBrowserRouter } from 'react-router'
 
-import { RootLayout } from '@/components/common/layout'
+import { MyPageLayout, RootLayout } from '@/components/common/layout'
 import {
   LoginPage,
   Main,
+  MyPage,
   NotFoundPage,
   PostCreatePage,
   PostEditPage,
@@ -33,6 +34,16 @@ export const router = createBrowserRouter([
       {
         path: 'post/:id/edit',
         element: <PostEditPage />,
+      },
+    ],
+  },
+  {
+    path: '/mypage',
+    element: <MyPageLayout />,
+    children: [
+      {
+        index: true,
+        element: <MyPage />,
       },
     ],
   },
