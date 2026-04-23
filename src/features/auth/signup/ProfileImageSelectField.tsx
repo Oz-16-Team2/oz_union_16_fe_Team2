@@ -47,18 +47,18 @@ export function ProfileImageSelectField({
   }
 
   return (
-    <div className="grid w-full grid-cols-[120px_1fr] items-center">
-      <span className="text-sm leading-tight">프로필 캐릭터 선택</span>
+    <div className="grid w-full grid-cols-[26%_1fr] items-center">
+      <span className="text-sm leading-tight">프로필 선택</span>
       <button
         type="button"
-        aria-label="프로필 캐릭터 선택"
+        aria-label="프로필 선택"
         className="group relative size-16 cursor-pointer rounded-full transition-transform duration-200 ease-out hover:scale-110"
         onClick={() => setIsOpen(true)}
       >
         <img
           src={selectedCharacter.src}
           alt={selectedCharacter.label}
-          className="size-16 rounded-full object-contain shrink-0"
+          className="size-12 sm:size-16 rounded-full object-contain shrink-0"
         />
         <span
           aria-hidden="true"

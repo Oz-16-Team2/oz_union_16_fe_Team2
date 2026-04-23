@@ -34,13 +34,17 @@ type FormFieldProps<TFieldValues extends FieldValues = FieldValues> = {
   name: Path<TFieldValues>
   control: Control<TFieldValues>
   label?: string
+  actionClassName?: string
 } & Omit<ComponentProps<'input'>, 'name'>
 
 function FormField<TFieldValues extends FieldValues = FieldValues>({
   name,
   label,
   control,
+  actionClassName,
+  className,
   children,
+  onBlur,
   ...props
 }: FormFieldProps<TFieldValues>) {
   // FormProvider 안에서 register와 에러 상태를 가져옵니다.
@@ -55,7 +59,7 @@ function FormField<TFieldValues extends FieldValues = FieldValues>({
   return (
     <div
       className={cn(
-        label ? 'grid grid-cols-[120px_1fr] items-center' : 'block',
+        label ? 'grid grid-cols-[26%_1fr] items-center' : 'block',
         'w-full'
       )}
     >
@@ -70,15 +74,25 @@ function FormField<TFieldValues extends FieldValues = FieldValues>({
           <Input
             id={id}
             {...field}
+            onBlur={(event) => {
+              field.onBlur()
+              onBlur?.(event)
+            }}
             className={cn(
-              'placeholder:text-sm py-1 px-1.5 w-full rounded-none border-t-0 border-x-0 border-border-strong bg-transparent',
-              children && 'pr-24',
-              props.className
+              'placeholder:text-sm py-1 px-1 w-full rounded-none border-t-0 border-x-0 border-border-strong bg-transparent',
+              // 오른쪽 토글/버튼이 있는 필드는 텍스트가 액션 영역과 겹치지 않도록 여백을 둡니다.
+              children && 'pr-10',
+              className
             )}
             {...props}
           />
           {children && (
-            <div className="absolute right-0 pb-3 top-1/2 -translate-y-1/2">
+            <div
+              className={cn(
+                'absolute right-0 top-1/2 -translate-y-1/2 pb-1.5',
+                actionClassName
+              )}
+            >
               {children}
             </div>
           )}

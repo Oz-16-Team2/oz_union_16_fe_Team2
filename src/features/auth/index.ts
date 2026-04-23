@@ -1,3 +1,5 @@
 export { AuthForm } from './AuthForm'
-export { AuthPageLayout } from './AuthPageLayout'
-export { ProfileImageSelectField } from './signup'
+export { AuthFormLayout } from './AuthFormLayout'
+export { CharacterDropAnimationFrame } from './character/CharacterDropAnimationFrame'
+export { PasswordVisibilityButton } from './PasswordVisibilityButton'
+export { ProfileImageSelectField, SignupDropAnimationFrame } from './signup'
