@@ -1,4 +1,5 @@
-import { FormProvider, useForm, useWatch } from 'react-hook-form'
+import { useState } from 'react'
+import { useForm, useWatch } from 'react-hook-form'
 import { Link } from 'react-router'
 
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -7,9 +8,14 @@ import { LoaderCircle } from 'lucide-react'
 import { Button } from '@/components/common/ui'
 import {
   AuthForm,
-  AuthPageLayout,
+  AuthFormLayout,
+  PasswordVisibilityButton,
   ProfileImageSelectField,
+  SignupDropAnimationFrame,
 } from '@/features/auth'
+import type { CharacterEyeStatus } from '@/features/auth/character/eye/useCharacterEye'
+import { useAuthEntranceMotion } from '@/features/auth/hooks/useAuthEntranceMotion'
+import { usePasswordVisibility } from '@/features/auth/hooks/usePasswordVisibility'
 import { useEmailVerification } from '@/features/auth/signup/hook/useEmailVerification'
 import { useNicknameCheck } from '@/features/auth/signup/hook/useNicknameCheck'
 import { useSignupMutation } from '@/query/auth'
@@ -19,7 +25,20 @@ import {
 } from '@/schemas/auth/authForm.schema'
 import { cn } from '@/utils/cn'
 
+type SignupFocusedField =
+  | 'nickname'
+  | 'email'
+  | 'code'
+  | 'password'
+  | 'passwordConfirm'
+  | null
+
 export function SignupPage() {
+  const { isDropped, isEntranceEyeActive } = useAuthEntranceMotion()
+  const [focusedField, setFocusedField] = useState<SignupFocusedField>(null)
+  const [lastFocusedField, setLastFocusedField] =
+    useState<SignupFocusedField>(null)
+
   const methods = useForm<SignupFormSchema>({
     mode: 'onChange',
     resolver: zodResolver(signupFormSchema),
@@ -36,13 +55,15 @@ export function SignupPage() {
 
   const {
     control,
-    formState: { isValid, isDirty },
+    formState: { errors, isValid, isDirty },
     setError,
     setValue,
   } = methods
   const profileImageUrl = useWatch({ control, name: 'profile_image_url' })
 
   const SignupField = AuthForm.FormField<SignupFormSchema>
+  const passwordVisibility = usePasswordVisibility()
+  const passwordConfirmVisibility = usePasswordVisibility()
 
   const nicknameCheck = useNicknameCheck(methods)
   const emailVerification = useEmailVerification(methods)
@@ -52,6 +73,46 @@ export function SignupPage() {
     isValid &&
     nicknameCheck.isChecked &&
     emailVerification.isVerified
+  const hasSignupError =
+    Boolean(errors.nickname) ||
+    Boolean(errors.email) ||
+    Boolean(errors.code) ||
+    Boolean(errors.password) ||
+    Boolean(errors.passwordConfirm) ||
+    signupMutation.isError
+  const errorTargetField: SignupFocusedField =
+    errors.password || errors.passwordConfirm || signupMutation.isError
+      ? 'password'
+      : errors.email || errors.code || errors.nickname
+        ? 'email'
+        : null
+  const eyeTargetField = errorTargetField ?? focusedField ?? lastFocusedField
+
+  // 회원가입도 로그인과 동일하게 비밀번호 입력 중에는 항상 회피 시선을 우선합니다.
+  const eyeStatus: CharacterEyeStatus =
+    focusedField === 'password' || focusedField === 'passwordConfirm'
+      ? 'look-away'
+      : hasSignupError
+        ? eyeTargetField === 'password' || eyeTargetField === 'passwordConfirm'
+          ? 'password-error'
+          : eyeTargetField === 'email' ||
+              eyeTargetField === 'code' ||
+              eyeTargetField === 'nickname'
+            ? 'email-error'
+            : 'error'
+        : focusedField === 'email' ||
+            focusedField === 'code' ||
+            focusedField === 'nickname'
+          ? 'email'
+          : !isDropped || isEntranceEyeActive
+            ? 'entrance'
+            : 'idle'
+
+  const handleFieldFocus = (field: Exclude<SignupFocusedField, null>) => {
+    // blur 이후 에러가 떠도 마지막으로 입력하던 필드를 계속 바라보도록 기억합니다.
+    setFocusedField(field)
+    setLastFocusedField(field)
+  }
 
   const handleSignupSubmit = ({
     email_token,
@@ -68,22 +129,26 @@ export function SignupPage() {
   }
 
   return (
-    <AuthPageLayout
-      title="회원가입"
-      subTitle="작심삼일 말고, 작심며칠! 오늘 부터 꾸준함을 만들어보세요"
-    >
-      <FormProvider {...methods}>
-        <AuthForm onSubmit={methods.handleSubmit(handleSignupSubmit)}>
+    <div className="relative flex min-h-screen w-full items-center justify-center">
+      <SignupDropAnimationFrame isDropped={isDropped} eyeStatus={eyeStatus}>
+        <AuthFormLayout
+          methods={methods}
+          title="회원가입"
+          description="작심삼일 말고, 작심며칠! 오늘 부터 꾸준함을 만들어보세요"
+          onSubmit={methods.handleSubmit(handleSignupSubmit)}
+        >
           <SignupField
             name="nickname"
             label="닉네임"
             control={control}
             type="text"
             placeholder="닉네임을 입력해주세요"
+            onFocus={() => handleFieldFocus('nickname')}
+            onBlur={() => setFocusedField(null)}
           >
             <Button
               className={cn(
-                'h-7 min-w-20 bg-transparent hover:text-white disabled:bg-transparent disabled:text-white',
+                'py-1 min-w-17 px-0 bg-transparent hover:text-white disabled:bg-transparent disabled:text-white',
                 nicknameCheck.isChecked && 'text-white'
               )}
               size={'sm'}
@@ -107,10 +172,12 @@ export function SignupPage() {
             control={control}
             type="email"
             placeholder="이메일을 입력해주세요"
+            onFocus={() => handleFieldFocus('email')}
+            onBlur={() => setFocusedField(null)}
           >
             <Button
               className={cn(
-                'h-7 min-w-20 bg-transparent hover:text-white disabled:bg-transparent disabled:text-white',
+                'py-1 min-w-17 px-0 bg-transparent hover:text-white disabled:bg-transparent disabled:text-white',
                 emailVerification.isVerified && 'text-white'
               )}
               size={'sm'}
@@ -137,6 +204,8 @@ export function SignupPage() {
               control={control}
               type="text"
               placeholder="인증번호를 입력해주세요"
+              onFocus={() => handleFieldFocus('code')}
+              onBlur={() => setFocusedField(null)}
             >
               <div className="flex items-center gap-2">
                 <span className="text-xs text-primary-500">
@@ -144,7 +213,7 @@ export function SignupPage() {
                 </span>
                 <Button
                   type="button"
-                  className="h-7 min-w-16 bg-transparent hover:text-white disabled:bg-transparent disabled:text-white"
+                  className="py-1 min-w-17 px-0 bg-transparent hover:text-white disabled:bg-transparent disabled:text-white"
                   size={'sm'}
                   variant="outline"
                   disabled={emailVerification.isVerifying}
@@ -164,17 +233,33 @@ export function SignupPage() {
             name="password"
             label="비밀번호"
             control={control}
-            type="password"
+            actionClassName="pb-0"
+            type={passwordVisibility.inputType}
             placeholder="비밀번호를 입력해주세요"
-          />
+            onFocus={() => handleFieldFocus('password')}
+            onBlur={() => setFocusedField(null)}
+          >
+            <PasswordVisibilityButton
+              isVisible={passwordVisibility.isVisible}
+              onToggle={passwordVisibility.toggleVisibility}
+            />
+          </SignupField>
 
           <SignupField
             name="passwordConfirm"
             label="비밀번호 확인"
             control={control}
-            type="password"
+            actionClassName="pb-0"
+            type={passwordConfirmVisibility.inputType}
             placeholder="비밀번호 재입력해주세요"
-          />
+            onFocus={() => handleFieldFocus('passwordConfirm')}
+            onBlur={() => setFocusedField(null)}
+          >
+            <PasswordVisibilityButton
+              isVisible={passwordConfirmVisibility.isVisible}
+              onToggle={passwordConfirmVisibility.toggleVisibility}
+            />
+          </SignupField>
 
           <ProfileImageSelectField
             value={profileImageUrl}
@@ -208,15 +293,15 @@ export function SignupPage() {
                 '회원가입'
               )}
             </Button>
-            <p className="flex justify-center items-center gap-3 mt-2 text-sm text-text-muted">
+            <p className="mt-2 flex items-center justify-center gap-3 text-sm text-text-muted">
               이미 계정이 있으신가요 ?
               <Link to="/login" className="font-medium text-primary-600">
                 로그인
               </Link>
             </p>
           </div>
-        </AuthForm>
-      </FormProvider>
-    </AuthPageLayout>
+        </AuthFormLayout>
+      </SignupDropAnimationFrame>
+    </div>
   )
 }

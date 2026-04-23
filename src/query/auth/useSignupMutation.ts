@@ -10,11 +10,9 @@ import {
   type SignupRequest,
   type SignupResponse,
 } from '@/apis/auth'
-import { useToast } from '@/components/common/ui'
 import type { SignupFormSchema } from '@/schemas/auth/authForm.schema'
 
 export function useSignupMutation(setError: UseFormSetError<SignupFormSchema>) {
-  const toast = useToast()
   const navigate = useNavigate()
 
   // 회원가입 제출은 사용자가 회원가입 버튼을 눌렀을 때만 실행합니다.
@@ -24,12 +22,10 @@ export function useSignupMutation(setError: UseFormSetError<SignupFormSchema>) {
     SignupRequest
   >({
     mutationFn: authApi.signup,
-    onSuccess: (data) => {
-      // 성공 토스트가 사라진 뒤 로그인 페이지로 이동하도록 짧은 지연을 둡니다.
-      toast.success(data.detail, { duration: 2000 })
+    onSuccess: () => {
       window.setTimeout(() => {
         navigate('/login')
-      }, 2000)
+      }, 1300)
     },
     onError: (error) => {
       const errorDetail = error.response?.data?.error_detail
