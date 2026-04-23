@@ -2,7 +2,7 @@ import { apiClient } from '@/apis/apiClient'
 import type {
   ApiPostListParams,
   ApiPostListResponse,
-} from '@/features/main/post-list/post-list.api.types'
+} from '@/features/main/post-list/PostList.api.types'
 import type {
   ApiGoalResponse,
   ApiPostCreateRequest,

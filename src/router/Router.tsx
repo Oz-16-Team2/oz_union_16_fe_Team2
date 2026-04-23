@@ -3,7 +3,7 @@ import { createBrowserRouter } from 'react-router'
 import { MyPageLayout, RootLayout } from '@/components/common/layout'
 import {
   LoginPage,
-  Main,
+  MainPage,
   MyPage,
   NotFoundPage,
   PostCreatePage,
@@ -25,7 +25,7 @@ export const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Main />,
+        element: <MainPage />,
       },
       {
         path: 'post/create',
