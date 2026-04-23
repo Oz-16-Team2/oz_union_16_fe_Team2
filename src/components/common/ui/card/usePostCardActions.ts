@@ -22,7 +22,7 @@ export function usePostCardActions({
   // 사용자 기준 count 값 --> like API 연동 후 필요없어질 상태
   const [localLikeCount, setLocalLikeCount] = useState(likeCount)
 
-  const toggleLike = (e: React.MouseEvent) => {
+  const toggleLike = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation()
     const newLiked = !liked
     setLiked(newLiked)
@@ -30,13 +30,13 @@ export function usePostCardActions({
     onLike()
   }
 
-  const toggleScrap = (e: React.MouseEvent) => {
+  const toggleScrap = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation()
     setScrapped((prev) => !prev)
     onScrap()
   }
 
-  const handleShare = (e: React.MouseEvent) => {
+  const handleShare = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation()
     onShare()
   }

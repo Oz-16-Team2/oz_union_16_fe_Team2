@@ -1,4 +1,4 @@
-import type { ApiPostListItem } from '@/features/main/post-list/post-list.api.types'
+import type { ApiPostListItem } from '@/features/main/post-list/PostList.api.types'
 import type {
   ApiGoalResponse,
   ApiPostResponse,

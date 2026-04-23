@@ -2,7 +2,7 @@ import type {
   ApiMonthlyRankingUser,
   ApiTotalRankingUser,
   ApiWeeklyRankingUser,
-} from '@/apis/ranking/ranking.api.types'
+} from '@/features/main/ranking/Ranking.api.types'
 
 export const mockWeeklyRankings: ApiWeeklyRankingUser[] = [
   {

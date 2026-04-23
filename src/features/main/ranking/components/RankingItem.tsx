@@ -3,8 +3,8 @@ import { Crown, Medal } from 'lucide-react'
 import { pinkCharacterImage } from '@/assets/images'
 import { cn } from '@/utils/cn'
 
-import { DEFAULT_RANK_STYLE, RANK_STYLES } from './Ranking.constants'
-import type { NormalizedRankingUser } from './Ranking.types'
+import { DEFAULT_RANK_STYLE, RANK_STYLES } from '../Ranking.constants'
+import type { NormalizedRankingUser } from '../Ranking.types'
 
 type RankingItemProps = {
   user: NormalizedRankingUser

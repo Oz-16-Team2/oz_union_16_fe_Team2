@@ -1,5 +1,5 @@
 export { LoginPage } from './LoginPage'
-export { default as Main } from './Main'
+export { MainPage } from './MainPage'
 export { MyPage } from './MyPage'
 export { NotFoundPage } from './not-found'
 export { PostCreatePage } from './PostCreatePage'

@@ -8,10 +8,10 @@ import { Footer, Header } from '@/components/common/layout'
 
 export function RootLayout() {
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex min-h-dvh flex-col">
       <Header />
 
-      <div className="max-w-300 mx-auto py-7.5 w-full flex-1 px-8">
+      <div className="max-w-300 mx-auto py-7.5 w-full flex-1">
         <Outlet />
       </div>
       <Footer />
