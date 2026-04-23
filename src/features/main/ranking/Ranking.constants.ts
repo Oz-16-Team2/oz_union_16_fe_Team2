@@ -31,7 +31,7 @@ export const RANK_STYLES: Record<number, RankStyleConfig> = {
 export const DEFAULT_RANK_STYLE: RankStyleConfig = {
   text: 'text-text-muted font-medium',
   bg: 'bg-ranking-default-bg',
-  border: 'border-ranking-default-border',
+  border: 'border-transparent',
   shadow: '',
 }
 
