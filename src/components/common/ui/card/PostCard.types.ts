@@ -5,13 +5,13 @@ export type PostCardProps = {
   createdAt: string
   title: string
   tags: string[]
-  preview: string
+  contentPreview: string
   likeCount: number
   commentCount: number
-  isBookmarked?: boolean
+  isScrapped?: boolean
   isLiked?: boolean
   onClick?: () => void
   onLike: () => void
   onShare: () => void
-  onBookmark: () => void
+  onScrap: () => void
 }

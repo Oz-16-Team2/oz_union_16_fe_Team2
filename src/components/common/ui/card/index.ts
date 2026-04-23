@@ -6,4 +6,5 @@ export {
   type GoalStatus,
 } from './GoalCard.types'
 export { GoalCardEdit } from './GoalCardEdit'
-export { PostCard, type PostCardProps } from './PostCard'
+export { PostCard } from './PostCard'
+export { PostCardSkeleton } from './PostCardSkeleton'
