@@ -61,7 +61,7 @@ export function CalendarMonthPicker({
               'h-10 rounded-md text-sm font-semibold',
               !isDisabled &&
                 !isSelectedMonth &&
-                'transition-colors hover:bg-primary-100 hover:text-primary-600',
+                'transition-colors hover:bg-primary-100 hover:text-primary-600 dark:hover:bg-white/10 dark:hover:text-primary-400',
               MONTH_BUTTON_STATE_CLASS[monthState]
             )}
           >

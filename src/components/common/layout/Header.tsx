@@ -43,16 +43,25 @@ export function Header() {
   return (
     <header className="max-w-7xl mx-auto w-full">
       <div className="flex items-center justify-between py-3 px-4">
-        <img
-          src={logoImage}
-          className="w-12 h-11 dark:hidden"
-          alt="OZ Union 로고"
-        />
-        <img
-          src={DarklogoImage}
-          className="hidden w-12 h-11 dark:block"
-          alt="OZ Union 로고"
-        />
+        <button
+          type="button"
+          onClick={() => navigate('/')}
+          className="cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
+          aria-label="메인페이지로 이동"
+        >
+          <img
+            src={logoImage}
+            className="w-12 h-11 dark:hidden"
+            alt=""
+            aria-hidden="true"
+          />
+          <img
+            src={DarklogoImage}
+            className="hidden w-12 h-11 dark:block"
+            alt=""
+            aria-hidden="true"
+          />
+        </button>
         <div className="flex items-center gap-6">
           <Button
             variant={'ghost'}
