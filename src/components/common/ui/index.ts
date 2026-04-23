@@ -3,12 +3,18 @@ export { Badge } from './badge/Badge'
 export { Button } from './button/Button'
 export { Calendar } from './calendar/Calendar'
 export type {
+  CardProps,
   GoalCardEditProps,
   GoalCardProps,
   GoalStatus,
-  PostCardProps,
 } from './card'
-export { Card, type CardProps, GoalCard, GoalCardEdit, PostCard } from './card'
+export {
+  Card,
+  GoalCard,
+  GoalCardEdit,
+  PostCard,
+  PostCardSkeleton,
+} from './card'
 export type { Comment } from './comment'
 export { CommentInput, CommentItem, CommentList } from './comment'
 export { Input, type InputProps } from './field/Input'

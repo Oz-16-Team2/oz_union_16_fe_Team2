@@ -16,15 +16,15 @@ const baseProps = {
   nickname: '작심며칠',
   createdAt: '3시간 전',
   title: '운동 vs 공부 뭐부터 할까? 진짜 너무 고민된다 아무것도 못하겠어',
-  preview:
+  contentPreview:
     '오늘부터 마음 다시 잡으려고 합니다 운동이랑 공부 중에 뭐부터 시작하면 좋을까요. 사실 둘 다 하고 싶긴 한데 체력이 딸려서 고민이에요. 여러분은 어떻게 하시나요?',
   tags: ['공부', '운동'],
   likeCount: 10,
   commentCount: 0,
-  isBookmarked: false,
+  isScrapped: false,
   onLike: () => {},
   onShare: () => {},
-  onBookmark: () => {},
+  onScrap: () => {},
 }
 
 export const WithImage: Story = {
@@ -38,7 +38,7 @@ export const WithoutImage: Story = {
 }
 
 export const Bookmarked: Story = {
-  render: () => <PostCard {...baseProps} isBookmarked />,
+  render: () => <PostCard {...baseProps} isScrapped />,
 }
 
 export const DarkWithImage: Story = {
