@@ -36,7 +36,7 @@ export function CalendarHeader({
         aria-label="달력 닫기"
         onClick={onClose}
         leftIcon={<X aria-hidden="true" size={10} />}
-        className="absolute right-1.5 top-2 z-10 rounded-full bg-black/10 p-1 hover:bg-black/20"
+        className="absolute right-1.5 top-2 z-10 rounded-full bg-black/10 p-1 text-text-muted hover:bg-black/20 hover:text-text-primary dark:bg-white/10 dark:hover:bg-white/20"
       />
 
       <div className="my-2.5 grid grid-cols-[1fr_auto_1fr] items-center">
@@ -51,7 +51,7 @@ export function CalendarHeader({
         <Button
           variant="ghost"
           onClick={onTitleClick}
-          className="text-base text-text-primary hover:bg-primary-100"
+          className="text-base text-text-primary hover:bg-primary-100 dark:hover:bg-white/10"
         >
           {title}
         </Button>

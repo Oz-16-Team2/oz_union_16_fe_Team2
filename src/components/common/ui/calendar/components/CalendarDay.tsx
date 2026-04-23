@@ -18,7 +18,7 @@ type DayButtonState = 'default' | 'disabled' | 'redDay' | 'selected' | 'today'
 
 // 상태별 날짜 버튼 스타일
 const DAY_BUTTON_STATE_CLASS: Record<DayButtonState, string> = {
-  default: 'text-primary',
+  default: 'text-text-primary',
   disabled:
     'cursor-not-allowed text-text-muted disabled:bg-transparent disabled:text-text-muted',
   redDay: 'text-red-500 hover:text-red-500',
@@ -65,17 +65,17 @@ export function CalendarDay({
     <div className="relative flex h-9 w-full items-center justify-center">
       {/* range 내부 날짜의 연결 배경 */}
       {isInRange && (
-        <div className="absolute left-0 right-0 top-1/2 h-9 -translate-y-1/2 bg-primary-100/80" />
+        <div className="absolute left-0 right-0 top-1/2 h-9 -translate-y-1/2 bg-primary-100/80 dark:bg-primary-600/20" />
       )}
 
       {/* 시작일에서 종료일 방향으로 이어지는 반쪽 배경 */}
       {isStart && hasRangeEnd && (
-        <div className="absolute left-1/2 right-0 top-1/2 h-9 -translate-y-1/2 bg-primary-100" />
+        <div className="absolute left-1/2 right-0 top-1/2 h-9 -translate-y-1/2 bg-primary-100 dark:bg-primary-600/20" />
       )}
 
       {/* 종료일에서 시작일 방향으로 이어지는 반쪽 배경 */}
       {isEnd && hasRangeStart && (
-        <div className="absolute left-0 right-1/2 top-1/2 h-9 -translate-y-1/2 bg-primary-100" />
+        <div className="absolute left-0 right-1/2 top-1/2 h-9 -translate-y-1/2 bg-primary-100 dark:bg-primary-600/20" />
       )}
 
       <Button
@@ -86,7 +86,7 @@ export function CalendarDay({
           'relative z-10 flex size-9 items-center rounded-full text-sm font-semibold',
           !isDisabled &&
             !isSelected &&
-            'cursor-pointer transition-colors hover:bg-primary-100/70 hover:text-primary-600',
+            'cursor-pointer transition-colors hover:bg-primary-100/70 hover:text-primary-600 dark:hover:bg-white/10 dark:hover:text-primary-400',
           DAY_BUTTON_STATE_CLASS[dayState]
         )}
       >

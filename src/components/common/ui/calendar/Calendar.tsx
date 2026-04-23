@@ -47,7 +47,7 @@ export function Calendar({
 
       {/* 패널은 날짜 선택 모드와 월 선택 모드를 전환해서 보여줌 */}
       {state.isOpen && (
-        <div className="absolute left-0 top-full z-10 mt-3 h-fit w-2xs rounded-2xl border border-border-default/60 bg-white/80 p-4 shadow-card-main backdrop-blur-md">
+        <div className="absolute left-0 top-full z-10 mt-3 h-fit w-2xs rounded-2xl border border-border-default bg-surface/90 p-4 shadow-card-main backdrop-blur-md">
           <CalendarHeader
             currentDate={state.currentDate}
             onClose={actions.closeCalendar}
@@ -88,7 +88,7 @@ export function Calendar({
             <Button
               size="md"
               variant="neutral"
-              className="w-full"
+              className="w-full dark:bg-white/10 dark:text-text-primary dark:hover:bg-white/15"
               onClick={() => actions.updateDraftDate(null)}
             >
               초기화
