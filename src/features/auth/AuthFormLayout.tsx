@@ -65,7 +65,7 @@ export function AuthFormLayout<TFieldValues extends FieldValues>({
 
       <FormProvider {...methods}>
         <AuthForm
-          className={cn('mt-8 space-y-6', formClassName)}
+          className={cn('mt-8 space-y-5', formClassName)}
           onSubmit={onSubmit}
         >
           {children}

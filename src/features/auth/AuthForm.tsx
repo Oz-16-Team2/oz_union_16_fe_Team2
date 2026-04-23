@@ -59,48 +59,56 @@ function FormField<TFieldValues extends FieldValues = FieldValues>({
   return (
     <div
       className={cn(
-        label ? 'grid grid-cols-[26%_1fr] items-center' : 'block',
+        label
+          ? 'grid grid-cols-[26%_1fr] grid-rows-[auto_0.75rem] items-center gap-y-0.5'
+          : 'grid grid-rows-[auto_0.75rem] gap-y-0.5',
         'w-full'
       )}
     >
       {label && (
-        <label htmlFor={id} className="text-sm">
+        <label htmlFor={id} className="row-start-1 text-sm">
           {label}
         </label>
       )}
 
-      <div className="flex flex-col gap-1 w-full">
-        <div className="relative w-full">
-          <Input
-            id={id}
-            {...field}
-            onBlur={(event) => {
-              field.onBlur()
-              onBlur?.(event)
-            }}
-            className={cn(
-              'placeholder:text-sm py-1 px-1 w-full rounded-none border-t-0 border-x-0 border-border-strong bg-transparent',
-              // 오른쪽 토글/버튼이 있는 필드는 텍스트가 액션 영역과 겹치지 않도록 여백을 둡니다.
-              children && 'pr-10',
-              className
-            )}
-            {...props}
-          />
-          {children && (
-            <div
-              className={cn(
-                'absolute right-0 top-1/2 -translate-y-1/2 pb-1.5',
-                actionClassName
-              )}
-            >
-              {children}
-            </div>
+      <div
+        className={cn('relative row-start-1 w-full', label && 'col-start-2')}
+      >
+        <Input
+          id={id}
+          {...field}
+          onBlur={(event) => {
+            field.onBlur()
+            onBlur?.(event)
+          }}
+          className={cn(
+            'placeholder:text-sm py-1 px-1 w-full rounded-none border-t-0 border-x-0 border-border-strong bg-transparent',
+            // 오른쪽 토글/버튼이 있는 필드는 텍스트가 액션 영역과 겹치지 않도록 여백을 둡니다.
+            children,
+            className
           )}
-        </div>
-        {fieldState.error?.message && (
-          <p className="text-xs text-red-500">{fieldState.error.message}</p>
+          {...props}
+        />
+        {children && (
+          <div
+            className={cn(
+              'absolute right-0 top-1/2 -translate-y-1/2 pb-1.5',
+              actionClassName
+            )}
+          >
+            {children}
+          </div>
         )}
       </div>
+      <p
+        className={cn(
+          'row-start-2 text-xs text-red-500 mt-1 ml-1',
+          label && 'col-start-2',
+          !fieldState.error?.message && 'invisible'
+        )}
+      >
+        {fieldState.error?.message ?? ' '}
+      </p>
     </div>
   )
 }
