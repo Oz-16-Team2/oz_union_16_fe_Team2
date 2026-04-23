@@ -1,2 +1,2 @@
-export type { RankingType, RankingUser } from './Ranking.types'
-export { RankingSection } from './RankingSection'
+export { RankingSection } from './components/RankingSection'
+export type { RankingType } from './Ranking.types'

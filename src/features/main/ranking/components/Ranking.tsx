@@ -7,9 +7,10 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 import { TabButton } from '@/components/common/ui'
 import { cn } from '@/utils/cn'
 
-import { TAB_LABELS } from './Ranking.constants'
-import type { RankingProps, RankingType } from './Ranking.types'
-import { normalizeUser } from './Ranking.utils'
+import type { ApiRankingItem } from '../Ranking.api.types'
+import { TAB_LABELS } from '../Ranking.constants'
+import type { RankingProps, RankingType } from '../Ranking.types'
+import { normalizeUser } from '../Ranking.utils'
 import { RankingItem } from './RankingItem'
 import { RankingItemSkeleton } from './RankingItemSkeleton'
 
@@ -38,7 +39,7 @@ export function Ranking({
     onTypeChange(RANKING_TYPES[swiper.activeIndex])
   }
 
-  const normalizedUsers = rankings.map((user) =>
+  const normalizedUsers = rankings.map((user: ApiRankingItem) =>
     normalizeUser(user, activeType)
   )
 

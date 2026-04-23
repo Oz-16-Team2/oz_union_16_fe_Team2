@@ -3,8 +3,8 @@ import { useState } from 'react'
 import { formatError } from '@/apis/api.utils'
 import { useRankingQuery } from '@/query/main/useRankingQuery'
 
+import type { RankingType } from '../Ranking.types'
 import { Ranking } from './Ranking'
-import type { RankingType } from './Ranking.types'
 
 export function RankingSection() {
   const [activeType, setActiveType] = useState<RankingType>('weekly')

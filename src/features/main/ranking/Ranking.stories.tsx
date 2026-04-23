@@ -2,8 +2,9 @@ import { useState } from 'react'
 
 import type { Meta, StoryObj } from '@storybook/react-vite'
 
-import { Ranking } from './Ranking'
-import type { RankingType, RankingUser } from './Ranking.types'
+import { Ranking } from './components/Ranking'
+import type { ApiRankingItem } from './Ranking.api.types'
+import type { RankingType } from './Ranking.types'
 
 const meta: Meta<typeof Ranking> = {
   component: Ranking,
@@ -13,7 +14,7 @@ export default meta
 
 type Story = StoryObj<typeof Ranking>
 
-const MOCK_WEEKLY: RankingUser[] = [
+const MOCK_WEEKLY: ApiRankingItem[] = [
   {
     user_id: 1,
     nickname: '운동왕',
@@ -51,7 +52,7 @@ const MOCK_WEEKLY: RankingUser[] = [
   },
 ]
 
-const MOCK_BY_TYPE: Record<RankingType, RankingUser[]> = {
+const MOCK_BY_TYPE: Record<RankingType, ApiRankingItem[]> = {
   weekly: MOCK_WEEKLY,
   monthly: [
     {
@@ -136,6 +137,7 @@ export const Default: Story = {
       <Ranking
         rankings={MOCK_BY_TYPE[type]}
         isLoading={false}
+        isError={false}
         activeType={type}
         onTypeChange={setType}
       />
@@ -148,6 +150,7 @@ export const Loading: Story = {
     <Ranking
       rankings={[]}
       isLoading
+      isError={false}
       activeType="weekly"
       onTypeChange={() => {}}
     />
@@ -162,6 +165,7 @@ export const Dark: Story = {
         <Ranking
           rankings={MOCK_BY_TYPE[type]}
           isLoading={false}
+          isError={false}
           activeType={type}
           onTypeChange={setType}
         />

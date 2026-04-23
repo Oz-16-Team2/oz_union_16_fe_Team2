@@ -2,7 +2,7 @@ import { Medal } from 'lucide-react'
 
 import { cn } from '@/utils/cn'
 
-import { DEFAULT_RANK_STYLE, RANK_STYLES } from './Ranking.constants'
+import { DEFAULT_RANK_STYLE, RANK_STYLES } from '../Ranking.constants'
 
 type RankingItemSkeletonProps = {
   rank: number
