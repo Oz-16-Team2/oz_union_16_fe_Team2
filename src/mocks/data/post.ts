@@ -1,8 +1,25 @@
+import type { ApiPostListItem } from '@/features/main/post-list/post-list.api.types'
 import type {
   ApiGoalResponse,
   ApiPostResponse,
   ApiTagResponse,
 } from '@/features/post/post.api.types'
+
+const PLACEHOLDER_COLORS = [
+  '%23f87171',
+  '%2360a5fa',
+  '%2334d399',
+  '%23fbbf24',
+  '%23a78bfa',
+  '%23f472b6',
+  '%2338bdf8',
+  '%234ade80',
+]
+
+function makePlaceholderImage(index: number): string {
+  const color = PLACEHOLDER_COLORS[index % PLACEHOLDER_COLORS.length]
+  return `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300'%3E%3Crect width='400' height='300' fill='${color}' opacity='0.3'/%3E%3C/svg%3E`
+}
 
 export const mockGoals: ApiGoalResponse[] = [
   {
@@ -43,6 +60,121 @@ export const mockTags: ApiTagResponse[] = [
   { id: 3, name: '공부' },
   { id: 4, name: '식단' },
   { id: 5, name: '명상' },
+]
+
+export const mockPostList: ApiPostListItem[] = [
+  {
+    post_id: 301,
+    images: ['https://picsum.photos/seed/post301/600/400'],
+    profile_image_url: null,
+    nickname: '운동왕',
+    created_at: '2026-04-20',
+    title: '오늘의 헬스 인증!',
+    tags: ['헬스', '운동'],
+    content_preview:
+      '오늘도 열심히 운동했습니다. 벤치프레스 100kg 달성! 목표를 향해 꾸준히 달려가겠습니다.',
+    like_count: 1,
+    comment_count: 8,
+    is_scrapped: false,
+  },
+  {
+    post_id: 302,
+    images: [],
+    profile_image_url: null,
+    nickname: '달리기선수',
+    created_at: '2026-04-19',
+    title: '10km 달리기 완주 (이미지 없음 테스트)',
+    tags: ['러닝', '마라톤'],
+    content_preview:
+      '오늘 새벽 6시에 일어나서 10km를 달렸습니다. 날씨가 너무 좋아서 기분이 최고였어요.',
+    like_count: 35,
+    comment_count: 5,
+    is_scrapped: true,
+  },
+  {
+    post_id: 303,
+    images: ['https://picsum.photos/seed/post303/600/600'],
+    profile_image_url: null,
+    nickname: '요가고수',
+    created_at: '2026-04-18',
+    title: '요가 1시간 인증',
+    tags: ['요가', '명상', '스트레칭'],
+    content_preview:
+      '아침 요가로 하루를 시작했습니다. 몸과 마음이 맑아지는 느낌이에요.',
+    like_count: 28,
+    comment_count: 3,
+    is_scrapped: false,
+  },
+  {
+    post_id: 304,
+    images: [],
+    profile_image_url: null,
+    nickname: '헬스마니아',
+    created_at: '2026-04-17',
+    title: '스쿼트 200개 챌린지 성공 (이미지 없음 테스트)',
+    tags: ['스쿼트', '하체운동'],
+    content_preview:
+      '드디어 스쿼트 200개 챌린지를 완료했습니다! 허벅지가 떨리지만 너무 뿌듯합니다.',
+    like_count: 61,
+    comment_count: 12,
+    is_scrapped: false,
+  },
+  {
+    post_id: 306,
+    images: ['https://picsum.photos/seed/post306/400/800'],
+    profile_image_url: null,
+    nickname: '수영러버',
+    created_at: '2026-04-16',
+    title: '수영 1km 완주 기록',
+    tags: ['수영', '유산소'],
+    content_preview:
+      '오늘 수영장에서 1km를 쉬지 않고 완주했습니다. 자유형 위주로 훈련 중이에요.',
+    like_count: 19,
+    comment_count: 6,
+    is_scrapped: false,
+  },
+  {
+    post_id: 307,
+    images: [makePlaceholderImage(5)],
+    profile_image_url: null,
+    nickname: '운동왕',
+    created_at: '2026-04-15',
+    title: '줄넘기 500회 인증',
+    tags: ['줄넘기', '유산소'],
+    content_preview:
+      '오늘 줄넘기 500회를 달성했습니다. 30분 만에 완료! 다음 목표는 1000회입니다.',
+    like_count: 33,
+    comment_count: 9,
+    is_scrapped: false,
+  },
+  {
+    post_id: 308,
+    images: [makePlaceholderImage(6)],
+    profile_image_url: null,
+    nickname: '달리기선수',
+    created_at: '2026-04-14',
+    title: '풀업 20개 달성',
+    tags: ['상체운동', '맨몸운동'],
+    content_preview:
+      '드디어 풀업 20개를 연속으로 달성했습니다. 6개월간의 노력이 결실을 맺었네요.',
+    like_count: 47,
+    comment_count: 14,
+    is_scrapped: true,
+  },
+  {
+    post_id: 309,
+    images: [makePlaceholderImage(7)],
+    profile_image_url: null,
+    nickname: '요가고수',
+    created_at: '2026-04-13',
+    title: '필라테스 첫 수업 후기',
+    tags: ['필라테스', '코어운동'],
+    content_preview:
+      '오늘 처음으로 필라테스 수업을 들었습니다. 생각보다 훨씬 어렵고 코어 운동에 효과적이었어요.',
+    like_count: 22,
+    comment_count: 7,
+    is_scrapped: false,
+  },
 ]
 
 export const mockPost: ApiPostResponse = {
