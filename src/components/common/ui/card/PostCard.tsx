@@ -7,25 +7,23 @@ import { Card } from './Card'
 import type { PostCardProps } from './PostCard.types'
 import { usePostCardActions } from './usePostCardActions'
 
-export function PostCard(props: PostCardProps) {
-  const {
-    image,
-    profileImage,
-    nickname,
-    createdAt,
-    title,
-    tags,
-    contentPreview,
-    likeCount,
-    commentCount,
-    isScrapped = false,
-    isLiked = false,
-    onClick,
-    onLike,
-    onShare,
-    onScrap,
-  } = props
-
+export function PostCard({
+  image,
+  profileImage,
+  nickname,
+  createdAt,
+  title,
+  tags,
+  contentPreview,
+  likeCount,
+  commentCount,
+  isScrapped = false,
+  isLiked = false,
+  onClick,
+  onLike,
+  onShare,
+  onScrap,
+}: PostCardProps) {
   const {
     liked,
     scrapped,
