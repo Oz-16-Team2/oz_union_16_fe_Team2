@@ -13,6 +13,7 @@ type ActionMenuProps = {
   items: ActionMenuItem[]
   align?: 'left' | 'right'
   className?: string
+  menuClassName?: string
 }
 
 export function ActionMenu({
@@ -20,6 +21,7 @@ export function ActionMenu({
   items,
   align = 'right',
   className,
+  menuClassName,
 }: ActionMenuProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [isClosing, setIsClosing] = useState(false)
@@ -56,7 +58,8 @@ export function ActionMenu({
             align === 'right' ? 'right-0' : 'left-0',
             isClosing
               ? 'animate-[dropdown-out_0.2s_ease-in_forwards]'
-              : 'animate-[dropdown-in_0.2s_ease-out]'
+              : 'animate-[dropdown-in_0.2s_ease-out]',
+            menuClassName
           )}
           onAnimationEnd={handleAnimationEnd}
         >

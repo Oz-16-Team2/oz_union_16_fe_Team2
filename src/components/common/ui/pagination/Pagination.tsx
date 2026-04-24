@@ -20,11 +20,12 @@ const BTN_BASE =
   'flex h-6 w-6 items-center justify-center rounded-md transition-colors cursor-pointer sm:h-8 sm:w-8'
 
 const BTN_ENABLED =
-  'text-text-primary hover:bg-primary-100 hover:text-primary-500'
+  'text-text-primary hover:bg-pagination-hover-bg hover:text-pagination-hover-text'
 
-const BTN_CHEVRON_DISABLED = 'cursor-not-allowed text-gray-400'
+const BTN_CHEVRON_DISABLED = 'cursor-not-allowed text-pagination-disabled-text'
 
-const BTN_PAGE_ACTIVE = 'bg-primary-100 font-semibold text-primary-500'
+const BTN_PAGE_ACTIVE =
+  'bg-pagination-active-bg font-semibold text-pagination-active-text'
 
 // 페이지네이션 범위를 정하는 함수 => util 함수가 1개라 일단 Pagination에 같이 보관
 // CASE 1. currentPage가 1 , totalPage가 20 일때
