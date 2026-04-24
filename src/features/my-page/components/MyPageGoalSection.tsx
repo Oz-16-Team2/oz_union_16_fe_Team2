@@ -19,7 +19,7 @@ export function MyPageGoalSection() {
   return (
     <section className="flex flex-col gap-8">
       {/* 목표 목록 필터와 생성 버튼을 한 줄로 묶는 상단 영역 */}
-      <div className="flex justify-between items-center border-b border-border-default  pb-1">
+      <div className="flex justify-between items-center">
         <div className="flex flex-wrap items-center gap-0.5">
           {GOAL_FILTERS.map((filter) => (
             <TabButton
@@ -32,13 +32,25 @@ export function MyPageGoalSection() {
               {filter}
             </TabButton>
           ))}
-          <span className="text-[#e0e0e0]">|</span>
+          <span className="mt-1 text-text-muted/35" aria-hidden="true">
+            |
+          </span>
+          <Button
+            variant="ghost"
+            rounded="full"
+            className="h-8 px-3 text-sm text-text-muted hover:bg-transparent hover:text-tab-active-text"
+          >
+            기간 설정
+          </Button>
+          <span className="mt-1 text-text-muted/35" aria-hidden="true">
+            |
+          </span>
           <Button
             variant="ghost"
             rounded="full"
             leftIcon={<RotateCcw className="size-4" aria-hidden="true" />}
             onClick={handleResetFilter}
-            className="h-8 px-3 text-sm text-text-muted hover:text-primary-600"
+            className="h-8 px-3 text-sm text-text-muted hover:bg-transparent hover:text-tab-active-text"
           >
             초기화
           </Button>
@@ -56,7 +68,7 @@ export function MyPageGoalSection() {
       </div>
 
       {/* TODO: API 연결 후 생성 카드와 목표 카드 데이터를 서버 상태 기준으로 교체 */}
-      <div className="grid grid-cols-[repeat(auto-fill,minmax(276px,1fr))] justify-items-center gap-y-4.5">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         <div
           className={cn(
             'transition-opacity duration-200',

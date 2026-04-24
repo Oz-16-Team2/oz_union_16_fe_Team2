@@ -79,9 +79,18 @@ export function Header() {
           {user ? (
             <ActionMenu
               className="flex items-center"
+              menuClassName="min-w-35 top-10 border border-border-default"
               align="right"
               items={[
                 { label: '마이페이지', onClick: () => navigate('/mypage') },
+                {
+                  label: '북마크',
+                  onClick: () => navigate('/mypage/bookmarks'),
+                },
+                {
+                  label: '내가 쓴 게시글',
+                  onClick: () => navigate('/mypage/posts'),
+                },
                 { label: '로그아웃', onClick: handleLogout },
               ]}
               trigger={

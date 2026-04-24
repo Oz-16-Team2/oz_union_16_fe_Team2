@@ -1,6 +1,8 @@
+export { BookmarkedGoalsPage } from './BookmarkedGoalsPage'
 export { LoginPage } from './LoginPage'
 export { MainPage } from './MainPage'
 export { MyPage } from './MyPage'
+export { MyPostsPage } from './MyPostsPage'
 export { NotFoundPage } from './not-found'
 export { PostCreatePage } from './PostCreatePage'
 export { PostEditPage } from './PostEditPage'

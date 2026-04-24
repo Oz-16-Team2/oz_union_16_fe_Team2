@@ -9,8 +9,8 @@ import {
 import { PostList } from '@/features/main/post-list/PostList'
 import { mockPostList } from '@/mocks/data/post'
 
-const MY_POSTS: PostListItem[] = mockPostList
-  .filter((post) => post.nickname === '운동왕' || post.nickname === '요가고수')
+const BOOKMARKED_POSTS: PostListItem[] = mockPostList
+  .filter((post) => post.is_scrapped)
   .map((post) => ({
     id: post.post_id,
     image: post.images[0],
@@ -28,7 +28,7 @@ const MY_POSTS: PostListItem[] = mockPostList
     onScrap: () => {},
   }))
 
-export function MyPostsPage() {
+export function BookmarkedGoalsPage() {
   const [currentPage, setCurrentPage] = useState(1)
   const [sortOrder, setSortOrder] = useState<PostSortOrder>('latest')
   const [searchQuery, setSearchQuery] = useState('')
@@ -37,13 +37,13 @@ export function MyPostsPage() {
     const normalizedQuery = searchQuery.trim().toLowerCase()
 
     const searchedPosts = normalizedQuery
-      ? MY_POSTS.filter((post) =>
+      ? BOOKMARKED_POSTS.filter((post) =>
           [post.title, post.contentPreview, post.nickname, ...post.tags]
             .join(' ')
             .toLowerCase()
             .includes(normalizedQuery)
         )
-      : MY_POSTS
+      : BOOKMARKED_POSTS
 
     const sortedPosts = [...searchedPosts].sort((a, b) => {
       if (sortOrder === 'popular') return b.likeCount - a.likeCount
