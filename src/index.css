@@ -2,6 +2,10 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+html {
+  scrollbar-gutter: stable;
+}
+
 body {
   font-family: 'Pretendard', ui-sans-serif, system-ui, sans-serif;
   color: var(--text-primary);
@@ -190,6 +194,15 @@ body {
   --tab-active-text: var(--color-primary-500);
 
   /* =========================
+     Pagination
+  ========================= */
+  --pagination-hover-bg: var(--color-primary-100);
+  --pagination-hover-text: var(--color-primary-500);
+  --pagination-active-bg: var(--color-primary-100);
+  --pagination-active-text: var(--color-primary-500);
+  --pagination-disabled-text: var(--color-gray-400);
+
+  /* =========================
      Ranking
   ========================= */
   --ranking-gold-bg: var(--color-rank-light-gold-bg);
@@ -317,6 +330,22 @@ body {
   --dropdown-item-hover-text: var(--color-primary-400);
 
   /* =========================
+     Tab
+  ========================= */
+  --tab-active-bg: rgba(107, 148, 255, 0.18);
+  --tab-hover-bg: rgba(107, 148, 255, 0.1);
+  --tab-active-text: #8fb0ff;
+
+  /* =========================
+     Pagination
+  ========================= */
+  --pagination-hover-bg: rgba(107, 148, 255, 0.12);
+  --pagination-hover-text: #8fb0ff;
+  --pagination-active-bg: rgba(107, 148, 255, 0.18);
+  --pagination-active-text: #a9c1ff;
+  --pagination-disabled-text: #6b7280;
+
+  /* =========================
      Shadow
   ========================= */
   --shadow-card-base: 0px 0px 10px rgba(255, 255, 255, 0.2);
@@ -399,6 +428,12 @@ body {
   --color-tab-active-bg: var(--tab-active-bg);
   --color-tab-hover-bg: var(--tab-hover-bg);
   --color-tab-active-text: var(--tab-active-text);
+
+  --color-pagination-hover-bg: var(--pagination-hover-bg);
+  --color-pagination-hover-text: var(--pagination-hover-text);
+  --color-pagination-active-bg: var(--pagination-active-bg);
+  --color-pagination-active-text: var(--pagination-active-text);
+  --color-pagination-disabled-text: var(--pagination-disabled-text);
 
   --color-ranking-gold-bg: var(--ranking-gold-bg);
   --color-ranking-silver-bg: var(--ranking-silver-bg);

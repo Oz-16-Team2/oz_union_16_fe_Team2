@@ -12,43 +12,31 @@ type MyPageStatsSummaryProps = {
   items: MyPageStatsSummaryItem[]
 }
 
-const STATS_CARD_CLASS_NAME =
-  'flex w-full min-w-36 flex-1 flex-col items-center justify-center rounded-lg border px-6 py-5 text-center'
+const STATS_ROW_CLASS_NAME = 'flex items-center gap-2 text-xs'
 
-const STATS_CARD_TONE_CLASS_NAME: Record<StatsCardTone, string> = {
-  yellow: 'border-border-mypage-stats-card-yellow bg-mypage-stats-card-yellow',
-  blue: 'border-border-mypage-stats-card-blue bg-mypage-stats-card-blue',
-  mint: 'border-border-mypage-stats-card-mint bg-mypage-stats-card-mint',
-}
-
-const STATS_VALUE_TONE_CLASS_NAME: Record<StatsCardTone, string> = {
-  yellow: 'text-primary-600',
-  blue: 'text-text-secondary',
-  mint: 'text-green-500',
+const STATS_CARD_TONE_CLASS_NAME = {
+  yellow: 'bg-blue-400',
+  blue: 'bg-yellow-400',
+  mint: 'bg-emerald-400',
 }
 
 export function MyPageStatsSummary({ items }: MyPageStatsSummaryProps) {
   return (
-    <div className="order-1 flex w-full flex-wrap gap-4 lg:order-2">
+    <div className="flex w-full items-center gap-x-5">
       {items.map(({ label, value, tone }) => (
-        <div
-          key={label}
-          className={cn(
-            STATS_CARD_CLASS_NAME,
-            STATS_CARD_TONE_CLASS_NAME[tone]
-          )}
-        >
-          <strong
+        <div key={label} className={cn(STATS_ROW_CLASS_NAME)}>
+          <span
             className={cn(
-              'block text-xl font-bold',
-              STATS_VALUE_TONE_CLASS_NAME[tone]
+              'inline-block h-2 w-2 shrink-0 rounded-full',
+              STATS_CARD_TONE_CLASS_NAME[tone]
             )}
-          >
+            aria-hidden="true"
+          />
+          <span className="text-xs font-medium">{label}</span>
+          <span className="opacity-70">:</span>
+          <strong className="text-xs font-semibold tracking-tight">
             {value}
           </strong>
-          <span className="mt-2 block text-base text-text-secondary">
-            {label}
-          </span>
         </div>
       ))}
     </div>
