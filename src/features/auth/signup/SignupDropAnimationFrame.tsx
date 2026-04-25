@@ -6,18 +6,27 @@ import type { CharacterEyeStatus } from '@/features/auth/character/eye/useCharac
 
 type SignupDropAnimationFrameProps = PropsWithChildren<{
   isDropped: boolean
+  isSuccessMotion?: boolean
+  isCompactMotion?: boolean
   eyeStatus?: CharacterEyeStatus
+  prefersReducedMotion?: boolean
 }>
 
 export function SignupDropAnimationFrame({
   isDropped,
+  isSuccessMotion,
+  isCompactMotion,
   eyeStatus,
+  prefersReducedMotion,
   children,
 }: SignupDropAnimationFrameProps) {
   return (
     <CharacterDropAnimationFrame
       isDropped={isDropped}
+      isSuccessMotion={isSuccessMotion}
+      isCompactMotion={isCompactMotion}
       eyeStatus={eyeStatus}
+      prefersReducedMotion={prefersReducedMotion}
       leftCharacterSrc={charYellow}
       rightCharacterSrc={charOrange}
       leftCharacterClassName="w-30"

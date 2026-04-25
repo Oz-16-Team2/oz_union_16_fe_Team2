@@ -119,7 +119,7 @@ export function CharacterEye({
       ? { x: 0, y: -1 }
       : pupilPositionByDirection[direction][state]
   const isErrorState = state.includes('error')
-  // 비밀번호 입력 중 회피 시선은 동공을 위로 올리고 눈을 살짝 키워 표현합니다.
+  // 비밀번호 입력 중 회피 시선은 동공만 위로 올리고 눈 크기는 과하지 않게 유지합니다.
   const isLookAwayState = state === 'look-away'
 
   return (
@@ -165,14 +165,14 @@ export function CharacterEye({
               eyeBaseClassName,
               // 깜빡임은 닫힌 선을 그리지 않고 눈 전체가 짧게 사라졌다 돌아오는 방식으로 처리합니다.
               isBlinking && 'scale-y-0 opacity-0 shadow-none',
-              isLookAwayState && 'scale-110 shadow-[0_2px_4px_rgba(0,0,0,0.2)]'
+              isLookAwayState && 'scale-100 shadow-[0_2px_4px_rgba(0,0,0,0.2)]'
             )}
           >
             <span
               className={cn(
                 'size-2.75 rounded-full bg-black transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform',
                 isBlinking && 'opacity-0',
-                isLookAwayState && 'size-3'
+                isLookAwayState && 'size-2.5'
               )}
               style={{
                 transform: `translate(${softenedX * 12 + offsetX * 4}%, ${softenedY * 12}%)`,

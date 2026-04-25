@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
-import { Link } from 'react-router'
+import { Link, useNavigate } from 'react-router'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { LoaderCircle } from 'lucide-react'
@@ -13,8 +13,8 @@ import {
   ProfileImageSelectField,
   SignupDropAnimationFrame,
 } from '@/features/auth'
-import type { CharacterEyeStatus } from '@/features/auth/character/eye/useCharacterEye'
 import { useAuthEntranceMotion } from '@/features/auth/hooks/useAuthEntranceMotion'
+import { useAuthEyeStatus } from '@/features/auth/hooks/useAuthEyeStatus'
 import { usePasswordVisibility } from '@/features/auth/hooks/usePasswordVisibility'
 import { useEmailVerification } from '@/features/auth/signup/hook/useEmailVerification'
 import { useNicknameCheck } from '@/features/auth/signup/hook/useNicknameCheck'
@@ -34,10 +34,17 @@ type SignupFocusedField =
   | null
 
 export function SignupPage() {
-  const { isDropped, isEntranceEyeActive } = useAuthEntranceMotion()
+  const navigate = useNavigate()
+  const {
+    isDropped,
+    isCompactMotion,
+    isEntranceEyeActive,
+    prefersReducedMotion,
+  } = useAuthEntranceMotion()
   const [focusedField, setFocusedField] = useState<SignupFocusedField>(null)
   const [lastFocusedField, setLastFocusedField] =
     useState<SignupFocusedField>(null)
+  const [isSuccessMotion, setIsSuccessMotion] = useState(false)
 
   const methods = useForm<SignupFormSchema>({
     mode: 'onChange',
@@ -67,7 +74,14 @@ export function SignupPage() {
 
   const nicknameCheck = useNicknameCheck(methods)
   const emailVerification = useEmailVerification(methods)
-  const signupMutation = useSignupMutation(setError)
+  const signupMutation = useSignupMutation(setError, {
+    onSuccess: () => {
+      setIsSuccessMotion(true)
+      window.setTimeout(() => {
+        navigate('/login')
+      }, 620)
+    },
+  })
   const canSignup =
     isDirty &&
     isValid &&
@@ -86,27 +100,17 @@ export function SignupPage() {
       : errors.email || errors.code || errors.nickname
         ? 'email'
         : null
-  const eyeTargetField = errorTargetField ?? focusedField ?? lastFocusedField
 
-  // 회원가입도 로그인과 동일하게 비밀번호 입력 중에는 항상 회피 시선을 우선합니다.
-  const eyeStatus: CharacterEyeStatus =
-    focusedField === 'password' || focusedField === 'passwordConfirm'
-      ? 'look-away'
-      : hasSignupError
-        ? eyeTargetField === 'password' || eyeTargetField === 'passwordConfirm'
-          ? 'password-error'
-          : eyeTargetField === 'email' ||
-              eyeTargetField === 'code' ||
-              eyeTargetField === 'nickname'
-            ? 'email-error'
-            : 'error'
-        : focusedField === 'email' ||
-            focusedField === 'code' ||
-            focusedField === 'nickname'
-          ? 'email'
-          : !isDropped || isEntranceEyeActive
-            ? 'entrance'
-            : 'idle'
+  const eyeStatus = useAuthEyeStatus<SignupFocusedField>({
+    emailFields: ['email', 'code', 'nickname'],
+    errorTargetField,
+    focusedField,
+    hasError: hasSignupError,
+    isDropped,
+    isEntranceEyeActive,
+    lastFocusedField,
+    passwordFields: ['password', 'passwordConfirm'],
+  })
 
   const handleFieldFocus = (field: Exclude<SignupFocusedField, null>) => {
     // blur 이후 에러가 떠도 마지막으로 입력하던 필드를 계속 바라보도록 기억합니다.
@@ -129,8 +133,14 @@ export function SignupPage() {
   }
 
   return (
-    <div className="relative flex min-h-screen w-full items-center justify-center">
-      <SignupDropAnimationFrame isDropped={isDropped} eyeStatus={eyeStatus}>
+    <div className="relative flex min-h-dvh w-full items-center justify-center overflow-hidden">
+      <SignupDropAnimationFrame
+        isDropped={isDropped}
+        isSuccessMotion={isSuccessMotion}
+        isCompactMotion={isCompactMotion}
+        eyeStatus={eyeStatus}
+        prefersReducedMotion={prefersReducedMotion}
+      >
         <AuthFormLayout
           methods={methods}
           title="회원가입"
@@ -277,15 +287,19 @@ export function SignupPage() {
               type="submit"
               rounded={'lg'}
               className={cn(
-                'min-h-13 text-xl py-3 w-full',
-                signupMutation.isPending
-                  ? 'disabled:bg-black disabled:text-white'
-                  : canSignup
-                    ? 'bg-black hover:bg-[#121212]'
-                    : 'disabled:bg-black/30 disabled:text-white/20'
+                'min-h-13 w-full py-3 text-xl text-white',
+                isSuccessMotion
+                  ? 'bg-black text-white disabled:bg-black disabled:text-white'
+                  : signupMutation.isPending
+                    ? 'disabled:bg-black disabled:text-white'
+                    : canSignup
+                      ? 'bg-black hover:bg-[#121212]'
+                      : 'disabled:bg-[#d9d9d9] disabled:text-white/60 dark:disabled:bg-black/30 dark:disabled:text-white/20'
               )}
               size="lg"
-              disabled={!canSignup || signupMutation.isPending}
+              disabled={
+                !canSignup || signupMutation.isPending || isSuccessMotion
+              }
             >
               {signupMutation.isPending ? (
                 <LoaderCircle size={18} className="animate-spin" />
@@ -293,7 +307,7 @@ export function SignupPage() {
                 '회원가입'
               )}
             </Button>
-            <p className="mt-2 flex items-center justify-center gap-3 text-sm text-text-muted">
+            <p className="mt-4 flex items-center justify-center gap-3 text-sm text-text-muted">
               이미 계정이 있으신가요 ?
               <Link to="/login" className="font-medium text-primary-600">
                 로그인

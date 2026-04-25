@@ -15,7 +15,14 @@ import { yellowCharacterImage } from '@/assets/images'
 import type { LoginFormSchema } from '@/schemas/auth/authForm.schema'
 import { useAuthStore } from '@/store/authStore'
 
-export function useLoginMutation(setError: UseFormSetError<LoginFormSchema>) {
+type UseLoginMutationOptions = {
+  onSuccess?: () => void
+}
+
+export function useLoginMutation(
+  setError: UseFormSetError<LoginFormSchema>,
+  options?: UseLoginMutationOptions
+) {
   const navigate = useNavigate()
   const setSession = useAuthStore((state) => state.setSession)
 
@@ -33,6 +40,12 @@ export function useLoginMutation(setError: UseFormSetError<LoginFormSchema>) {
         nickname: variables.email.split('@')[0],
         profileImageUrl: yellowCharacterImage,
       })
+
+      if (options?.onSuccess) {
+        options.onSuccess()
+        return
+      }
+
       navigate('/')
     },
     onError: (error) => {

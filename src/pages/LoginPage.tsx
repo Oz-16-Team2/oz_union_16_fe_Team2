@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { Link } from 'react-router'
+import { Link, useNavigate } from 'react-router'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { LoaderCircle } from 'lucide-react'
@@ -11,8 +11,8 @@ import {
   AuthFormLayout,
   CharacterDropAnimationFrame,
 } from '@/features/auth'
-import type { CharacterEyeStatus } from '@/features/auth/character/eye/useCharacterEye'
 import { useAuthEntranceMotion } from '@/features/auth/hooks/useAuthEntranceMotion'
+import { useAuthEyeStatus } from '@/features/auth/hooks/useAuthEyeStatus'
 import { usePasswordVisibility } from '@/features/auth/hooks/usePasswordVisibility'
 import { mockSocialLoginPayload } from '@/mocks/data/auth'
 import { useLoginMutation, useSocialLoginMutation } from '@/query/auth'
@@ -47,12 +47,19 @@ type SocialLoginProvider = (typeof socialLoginButtons)[number]['provider']
 type LoginFocusedField = 'email' | 'password' | null
 
 export function LoginPage() {
-  const { isDropped, isEntranceEyeActive } = useAuthEntranceMotion()
+  const navigate = useNavigate()
+  const {
+    isDropped,
+    isCompactMotion,
+    isEntranceEyeActive,
+    prefersReducedMotion,
+  } = useAuthEntranceMotion()
   const [focusedField, setFocusedField] = useState<LoginFocusedField>(null)
   const [lastFocusedField, setLastFocusedField] =
     useState<LoginFocusedField>(null)
   const [pendingSocialProvider, setPendingSocialProvider] =
     useState<SocialLoginProvider | null>(null)
+  const [isSuccessMotion, setIsSuccessMotion] = useState(false)
 
   const methods = useForm<LoginFormSchema>({
     mode: 'onChange',
@@ -71,7 +78,14 @@ export function LoginPage() {
 
   const LoginField = AuthForm.FormField<LoginFormSchema>
   const passwordVisibility = usePasswordVisibility()
-  const loginMutation = useLoginMutation(setError)
+  const loginMutation = useLoginMutation(setError, {
+    onSuccess: () => {
+      setIsSuccessMotion(true)
+      window.setTimeout(() => {
+        navigate('/')
+      }, 620)
+    },
+  })
   const socialLoginMutation = useSocialLoginMutation()
   const isSocialLoginPending = socialLoginMutation.isPending
   const hasLoginError =
@@ -81,33 +95,23 @@ export function LoginPage() {
     : errors.password || loginMutation.isError
       ? 'password'
       : null
-  const eyeTargetField = errorTargetField ?? focusedField ?? lastFocusedField
 
-  // 비밀번호 입력 중에는 에러 유무와 무관하게 다른 쪽을 보고, 그 외에는 에러 필드를 우선 봅니다.
-  const eyeStatus: CharacterEyeStatus =
-    focusedField === 'password'
-      ? 'look-away'
-      : hasLoginError
-        ? eyeTargetField === 'password'
-          ? 'password-error'
-          : eyeTargetField === 'email'
-            ? 'email-error'
-            : 'error'
-        : focusedField === 'email'
-          ? 'email'
-          : !isDropped || isEntranceEyeActive
-            ? 'entrance'
-            : 'idle'
+  const eyeStatus = useAuthEyeStatus<LoginFocusedField>({
+    emailFields: ['email'],
+    errorTargetField,
+    focusedField,
+    hasError: hasLoginError,
+    isDropped,
+    isEntranceEyeActive,
+    lastFocusedField,
+    passwordFields: ['password'],
+  })
 
   const handleLoginSubmit = (formValues: LoginFormSchema) => {
-    // 로그인 폼 제출 시 authApi.login -> MSW login handler 순서로 요청이 흐릅니다.
-    // 실제 API가 개발되면 같은 mutation을 유지한 채 baseURL만 실제 서버로 연결하면 됩니다.
     loginMutation.mutate(formValues)
   }
 
   const handleSocialLogin = (provider: SocialLoginProvider) => {
-    // 현재는 OAuth redirect가 없어서 MSW callback endpoint를 직접 호출합니다.
-    // 추후 실제 소셜 로그인 연동 시 provider 로그인 URL로 이동하거나 callback 페이지에서 이 요청을 실행하도록 교체합니다.
     setPendingSocialProvider(provider)
 
     const mutationOptions = {
@@ -118,8 +122,6 @@ export function LoginPage() {
       },
     }
 
-    // provider별 callback payload 모양이 달라서 분기별로 mutation 변수를 넘깁니다.
-    // 이렇게 두면 스키마 타입과 provider가 어긋나는 실수를 TypeScript가 잡아줍니다.
     if (provider === 'kakao') {
       socialLoginMutation.mutate(
         {
@@ -152,8 +154,14 @@ export function LoginPage() {
   }
 
   return (
-    <div className="relative flex min-h-screen w-full items-center justify-center">
-      <CharacterDropAnimationFrame isDropped={isDropped} eyeStatus={eyeStatus}>
+    <div className="relative flex min-h-dvh w-full items-center justify-center overflow-hidden">
+      <CharacterDropAnimationFrame
+        isDropped={isDropped}
+        isSuccessMotion={isSuccessMotion}
+        isCompactMotion={isCompactMotion}
+        eyeStatus={eyeStatus}
+        prefersReducedMotion={prefersReducedMotion}
+      >
         <AuthFormLayout
           methods={methods}
           title="로그인"
@@ -193,15 +201,19 @@ export function LoginPage() {
             type="submit"
             rounded={'lg'}
             className={cn(
-              'text-xl py-3 w-full',
-              loginMutation.isPending
-                ? 'disabled:bg-black disabled:text-white'
-                : isValid
-                  ? 'bg-black hover:bg-[#121212]'
-                  : 'disabled:bg-black/30 disabled:text-white/20'
+              'w-full py-3 text-xl text-white',
+              isSuccessMotion
+                ? 'bg-black text-white disabled:bg-black disabled:text-white'
+                : loginMutation.isPending
+                  ? 'disabled:bg-black disabled:text-white'
+                  : isValid
+                    ? 'bg-black hover:bg-[#121212]'
+                    : 'disabled:bg-[#d9d9d9] disabled:text-white/60 dark:disabled:bg-black/30 dark:disabled:text-white/20'
             )}
             size="lg"
-            disabled={!isDirty || !isValid || loginMutation.isPending}
+            disabled={
+              !isDirty || !isValid || loginMutation.isPending || isSuccessMotion
+            }
           >
             {loginMutation.isPending ? (
               <LoaderCircle size={18} className="animate-spin" />
@@ -239,7 +251,7 @@ export function LoginPage() {
               )
             )}
           </div>
-          <p className="mt-2 flex items-center justify-center gap-3 text-sm text-text-muted">
+          <p className="mt-4 flex items-center justify-center gap-3 text-sm text-text-muted">
             계정이 없으신가요?
             <Link to="/signup" className="font-medium text-primary-600">
               회원가입

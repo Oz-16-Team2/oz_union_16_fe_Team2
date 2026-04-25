@@ -35,11 +35,11 @@ export function AuthFormLayout<TFieldValues extends FieldValues>({
   return (
     <div
       className={cn(
-        'space-y-12 rounded-4xl border border-border-default bg-white/25 dark:bg-neutral-900/30 backdrop-blur-lg px-14 py-12 shadow-2xl relative',
+        'px-5 py-6 relative sm:space-y-10 sm:rounded-4xl sm:border sm:border-border-default sm:bg-white/25 sm:dark:bg-neutral-900/30 sm:backdrop-blur-lg sm:px-12 sm:py-12 sm:shadow-2xl sm:max-h-[calc(100vh-14vh)] overflow-y-auto',
         className
       )}
     >
-      <div className="flex flex-col items-center gap-2.5">
+      <div className="flex flex-col items-center sm:gap-2.5 gap-4">
         <Button
           title="홈으로 이동"
           variant="ghost"
@@ -65,7 +65,7 @@ export function AuthFormLayout<TFieldValues extends FieldValues>({
 
       <FormProvider {...methods}>
         <AuthForm
-          className={cn('mt-8 space-y-5', formClassName)}
+          className={cn('mt-8 space-y-4', formClassName)}
           onSubmit={onSubmit}
         >
           {children}
