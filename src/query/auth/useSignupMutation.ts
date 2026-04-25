@@ -12,7 +12,14 @@ import {
 } from '@/apis/auth'
 import type { SignupFormSchema } from '@/schemas/auth/authForm.schema'
 
-export function useSignupMutation(setError: UseFormSetError<SignupFormSchema>) {
+type UseSignupMutationOptions = {
+  onSuccess?: () => void
+}
+
+export function useSignupMutation(
+  setError: UseFormSetError<SignupFormSchema>,
+  options?: UseSignupMutationOptions
+) {
   const navigate = useNavigate()
 
   // 회원가입 제출은 사용자가 회원가입 버튼을 눌렀을 때만 실행합니다.
@@ -23,6 +30,11 @@ export function useSignupMutation(setError: UseFormSetError<SignupFormSchema>) {
   >({
     mutationFn: authApi.signup,
     onSuccess: () => {
+      if (options?.onSuccess) {
+        options.onSuccess()
+        return
+      }
+
       window.setTimeout(() => {
         navigate('/login')
       }, 1300)

@@ -15,7 +15,14 @@ import { yellowCharacterImage } from '@/assets/images'
 import type { LoginFormSchema } from '@/schemas/auth/authForm.schema'
 import { useAuthStore } from '@/store/authStore'
 
-export function useLoginMutation(setError: UseFormSetError<LoginFormSchema>) {
+type UseLoginMutationOptions = {
+  onSuccess?: () => void
+}
+
+export function useLoginMutation(
+  setError: UseFormSetError<LoginFormSchema>,
+  options?: UseLoginMutationOptions
+) {
   const navigate = useNavigate()
   const setSession = useAuthStore((state) => state.setSession)
 
@@ -33,13 +40,18 @@ export function useLoginMutation(setError: UseFormSetError<LoginFormSchema>) {
         nickname: variables.email.split('@')[0],
         profileImageUrl: yellowCharacterImage,
       })
+
+      if (options?.onSuccess) {
+        options.onSuccess()
+        return
+      }
+
       navigate('/')
     },
     onError: (error) => {
       const errorDetail = error.response?.data?.error_detail
 
       // 로그인 실패 응답이 문자열이면 이메일/비밀번호 조합 실패로 보고 비밀번호 필드에 표시합니다.
-      // 이 문구는 auth.schema.ts의 loginUnauthorizedResponseSchema와 MSW handler가 같은 값을 사용합니다.
       if (typeof errorDetail === 'string') {
         setError('password', {
           type: 'server',
@@ -48,8 +60,7 @@ export function useLoginMutation(setError: UseFormSetError<LoginFormSchema>) {
         return
       }
 
-      // 서버 또는 MSW에서 field error 형태로 내려준 경우 폼 필드 에러로 연결합니다.
-      // 실제 API 연동 시 백엔드 field key가 바뀌면 이 매핑만 조정하면 됩니다.
+      // 서버에서 field error 형태로 내려준 경우 폼 필드 에러로 연결합니다.
       if (errorDetail?.email?.[0]) {
         setError('email', {
           type: 'server',

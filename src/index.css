@@ -2,14 +2,15 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
-html {
+/* html {
   scrollbar-gutter: stable;
-}
+} */
 
 body {
   font-family: 'Pretendard', ui-sans-serif, system-ui, sans-serif;
   color: var(--text-primary);
   background-color: var(--bg-surface);
+  padding-right: var(--scrollbar-width);
 }
 
 :root {
@@ -187,6 +188,12 @@ body {
   --dropdown-item-hover-text: var(--color-primary-600);
 
   /* =========================
+     Scrollbar
+  ========================= */
+  --scrollbar-thumb: rgba(50, 50, 50, 0.38);
+  --scrollbar-track: rgba(34, 34, 34, 0.01);
+
+  /* =========================
      Tab
   ========================= */
   --tab-active-bg: var(--color-primary-100);
@@ -328,6 +335,13 @@ body {
   ========================= */
   --dropdown-item-hover-bg: transparent;
   --dropdown-item-hover-text: var(--color-primary-400);
+
+  /* =========================
+     Scrollbar
+  ========================= */
+  --scrollbar-thumb: rgba(80, 80, 80, 0.6);
+  --scrollbar-thumb-hover: rgba(100, 100, 100, 0.8);
+  --scrollbar-track: rgba(20, 20, 20, 0.4);
 
   /* =========================
      Tab
@@ -493,6 +507,35 @@ body {
     opacity: 0;
     transform: translateY(-6px);
   }
+}
+
+/* overflow-auto/scroll 요소도 별도 클래스 없이 공통 스크롤바 색상을 사용합니다. */
+* {
+  scrollbar-width: auto;
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+}
+
+*::-webkit-scrollbar {
+  width: 14px;
+  height: 14px;
+}
+
+*::-webkit-scrollbar-track {
+  background: var(--scrollbar-track);
+  border-radius: 999px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border: 2px solid transparent;
+  border-radius: 999px;
+  background-clip: padding-box;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover);
+  border: 4px solid transparent;
+  background-clip: padding-box;
 }
 
 /* =========================

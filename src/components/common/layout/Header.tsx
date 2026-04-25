@@ -6,6 +6,7 @@ import { DarklogoImage, logoImage } from '@/assets/images'
 import { ActionMenu } from '@/components/common/overlay'
 import { Button } from '@/components/common/ui'
 import { useTheme } from '@/lib/theme/ThemeProvider'
+import { useLogoutMutation } from '@/query/auth'
 import { useAuthStore } from '@/store/authStore'
 
 const THEME_META = {
@@ -18,7 +19,7 @@ export function Header() {
   const { theme, setTheme } = useTheme()
   const navigate = useNavigate()
   const user = useAuthStore((state) => state.user)
-  const clearSession = useAuthStore((state) => state.clearSession)
+  const logoutMutation = useLogoutMutation()
   const { label, display, Icon } = THEME_META[theme]
 
   const handleClickTheme = () => {
@@ -36,8 +37,9 @@ export function Header() {
   }
 
   const handleLogout = () => {
-    clearSession()
-    navigate('/')
+    // 로그아웃은 서버 쿠키 정리까지 끝내야 해서
+    // 로컬 상태를 바로 지우지 않고 실제 API 호출을 먼저 보냅니다.
+    logoutMutation.mutate()
   }
 
   return (
@@ -111,7 +113,7 @@ export function Header() {
               variant="ghost"
               onClick={() => navigate('/login')}
               rounded="full"
-              className="ml-3 h-9 bg-transparent px-0 py-0 text-sm text-text-primary hover:bg-transparent hover:text-primary-600 dark:hover:text-primary-400"
+              className="h-9 bg-transparent px-0 py-0 text-sm text-text-primary hover:bg-transparent hover:text-primary-600 dark:hover:text-primary-400"
             >
               로그인
             </Button>

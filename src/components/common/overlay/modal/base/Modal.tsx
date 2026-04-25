@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import { createPortal } from 'react-dom'
 
 import { cva, type VariantProps } from 'class-variance-authority'
 
@@ -59,7 +60,7 @@ export function Modal({
     }
   }, [onClose])
 
-  return (
+  const modalNode = (
     <ModalBackdrop onClick={onClose}>
       <div
         role="dialog"
@@ -72,6 +73,10 @@ export function Modal({
       </div>
     </ModalBackdrop>
   )
+
+  // 모달은 호출한 컴포넌트 위치가 아니라 document.body에 포탈로 붙여야
+  // 부모의 overflow, stacking context, layout 영향 없이 화면 전체를 덮을 수 있습니다.
+  return createPortal(modalNode, document.body)
 }
 
 Modal.Header = ModalHeader
