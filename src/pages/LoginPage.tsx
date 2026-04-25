@@ -10,7 +10,6 @@ import {
   AuthForm,
   AuthFormLayout,
   CharacterDropAnimationFrame,
-  PasswordVisibilityButton,
 } from '@/features/auth'
 import type { CharacterEyeStatus } from '@/features/auth/character/eye/useCharacterEye'
 import { useAuthEntranceMotion } from '@/features/auth/hooks/useAuthEntranceMotion'
@@ -187,12 +186,7 @@ export function LoginPage() {
               setLastFocusedField('password')
             }}
             onBlur={() => setFocusedField(null)}
-          >
-            <PasswordVisibilityButton
-              isVisible={passwordVisibility.isVisible}
-              onToggle={passwordVisibility.toggleVisibility}
-            />
-          </LoginField>
+          ></LoginField>
 
           <Button
             variant={'neutral'}

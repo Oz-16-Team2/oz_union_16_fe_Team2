@@ -1,5 +1,7 @@
 import axios, { type AxiosError } from 'axios'
 
+import { useAuthStore } from '@/store/authStore'
+
 import { API_BASE_URL, MSW_BASE_URL } from './apiPath'
 
 export const apiClient = axios.create({
@@ -15,25 +17,39 @@ export const apiClient = axios.create({
 })
 
 apiClient.interceptors.request.use((config) => {
-  // TODO: 로그인 API 연결 후 access token 저장 위치가 확정되면 Authorization 헤더를 추가
+  // Zustand에 저장된 accessToken을 가져옴
+  const accessToken = useAuthStore.getState().accessToken
 
+  // accessToken이 존재할 경우에만 Authorization 헤더에 Bearer 토큰을 추가
+  if (accessToken) {
+    config.headers.Authorization = `Bearer ${accessToken}`
+  }
+
+  // 수정된 config를 반환하여 요청에 반영
   return config
 })
 
 apiClient.interceptors.response.use(
   (response) => response,
   async (error: AxiosError) => {
-    // TODO: refresh token 정책 확정 후 구현
-    // const originalRequest = error.config
-    // if (error.response?.status === 401 && !originalRequest._retry) {
-    //   return handle401Error(originalRequest)
-    // }
+    const status = error.response?.status
 
-    // TODO: 권한 모달 정책 확정 후 구현
-    // if (error.response?.status === 403) {
-    //   useModalStore.getState().openUnauthorized()
-    // }
+    // 401: 토큰 만료 or 인증 실패
+    if (status === 401) {
+      const { clearSession } = useAuthStore.getState()
 
-    throw error
+      // 1. 세션 초기화 (토큰 제거)
+      clearSession()
+
+      // 2. 로그인 페이지로 이동
+      window.location.href = '/login'
+    }
+
+    // 403: 권한 없음
+    if (status === 403) {
+      console.warn('권한이 없습니다.')
+    }
+
+    return Promise.reject(error)
   }
 )
