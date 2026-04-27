@@ -17,6 +17,7 @@ export {
 } from './card'
 export type { Comment } from './comment'
 export { CommentInput, CommentItem, CommentList } from './comment'
+export { EmptyState } from './empty-state/EmptyState'
 export { Input, type InputProps } from './field/Input'
 export { SearchBar, type SearchBarProps } from './field/SearchBar'
 export { Textarea, type TextareaProps } from './field/Textarea'
