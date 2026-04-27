@@ -1,4 +1,4 @@
-import { CalendarDays, Users } from 'lucide-react'
+import { Users } from 'lucide-react'
 
 import { Button } from '@/components/common/ui'
 import { formatSelectedDate } from '@/components/common/ui/calendar/Calendar.util'
@@ -33,15 +33,12 @@ export function VoteDisplay({
   return (
     <>
       <div className="mb-2 flex items-center gap-2 text-sm">
-        <span className="text-text-muted">{statusLabel}</span>
+        <span className="text-text-primary">{statusLabel}</span>
 
         {hasPeriod && (
-          <>
-            <CalendarDays className="h-4 w-4 text-text-muted" />
-            <span className="text-text-primary">
-              {formatSelectedDate(period ?? { start: null, end: null }, '')}
-            </span>
-          </>
+          <span className="text-text-primary">
+            {formatSelectedDate(period ?? { start: null, end: null }, '')}
+          </span>
         )}
       </div>
 
@@ -80,7 +77,6 @@ export function VoteDisplay({
           </Button>
         </div>
       </section>
-
       <div className="mt-4 flex items-center gap-2 text-sm text-text-muted">
         <Users className="h-4 w-4" />
         <span>{participantCount}명 참여중</span>

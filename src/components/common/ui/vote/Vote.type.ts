@@ -46,6 +46,7 @@ export type VoteDisplayProps = {
   actionSlot?: ReactNode
   onSelectOption?: (optionId: string) => void
   onActionClick?: () => void
+  showCalendarIcon?: boolean
 } & VoteBaseProps
 
 // 생성/수정 컴포넌트 props

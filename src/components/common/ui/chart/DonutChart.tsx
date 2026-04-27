@@ -5,13 +5,18 @@ import type { GoalStatus } from '@/components/common/ui/card'
 type DonutChartProps = {
   progressRate: number
   status?: GoalStatus
+  size?: number
 }
 
 export function DonutChart({
   progressRate,
   status = 'IN_PROGRESS',
+  size = 140,
 }: DonutChartProps) {
   const percentage = Math.min(100, Math.max(0, progressRate))
+
+  const innerRadius = size * 0.35
+  const outerRadius = size * 0.46
 
   // 상태별 색상
   const gaugeColor =
@@ -19,13 +24,13 @@ export function DonutChart({
 
   return (
     <div className="relative flex items-center justify-center">
-      <PieChart width={140} height={140}>
+      <PieChart width={size} height={size}>
         {/* 회색 배경 */}
         <Pie
           data={[{ value: 100 }]}
           dataKey="value"
-          innerRadius={50}
-          outerRadius={65}
+          innerRadius={size * 0.35}
+          outerRadius={size * 0.46}
           fill="var(--color-gray-200)"
           stroke="none"
           isAnimationActive={false}
@@ -37,8 +42,8 @@ export function DonutChart({
           dataKey="value"
           startAngle={90}
           endAngle={90 - (percentage / 100) * 360}
-          innerRadius={50}
-          outerRadius={65}
+          innerRadius={innerRadius}
+          outerRadius={outerRadius}
           fill={gaugeColor}
           stroke="none"
           animationDuration={800}
