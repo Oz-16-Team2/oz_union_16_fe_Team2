@@ -1,4 +1,4 @@
-export { MyPageGoalSection } from './MyPageGoalSection'
+export { MyPageGoalSection } from './goal/MyPageGoalSection'
 export { MyPageHeatmap } from './MyPageHeatmap'
 export {
   MyPageStatsSummary,
