@@ -3,15 +3,9 @@ import { delay, http, HttpResponse } from 'msw'
 import { toMswApiUrl } from '@/apis/apiPath'
 import { POST_ENDPOINTS } from '@/apis/post'
 
-import { mockGoals, mockPost, mockPostList, mockTags } from '../data/post'
+import { mockPost, mockPostList, mockTags } from '../data/post'
 
 export const postHandler = [
-  // GET /api/v1/goals — 목표 목록 조회
-  http.get(toMswApiUrl(POST_ENDPOINTS.goals), async () => {
-    await delay(300)
-    return HttpResponse.json(mockGoals, { status: 200 })
-  }),
-
   // GET /api/v1/tags — 태그 목록 조회
   http.get(toMswApiUrl(POST_ENDPOINTS.tags), async () => {
     await delay(300)

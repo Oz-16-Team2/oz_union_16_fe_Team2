@@ -556,7 +556,6 @@ input:-webkit-autofill:focus {
 [data-sonner-toaster][data-x-position='center'] {
   left: 50vw !important;
   right: auto !important;
-  width: min(300px, calc(100vw - 32px)) !important;
   transform: translateX(-50%) !important;
 }
 
@@ -564,20 +563,6 @@ input:-webkit-autofill:focus {
 [data-sonner-toaster][data-x-position='center'] [data-sonner-toast] {
   left: 50% !important;
   right: auto !important;
-  width: min(300px, calc(100vw - 32px)) !important;
-  translate: -50% 0;
-}
-
-/* 커스텀 Toast 내부 박스가 wrapper 너비를 그대로 사용하게 합니다. */
-[data-sonner-toaster][data-x-position='center'] [data-sonner-toast] > div {
-  width: 100%;
   max-width: 100%;
-}
-
-/* 모바일에서는 좌우 16px 여백을 남기고 가운데 정렬을 유지합니다. */
-@media (max-width: 600px) {
-  [data-sonner-toaster][data-x-position='center'] {
-    left: 50vw !important;
-    width: calc(100vw - 32px) !important;
-  }
+  translate: -50% 0;
 }

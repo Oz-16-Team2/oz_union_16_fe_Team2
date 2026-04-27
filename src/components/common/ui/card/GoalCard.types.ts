@@ -23,6 +23,9 @@ export type GoalCardProps = {
   status: GoalStatus
   progressRate: number
   period: DateRange
+  isCheckedToday?: boolean
+  onCheck?: () => void
+  onEdit?: () => void
   onDelete: () => void
 }
 
@@ -34,5 +37,13 @@ export type GoalCardEditProps = {
   initialProgressRate: number
   initialStatus: GoalStatus
   onClose: () => void
-  onSubmit: (data: { title: string; dateRange: DateRange }) => void
-}
+} & (
+  | {
+      mode: 'create'
+      onSubmit: (data: { title: string; dateRange: DateRange }) => void
+    }
+  | {
+      mode: 'edit'
+      onSubmit: (data: { title: string }) => void
+    }
+)

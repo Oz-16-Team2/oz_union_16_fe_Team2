@@ -10,15 +10,15 @@ const toastVariants = {
     icon: <CircleCheck size={18} />,
   },
   error: {
-    className: 'border-danger-500 bg-danger-100 text-danger-500',
+    className: 'border-danger-500 bg-danger-100/10 text-danger-500',
     icon: <XCircle size={18} />,
   },
   warning: {
-    className: 'border-orange-400 bg-orange-50 text-orange-400',
+    className: 'border-orange-400 bg-orange-50/10 text-orange-400',
     icon: <AlertTriangle size={18} />,
   },
   info: {
-    className: 'border-primary-500 bg-primary-100 text-primary-500',
+    className: 'border-primary-500 bg-primary-100/5 text-primary-400',
     icon: <Info size={18} />,
   },
 }
@@ -29,12 +29,14 @@ export function Toast({ message, type = 'success' }: ToastProps) {
   return (
     <div
       className={cn(
-        'inline-flex h-13.5 w-full max-w-75 items-center justify-center gap-2 rounded-xl border px-8',
+        'inline-flex w-auto items-start justify-start gap-2 rounded-xl border px-4 py-3 max-w-[min(420px,calc(100vw-32px))]',
         className
       )}
     >
-      {icon}
-      <span className="min-w-0 text-sm">{message}</span>
+      <div className="shrink-0 mt-0.5">{icon}</div>
+      <span className="flex-1 min-w-0 text-sm whitespace-nowrap overflow-hidden text-ellipsis">
+        {message}
+      </span>
     </div>
   )
 }
