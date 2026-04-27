@@ -49,13 +49,18 @@ export function PostDetailBody({
         </div>
       )}
 
-      <h1 className="text-lg font-semibold text-text-primary">{title}</h1>
+      <h1 className="text-xl font-semibold text-text-primary">{title}</h1>
 
-      <p className="text-sm text-text-muted">{content}</p>
+      <p className="text-sm leading-relaxed text-text-muted">{content}</p>
 
-      <div className="flex gap-2 text-xs text-text-primary">
+      <div className="mt-4 flex flex-wrap gap-2">
         {tags.map((tag, index) => (
-          <span key={`${tag}-${index}`}>#{tag}</span>
+          <span
+            key={`${tag}-${index}`}
+            className="max-w-fit break-all rounded-md bg-gray-100 px-2 py-1 text-xs text-text-muted"
+          >
+            #{tag}
+          </span>
         ))}
       </div>
     </div>

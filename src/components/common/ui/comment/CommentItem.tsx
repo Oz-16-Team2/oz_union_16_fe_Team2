@@ -26,7 +26,6 @@ type CommentItemProps = {
   isSelected?: boolean
   onSelect?: () => void
   onLike?: (id: number) => void
-  onDelete?: (id: number) => void
 }
 
 export function CommentItem({
@@ -35,7 +34,6 @@ export function CommentItem({
   isSelected = false,
   onSelect,
   onLike,
-  onDelete,
 }: CommentItemProps) {
   const {
     id,
@@ -50,13 +48,13 @@ export function CommentItem({
   return (
     <div
       className={cn(
-        'flex gap-3 rounded-xl  px-4 py-3',
-        isSelected && 'bg-primary-100/50'
+        'flex gap-3 rounded-xl px-4 py-3',
+        isSelected && 'bg-primary-100/30'
       )}
       onClick={() => onSelect?.()}
     >
       {/* 프로필 */}
-      <div className="h-10 w-10 shrink-0 overflow-hidden rounded-full bg-gray-200">
+      <div className="h-12 w-12 shrink-0 overflow-hidden rounded-full bg-gray-200">
         {profile_image_url ? (
           <img
             src={profile_image_url}
@@ -67,7 +65,7 @@ export function CommentItem({
       </div>
 
       {/* 내용 */}
-      <div className="flex flex-1 flex-col gap-1">
+      <div className="flex min-w-0 flex-1 flex-col gap-1">
         {/* 상단 */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -81,20 +79,32 @@ export function CommentItem({
 
           {/* 더보기 */}
           {isOwner ? (
-            <Button variant="ghost" size="sm" onClick={() => onDelete?.(id)}>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={(e) => {
+                e.stopPropagation()
+                console.log('more', id)
+              }}
+            >
               <MoreHorizontal className="h-4 w-4" />
             </Button>
           ) : null}
         </div>
 
         {/* 본문 */}
-        <p className="text-sm text-text-primary">{content}</p>
+        <p className="max-w-full break-all whitespace-pre-wrap text-sm text-text-primary">
+          {content}
+        </p>
 
         {/* 하단 액션 */}
         <div className="flex items-center gap-2">
           <button
             type="button"
-            onClick={() => onLike?.(id)}
+            onClick={(e) => {
+              e.stopPropagation()
+              onLike?.(id)
+            }}
             className="flex items-center gap-1"
             aria-label="댓글 좋아요"
           >

@@ -8,7 +8,7 @@ type PostDetailHeaderProps = {
 
 export function PostDetailHeader({ author, createdAt }: PostDetailHeaderProps) {
   return (
-    <div className="flex items-center gap-3">
+    <div className="mt-9 flex items-center gap-3">
       <div className="h-10 w-10 shrink-0 overflow-hidden rounded-full bg-gray-200">
         <img
           src={author.profileImageUrl}

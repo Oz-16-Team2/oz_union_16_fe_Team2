@@ -15,7 +15,7 @@ export function PostDetailLayout() {
   const post = mockPostDetail
 
   return (
-    <article className="rounded-2xl border border-border-default bg-white p-6 shadow-card-main">
+    <article className="rounded-2xl border border-border-default bg-white px-16 py-6 shadow-card-main">
       <PostDetailHeader author={post.author} createdAt={post.createdAt} />
 
       <div className="mt-6">
