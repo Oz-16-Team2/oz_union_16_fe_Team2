@@ -1,10 +1,11 @@
 import { useState } from 'react'
 
+import type { GoalStatus } from '@/components/common/ui'
 import type { DateRange } from '@/components/common/ui/calendar/Calendar.type'
 import { EMPTY_STATE_MESSAGES } from '@/components/common/ui/empty-state/empty-state.messages'
 import { matchesPeriod } from '@/utils/date'
 
-import type { Goal, GoalStatus } from '../components/goal/goal.types'
+import type { Goal } from '../components/goal/goal.types'
 
 export const GOAL_FILTERS = ['전체 보기', '진행중', '미달성', '완료'] as const
 const GOALS_PAGE_SIZE = 8

@@ -14,4 +14,5 @@ export type CalendarProps = {
   minDate?: Date
   onChange?: (date: DateRange | null) => void
   value?: DateRange
+  className?: string
 }

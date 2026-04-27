@@ -12,6 +12,7 @@ import { useCalendar } from './useCalendar'
 
 // 캘린더 컨테이너는 상태 hook과 하위 UI 컴포넌트를 연결한다.
 export function Calendar({
+  className,
   label = '날짜를 선택해주세요',
   ...calendarProps
 }: CalendarProps) {
@@ -25,7 +26,7 @@ export function Calendar({
   return (
     <div className="relative w-full">
       {/* 캘린더의 열림/닫힘 버튼 */}
-      <div className="flex w-50">
+      <div className={cn('flex w-50', className)}>
         <Button
           variant="ghost"
           aria-expanded={state.isOpen}
