@@ -12,6 +12,7 @@ import {
   PostEditPage,
   SignupPage,
 } from '@/pages'
+import { PostDetailPage } from '@/pages/PostDetailPage'
 
 /*
  * 라우터 설정 파일
@@ -48,6 +49,11 @@ export const router = createBrowserRouter([
       {
         path: 'mypage/posts',
         element: <MyPostsPage />,
+      },
+
+      {
+        path: 'post/:postId',
+        element: <PostDetailPage />,
       },
     ],
   },

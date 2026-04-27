@@ -1,0 +1,68 @@
+import { useState } from 'react'
+
+type PostDetailBodyProps = {
+  title: string
+  content: string
+  tags: string[]
+  images: string[]
+}
+
+function getImageGridClass(count: number): string {
+  if (count === 1) return 'grid-cols-1 max-w-xl'
+  if (count === 2) return 'grid-cols-2'
+  return 'grid-cols-3'
+}
+
+export function PostDetailBody({
+  title,
+  content,
+  tags,
+  images,
+}: PostDetailBodyProps) {
+  const visibleImages = images.slice(0, 3)
+  const [failedImages, setFailedImages] = useState<Set<number>>(new Set())
+
+  const handleImageError = (index: number) => {
+    setFailedImages((prev) => new Set(prev).add(index))
+  }
+
+  return (
+    <div className="space-y-4">
+      {visibleImages.length > 0 && (
+        <div
+          className={`grid gap-3 ${getImageGridClass(visibleImages.length)}`}
+        >
+          {visibleImages.map((image, index) => {
+            if (failedImages.has(index)) return null
+
+            return (
+              <img
+                key={image}
+                src={image}
+                alt={`게시글 이미지 ${index + 1}`}
+                className="aspect-4/3 w-full rounded-xl object-cover"
+                loading="lazy"
+                onError={() => handleImageError(index)}
+              />
+            )
+          })}
+        </div>
+      )}
+
+      <h1 className="text-xl font-semibold text-text-primary">{title}</h1>
+
+      <p className="text-sm leading-relaxed text-text-muted">{content}</p>
+
+      <div className="mt-4 flex flex-wrap gap-2">
+        {tags.map((tag, index) => (
+          <span
+            key={`${tag}-${index}`}
+            className="max-w-fit break-all rounded-md bg-gray-100 px-2 py-1 text-xs text-text-muted"
+          >
+            #{tag}
+          </span>
+        ))}
+      </div>
+    </div>
+  )
+}

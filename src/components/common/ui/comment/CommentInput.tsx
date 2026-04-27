@@ -32,9 +32,9 @@ export function CommentInput({
   }
 
   return (
-    <div className="flex gap-3">
+    <div className="flex items-start gap-4 pl-4">
       {/* 프로필 (나중에 사용자 정보로 교체 가능) */}
-      <div className="h-10 w-10 shrink-0 overflow-hidden rounded-full bg-gray-200">
+      <div className="h-12 w-12 shrink-0 overflow-hidden rounded-full bg-gray-200">
         {profileImageUrl ? (
           <img
             src={profileImageUrl}
@@ -46,19 +46,23 @@ export function CommentInput({
 
       {/* 입력 영역 */}
       <div className="flex flex-1 flex-col gap-2">
-        <Textarea
-          className="bg-gray-100 focus:bg-white"
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-          placeholder={placeholder}
-          maxLength={maxLength}
-        />
+        <div className="relative">
+          <Textarea
+            className="h-14 min-h-14 max-h-30 overflow-y-auto bg-gray-100 pr-20 pb-6 focus:bg-white"
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
+            placeholder={placeholder}
+            maxLength={maxLength}
+          />
 
-        {/* 하단 영역 */}
-        <div className="flex items-center justify-between">
-          <span className="text-xs text-text-muted">
+          {/* 글자수 */}
+          <span className="absolute right-4 bottom-3 text-xs text-text-muted">
             {value.length}/{maxLength}
           </span>
+        </div>
+
+        {/* 하단 영역 */}
+        <div className="flex justify-end">
           <Button
             variant="submit"
             size="sm"

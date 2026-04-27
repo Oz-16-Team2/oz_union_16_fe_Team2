@@ -15,6 +15,7 @@ export {
   PostCard,
   PostCardSkeleton,
 } from './card'
+export { DonutChart } from './chart/DonutChart'
 export type { Comment } from './comment'
 export { CommentInput, CommentItem, CommentList } from './comment'
 export { EmptyState } from './empty-state/EmptyState'
