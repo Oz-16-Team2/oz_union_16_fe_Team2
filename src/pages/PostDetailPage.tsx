@@ -1,9 +1,16 @@
 import { PostDetailLayout } from '@/features/post-detail/components/PostDetailLayout'
+import { usePostDetailQuery } from '@/query/post/usePostDetailQuery'
 
 export function PostDetailPage() {
+  const { data: post, isLoading, error } = usePostDetailQuery(305)
+
+  if (isLoading) return <div>로딩중</div>
+  if (error) return <div>에러</div>
+  if (!post) return <div>게시글 없음</div>
+
   return (
     <div className="flex min-h-full justify-start">
-      <PostDetailLayout />
+      <PostDetailLayout post={post} />
     </div>
   )
 }

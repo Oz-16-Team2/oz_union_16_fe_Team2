@@ -56,3 +56,38 @@ export type TagOption = {
   id: number
   name: string
 }
+
+//게시글 상세 페이지 화면용
+export type PostDetailData = {
+  postId: number
+  images: string[]
+  profileImageUrl: string | null
+  nickname: string
+  createdAt: string
+  title: string
+  content: string
+  tags: string[]
+  likeCount: number
+  commentCount: number
+  isScrapped: boolean
+  hasGoal: boolean
+  goalInfo: {
+    goalId: number
+    title: string
+    startDate: string | null
+    endDate: string | null
+    progressRate: number | null
+  } | null
+  hasVote: boolean
+  voteInfo: {
+    voteId: number
+    startAt: string
+    endAt: string
+    status: string
+    options: {
+      optionId: number
+      content: string
+      sortOrder: number
+    }[]
+  } | null
+}

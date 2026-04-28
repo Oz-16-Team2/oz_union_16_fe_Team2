@@ -4,7 +4,7 @@ import type {
   ApiPostResponse,
   ApiPostUpdateRequest,
 } from './post.api.types'
-import type { GoalOption, PostFormData } from './post.types'
+import type { GoalOption, PostDetailData, PostFormData } from './post.types'
 
 // API 응답 → 프론트 타입
 
@@ -42,6 +42,47 @@ export function toPostFormData(api: ApiPostResponse): PostFormData {
       : undefined,
     tagNames: api.tags ?? [],
     tagIds: [],
+  }
+}
+
+// GET /api/v1/posts/:postId 응답 → PostDetailData (게시글 상세 페이지용)
+export function toPostDetailData(api: ApiPostResponse): PostDetailData {
+  return {
+    postId: api.post_id,
+    images: api.images,
+    profileImageUrl: api.profile_image_url,
+    nickname: api.nickname,
+    createdAt: api.created_at,
+    title: api.title,
+    content: api.content,
+    tags: api.tags ?? [],
+    likeCount: api.like_count,
+    commentCount: api.comment_count,
+    isScrapped: api.is_scrapped,
+    hasGoal: api.has_goal,
+    goalInfo: api.goal_info
+      ? {
+          goalId: api.goal_info.goal_id,
+          title: api.goal_info.goal_title,
+          startDate: api.goal_info.goal_start_date,
+          endDate: api.goal_info.goal_end_date,
+          progressRate: api.goal_info.goal_progress,
+        }
+      : null,
+    hasVote: api.has_vote,
+    voteInfo: api.vote_info
+      ? {
+          voteId: api.vote_info.vote_id,
+          startAt: api.vote_info.start_at,
+          endAt: api.vote_info.end_at,
+          status: api.vote_info.status,
+          options: api.vote_info.options.map((o) => ({
+            optionId: o.option_id,
+            content: o.content,
+            sortOrder: o.sort_order,
+          })),
+        }
+      : null,
   }
 }
 
