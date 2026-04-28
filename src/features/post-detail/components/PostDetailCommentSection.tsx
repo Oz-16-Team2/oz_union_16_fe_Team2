@@ -1,80 +1,47 @@
-import { useState } from 'react'
+import { CommentInput, CommentList } from '@/components/common/ui/comment'
+import { useCommentsQuery } from '@/query/post/useCommentsQuery'
+import { useCreateCommentMutation } from '@/query/post/useCreateCommentMutation'
 
-import {
-  type Comment,
-  CommentInput,
-  CommentList,
-} from '@/components/common/ui/comment'
-
-const MOCK_COMMENTS: Comment[] = [
-  {
-    id: 1,
-    user_id: 2,
-    nickname: '하이룽',
-    content: '치맥이나 하자 ㅋㅋㅋㅋ',
-    created_at: new Date(Date.now() - 6 * 60 * 1000).toISOString(),
-    like_count: 0,
-    is_liked: false,
-    profile_image_url: null,
-  },
-  {
-    id: 2,
-    user_id: 3,
-    nickname: 'stt',
-    content: 'ㅋㅋㅋㅋ',
-    created_at: new Date(Date.now() - 6 * 60 * 1000).toISOString(),
-    like_count: 0,
-    is_liked: false,
-    profile_image_url: null,
-  },
-]
+type PostDetailCommentSectionProps = {
+  postId: number
+}
 
 const CURRENT_USER_ID = 1
 
-export function PostDetailCommentSection() {
-  const [comments, setComments] = useState<Comment[]>(MOCK_COMMENTS)
+export function PostDetailCommentSection({
+  postId,
+}: PostDetailCommentSectionProps) {
+  const { data: comments = [], isLoading, isError } = useCommentsQuery(postId)
+
+  const { mutate: createComment, isPending } = useCreateCommentMutation()
 
   const handleSubmitComment = (content: string) => {
-    const newComment: Comment = {
-      id: Date.now(),
-      user_id: CURRENT_USER_ID,
-      nickname: '나',
+    createComment({
+      postId,
       content,
-      created_at: new Date().toISOString(),
-      like_count: 0,
-      is_liked: false,
-      profile_image_url: null,
-    }
-
-    setComments((prevComments) => [newComment, ...prevComments])
+    })
   }
 
-  const handleLike = (id: number) => {
-    setComments((prevComments) =>
-      prevComments.map((comment) =>
-        comment.id === id
-          ? {
-              ...comment,
-              is_liked: !comment.is_liked,
-              like_count: comment.is_liked
-                ? comment.like_count - 1
-                : comment.like_count + 1,
-            }
-          : comment
-      )
+  if (isError) {
+    return (
+      <section>
+        <p className="py-6 text-center text-sm text-danger-500">
+          댓글을 불러오지 못했습니다.
+        </p>
+      </section>
     )
   }
 
   return (
     <section>
-      <div className="px-6"></div>
-      <CommentInput onSubmit={handleSubmitComment} />
+      <CommentInput isLoading={isPending} onSubmit={handleSubmitComment} />
 
       <div className="mt-8">
         <CommentList
           comments={comments}
           currentUserId={CURRENT_USER_ID}
-          onLike={handleLike}
+          isLoading={isLoading}
+          onLike={() => {}}
         />
       </div>
     </section>

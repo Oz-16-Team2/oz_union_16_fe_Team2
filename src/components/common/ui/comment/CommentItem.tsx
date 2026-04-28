@@ -39,10 +39,10 @@ export function CommentItem({
     id,
     nickname,
     content,
-    created_at,
-    like_count,
-    is_liked,
-    profile_image_url,
+    createdAt,
+    likeCount,
+    isLiked,
+    profileImageUrl,
   } = comment
 
   return (
@@ -55,9 +55,9 @@ export function CommentItem({
     >
       {/* 프로필 */}
       <div className="h-12 w-12 shrink-0 overflow-hidden rounded-full bg-gray-200">
-        {profile_image_url ? (
+        {profileImageUrl ? (
           <img
-            src={profile_image_url}
+            src={profileImageUrl}
             alt={`${nickname}의 프로필 이미지`}
             className="h-full w-full object-cover"
           />
@@ -73,7 +73,7 @@ export function CommentItem({
               {nickname}
             </span>
             <span className="text-xs text-text-muted">
-              {formatTime(created_at)}
+              {formatTime(createdAt)}
             </span>
           </div>
 
@@ -111,12 +111,12 @@ export function CommentItem({
             <Heart
               className={cn(
                 'h-4 w-4',
-                is_liked
+                isLiked
                   ? 'fill-primary-500 text-primary-500'
                   : 'text-text-muted'
               )}
             />
-            <span className="text-xs text-text-muted">{like_count}</span>
+            <span className="text-xs text-text-muted">{likeCount}</span>
           </button>
         </div>
       </div>

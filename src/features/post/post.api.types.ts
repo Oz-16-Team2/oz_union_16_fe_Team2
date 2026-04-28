@@ -92,3 +92,25 @@ export type ApiPostUpdateRequest = {
   vote?: VoteContent
   tag_ids?: number[]
 }
+
+//댓글 api
+export type CommentApiResponse = {
+  id: number
+  user_id: number
+  nickname: string
+  content: string
+  created_at: string
+  like_count: number
+  is_liked: boolean
+  profile_image_url?: string | null
+}
+
+export type GetCommentsApiResponse = {
+  results: CommentApiResponse[]
+}
+
+export type CreateCommentApiRequest = {
+  content: string
+}
+
+export type CreateCommentApiResponse = CommentApiResponse
