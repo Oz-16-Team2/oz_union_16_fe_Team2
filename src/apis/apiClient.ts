@@ -1,5 +1,6 @@
-import axios, { type AxiosError } from 'axios'
+import axios, { type AxiosError, type AxiosRequestConfig } from 'axios'
 
+import { AUTH_ENDPOINTS } from '@/apis/auth/endpoints'
 import { useAuthStore } from '@/store/authStore'
 
 import { API_BASE_URL, MSW_BASE_URL } from './apiPath'
@@ -33,21 +34,38 @@ apiClient.interceptors.response.use(
   (response) => response,
   async (error: AxiosError) => {
     const status = error.response?.status
+    const requestUrl = error.config?.url ?? ''
+    const isLogoutRequest = requestUrl.includes(AUTH_ENDPOINTS.logout)
 
-    // 401: 토큰 만료 or 인증 실패
-    if (status === 401) {
-      const { clearSession } = useAuthStore.getState()
+    // 401: 인증 실패 (accessToken 만료 or 유효하지 않음)
+    // → refresh token으로 accessToken 재발급 시도
+    if (status === 401 && !isLogoutRequest) {
+      //무한루프 방지용
+      const originalRequest = error.config as AxiosRequestConfig & {
+        _retry?: boolean
+      }
+      if (originalRequest?._retry) {
+        return Promise.reject(error)
+      }
+      originalRequest._retry = true
 
-      // 1. 세션 초기화 (토큰 제거)
-      clearSession()
-
-      // 2. 로그인 페이지로 이동
-      window.location.href = '/login'
-    }
-
-    // 403: 권한 없음
-    if (status === 403) {
-      console.warn('권한이 없습니다.')
+      try {
+        // 1. refresh token을 이용해 새로운 accessToken 요청 (쿠키 기반)
+        await apiClient.post(
+          AUTH_ENDPOINTS.refreshToken,
+          {},
+          {
+            withCredentials: true,
+          }
+        )
+        // 2. refresh 성공 시, 원래 요청을 다시 실행
+        return apiClient.request(error.config!)
+      } catch {
+        // 3. refresh 실패 시 (세션 만료 등), 로그아웃 처리
+        const { clearSession } = useAuthStore.getState()
+        clearSession()
+        window.location.href = '/login'
+      }
     }
 
     return Promise.reject(error)
