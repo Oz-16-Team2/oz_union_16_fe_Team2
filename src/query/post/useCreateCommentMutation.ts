@@ -26,8 +26,13 @@ export function useCreateCommentMutation() {
     },
 
     onSuccess: (_, variables) => {
+      //댓글 목록 갱신
       queryClient.invalidateQueries({
         queryKey: ['comments', variables.postId],
+      })
+      // 게시글 상세 같이 갱신 (commentCount 업데이트됨)
+      queryClient.invalidateQueries({
+        queryKey: ['postDetail', variables.postId],
       })
     },
   })

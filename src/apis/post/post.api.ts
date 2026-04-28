@@ -33,6 +33,20 @@ export const postApi = {
   getPosts: (params?: ApiPostListParams) =>
     apiClient.get<ApiPostListResponse>(POST_ENDPOINTS.posts, { params }),
 
+  // 게시글 수정
   updatePost: (postId: number, body: ApiPostUpdateRequest) =>
     apiClient.patch<void>(POST_ENDPOINTS.post(postId), body),
+
+  // 게시글 좋아요 토글
+  toggleLike: (postId: number) => apiClient.post(`/posts/${postId}/likes/`),
+
+  // 게시글 스크랩
+  scrapPost: (postId: number) => apiClient.post(`/posts/${postId}/scraps`),
+
+  // 게시글 스크랩 취소
+  unscrapPost: (postId: number) => apiClient.delete(`/posts/${postId}/scraps`),
+
+  // 게시글 신고
+  reportPost: (postId: number) =>
+    apiClient.post<void>(`/posts/${postId}/reports/`),
 } as const

@@ -43,10 +43,19 @@ export function PostDetailLayout({ post }: PostDetailLayoutProps) {
       )}
 
       <div className="mt-8">
-        <PostDetailActions />
+        <PostDetailActions
+          postId={post.postId}
+          likeCount={post.likeCount}
+          commentCount={post.commentCount}
+          isLiked={post.isLiked}
+          isScrapped={post.isScrapped}
+        />
       </div>
 
-      <PostDetailCommentSection postId={post.postId} />
+      {/* 댓글 버튼 클릭 시 이 영역으로 스크롤 이동 */}
+      <div id="post-detail-comment-section">
+        <PostDetailCommentSection postId={post.postId} />
+      </div>
     </article>
   )
 }
