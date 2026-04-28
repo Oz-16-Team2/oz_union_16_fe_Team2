@@ -2,16 +2,18 @@ import type { UseFormSetError } from 'react-hook-form'
 import { useNavigate } from 'react-router'
 
 import { useMutation } from '@tanstack/react-query'
-import type { AxiosError } from 'axios'
+import { type AxiosError, isAxiosError } from 'axios'
 
 import {
   authApi,
   type FieldErrorResponse,
   type LoginRequest,
-  type LoginResponse,
   type LoginUnauthorizedResponse,
 } from '@/apis/auth'
-import { yellowCharacterImage } from '@/assets/images'
+import {
+  type AuthSession,
+  buildAuthSession,
+} from '@/features/auth/utils/buildAuthSession'
 import type { LoginFormSchema } from '@/schemas/auth/authForm.schema'
 import { useAuthStore } from '@/store/authStore'
 
@@ -26,20 +28,23 @@ export function useLoginMutation(
   const navigate = useNavigate()
   const setSession = useAuthStore((state) => state.setSession)
 
-  // 로그인은 사용자가 로그인 버튼을 눌렀을 때만 실행되는 동작이라 useMutation으로 관리합니다.
+  // 로그인은 성공 직후 /me 조회까지 끝내서 세션을 완성합니다.
   return useMutation<
-    LoginResponse,
-    AxiosError<FieldErrorResponse | LoginUnauthorizedResponse>,
+    AuthSession,
+    AxiosError<FieldErrorResponse | LoginUnauthorizedResponse> | Error,
     LoginRequest
   >({
-    mutationFn: authApi.login,
-    onSuccess: (data, variables) => {
-      // 현재 로그인 응답에는 access_token만 있어서 닉네임/프로필은 임시값으로 표시합니다.
-      // 추후 내 정보 API가 붙으면 로그인 직후 사용자 정보를 조회해 이 값을 교체하면 됩니다.
-      setSession(data.access_token, {
-        nickname: variables.email.split('@')[0],
-        profileImageUrl: yellowCharacterImage,
-      })
+    mutationFn: async (payload) => {
+      const loginResponse = await authApi.login(payload)
+      console.log('🔥 login 시작', payload)
+      // 먼저 accessToken을 store에 저장 (interceptor가 사용)
+      const { setAccessToken } = useAuthStore.getState()
+      setAccessToken(loginResponse.access_token)
+      // 그 다음 /me 호출 포함된 세션 생성
+      return buildAuthSession()
+    },
+    onSuccess: (data) => {
+      setSession(data.accessToken, data.user)
 
       if (options?.onSuccess) {
         options.onSuccess()
@@ -49,9 +54,17 @@ export function useLoginMutation(
       navigate('/')
     },
     onError: (error) => {
+      if (!isAxiosError(error)) {
+        setError('password', {
+          type: 'server',
+          message: '유저 정보를 불러오지 못했습니다. 다시 시도해주세요.',
+        })
+        return
+      }
+
       const errorDetail = error.response?.data?.error_detail
 
-      // 로그인 실패 응답이 문자열이면 이메일/비밀번호 조합 실패로 보고 비밀번호 필드에 표시합니다.
+      // 로그인 실패 응답이 문자열이면 이메일/비밀번호 조합 실패로 봅니다.
       if (typeof errorDetail === 'string') {
         setError('password', {
           type: 'server',

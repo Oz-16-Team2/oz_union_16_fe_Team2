@@ -3,6 +3,7 @@ export const AUTH_ENDPOINTS = {
   signup: '/accounts/signup',
   login: '/accounts/login',
   logout: '/accounts/logout',
+  me: '/accounts/me',
   sendEmailVerification: '/accounts/verification/send-email',
   verifyEmail: '/accounts/verification/verify-email',
   checkNickname: '/accounts/check-nickname',

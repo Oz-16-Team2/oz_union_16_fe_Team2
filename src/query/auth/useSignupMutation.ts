@@ -2,15 +2,20 @@ import type { UseFormSetError } from 'react-hook-form'
 import { useNavigate } from 'react-router'
 
 import { useMutation } from '@tanstack/react-query'
-import type { AxiosError } from 'axios'
+import { type AxiosError, isAxiosError } from 'axios'
 
 import {
   authApi,
   type FieldErrorResponse,
+  type LoginUnauthorizedResponse,
   type SignupRequest,
-  type SignupResponse,
 } from '@/apis/auth'
+import {
+  type AuthSession,
+  buildAuthSession,
+} from '@/features/auth/utils/buildAuthSession'
 import type { SignupFormSchema } from '@/schemas/auth/authForm.schema'
+import { useAuthStore } from '@/store/authStore'
 
 type UseSignupMutationOptions = {
   onSuccess?: () => void
@@ -21,26 +26,55 @@ export function useSignupMutation(
   options?: UseSignupMutationOptions
 ) {
   const navigate = useNavigate()
+  const setSession = useAuthStore((state) => state.setSession)
 
-  // 회원가입 제출은 사용자가 회원가입 버튼을 눌렀을 때만 실행합니다.
+  // 회원가입은 성공 직후 로그인과 /me 조회까지 끝내서 세션을 완성합니다.
   return useMutation<
-    SignupResponse,
-    AxiosError<FieldErrorResponse>,
+    AuthSession,
+    AxiosError<FieldErrorResponse | LoginUnauthorizedResponse> | Error,
     SignupRequest
   >({
-    mutationFn: authApi.signup,
-    onSuccess: () => {
+    mutationFn: async (payload) => {
+      // 회원가입이 먼저 성공해야 다음 로그인 단계로 넘어갈 수 있습니다.
+      await authApi.signup(payload)
+
+      const loginResponse = await authApi.login({
+        email: payload.email,
+        password: payload.password,
+      })
+
+      const { setAccessToken } = useAuthStore.getState()
+      setAccessToken(loginResponse.access_token)
+      return buildAuthSession()
+    },
+    onSuccess: (data) => {
+      setSession(data.accessToken, data.user)
+
       if (options?.onSuccess) {
         options.onSuccess()
         return
       }
 
-      window.setTimeout(() => {
-        navigate('/login')
-      }, 1300)
+      navigate('/')
     },
     onError: (error) => {
+      if (!isAxiosError(error)) {
+        setError('root', {
+          type: 'server',
+          message: '회원가입 후 로그인 처리에 실패했습니다.',
+        })
+        return
+      }
+
       const errorDetail = error.response?.data?.error_detail
+
+      if (typeof errorDetail === 'string') {
+        setError('password', {
+          type: 'server',
+          message: errorDetail,
+        })
+        return
+      }
 
       // 서버에서 내려준 회원가입 필드 에러를 폼 에러로 연결합니다.
       if (errorDetail?.email?.[0]) {
@@ -61,13 +95,6 @@ export function useSignupMutation(
         setError('code', {
           type: 'server',
           message: errorDetail.email_token[0],
-        })
-      }
-
-      if (!errorDetail) {
-        setError('nickname', {
-          type: 'server',
-          message: '회원가입에 실패했습니다.',
         })
       }
     },

@@ -119,12 +119,14 @@ export function SignupPage() {
   }
 
   const handleSignupSubmit = ({
+    email,
     email_token,
     password,
     nickname,
     profile_image_url,
   }: SignupFormSchema) => {
     signupMutation.mutate({
+      email,
       password,
       nickname,
       profile_image_url,

@@ -1,41 +1,34 @@
 import { useCallback, useState } from 'react'
 
-import {
-  blueCharacterImage,
-  orangeCharacterImage,
-  pinkCharacterImage,
-  yellowCharacterImage,
-} from '@/assets/images'
 import { Button } from '@/components/common/ui'
+import type { ProfileAvatarOption } from '@/shared/profileAvatar'
 import { cn } from '@/utils/cn'
 
 import { Modal, type ModalProps } from '../base/Modal'
 
-// 상수로 뺄지 일단 보류
-const CHARACTERS = [
-  { id: 'yellow', src: yellowCharacterImage, label: '노란 캐릭터' },
-  { id: 'blue', src: blueCharacterImage, label: '파란 캐릭터' },
-  { id: 'orange', src: orangeCharacterImage, label: '주황 캐릭터' },
-  { id: 'pink', src: pinkCharacterImage, label: '분홍 캐릭터' },
-]
-
 type CharacterSelectModalProps = {
-  onSelect: (id: string) => void
+  characters: ProfileAvatarOption[]
+  defaultSelectedCode?: ProfileAvatarOption['code']
+  onSelect: (code: ProfileAvatarOption['code']) => void
 } & Omit<ModalProps, 'children'>
 
 export function CharacterSelectModal({
+  characters,
   className,
+  defaultSelectedCode,
   onSelect,
   onClose,
   size,
   rounded,
   border,
 }: CharacterSelectModalProps) {
-  const [selectedId, setSelectedId] = useState<string | null>(null)
+  const [selectedCode, setSelectedCode] = useState<
+    ProfileAvatarOption['code'] | null
+  >(defaultSelectedCode ?? null)
 
   const handleSelect = useCallback(() => {
-    if (selectedId) onSelect(selectedId)
-  }, [selectedId, onSelect])
+    if (selectedCode) onSelect(selectedCode)
+  }, [selectedCode, onSelect])
 
   return (
     <Modal
@@ -56,23 +49,23 @@ export function CharacterSelectModal({
       </Modal.Header>
       <Modal.Content>
         <div className="mx-auto flex w-fit gap-3">
-          {CHARACTERS.map(({ id, src, label }) => (
+          {characters.map(({ code, imageUrl, label }) => (
             <button
-              key={id}
+              key={code}
               type="button"
               aria-label={label}
-              onClick={() => setSelectedId(id)}
+              onClick={() => setSelectedCode(code)}
               className={cn(
                 'relative flex size-[70px] cursor-pointer transition-transform duration-300',
-                selectedId === id && 'scale-110'
+                selectedCode === code && 'scale-110'
               )}
             >
               <img
-                src={src}
+                src={imageUrl}
                 alt={label}
                 className="h-full w-full object-contain"
               />
-              {selectedId !== id && (
+              {selectedCode !== code && (
                 <div className="pointer-events-none absolute inset-0 rounded-full bg-gray-200/70 dark:bg-gray-950/50" />
               )}
             </button>
@@ -92,8 +85,8 @@ export function CharacterSelectModal({
           variant="primary"
           rounded="lg"
           onClick={handleSelect}
-          disabled={!selectedId}
-          aria-disabled={!selectedId}
+          disabled={!selectedCode}
+          aria-disabled={!selectedCode}
           className="px-5 py-1.5 text-xs font-light"
         >
           선택

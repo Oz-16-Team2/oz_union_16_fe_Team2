@@ -15,6 +15,7 @@ const fieldError = z.record(z.string(), z.array(z.string()))
 // REQ-AUTH-001: 이메일 회원가입
 // POST /api/v1/accounts/signup
 export const signupRequestSchema = z.object({
+  email,
   password,
   nickname,
   profile_image_url: profileImageUrl,
@@ -120,6 +121,14 @@ export const checkNicknameResponseSchema = z.object({
   detail,
 })
 
+// REQ-AUTH-011: 내 프로필 조회
+// GET /api/v1/accounts/me
+export const meResponseSchema = z.object({
+  id: z.number(),
+  nickname: z.string(),
+  profile_image_url: z.string(),
+})
+
 // Zod 스키마 기반 타입 추론
 // z.infer<typeof schema>를 사용하면,
 // Zod로 정의한 스키마를 기준으로 TypeScript 타입을 자동 생성
@@ -164,3 +173,4 @@ export type SessionExpiredResponse = z.infer<
 >
 export type CheckNicknameRequest = z.infer<typeof checkNicknameRequestSchema>
 export type CheckNicknameResponse = z.infer<typeof checkNicknameResponseSchema>
+export type MeResponse = z.infer<typeof meResponseSchema>

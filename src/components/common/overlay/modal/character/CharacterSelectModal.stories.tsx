@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 
 import { useModal } from '@/hooks/useModal'
+import { PROFILE_AVATAR_OPTIONS } from '@/shared/profileAvatar'
 
 import { CharacterSelectModal } from './CharacterSelectModal'
 
@@ -28,8 +29,8 @@ export const Default: Story = {
         {isOpen && (
           <CharacterSelectModal
             {...args}
-            onSelect={(id) => {
-              alert(`선택된 캐릭터: ${id}`)
+            onSelect={(code) => {
+              alert(`선택된 캐릭터: ${code}`)
               close()
             }}
             onClose={close}
@@ -39,6 +40,7 @@ export const Default: Story = {
     )
   },
   args: {
+    characters: PROFILE_AVATAR_OPTIONS,
     onSelect: () => {},
     onClose: () => {},
   },
@@ -54,6 +56,7 @@ export const Dark: Story = {
   ],
   render: (args) => <CharacterSelectModal {...args} />,
   args: {
+    characters: PROFILE_AVATAR_OPTIONS,
     onSelect: () => {},
     onClose: () => {},
   },
