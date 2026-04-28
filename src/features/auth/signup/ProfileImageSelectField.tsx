@@ -1,21 +1,12 @@
 import { useMemo, useState } from 'react'
 
-import {
-  blueCharacterImage,
-  orangeCharacterImage,
-  pinkCharacterImage,
-  yellowCharacterImage,
-} from '@/assets/images'
 import { CharacterSelectModal } from '@/components/common/overlay'
+import {
+  DEFAULT_PROFILE_AVATAR,
+  getProfileAvatarImageUrl,
+  PROFILE_AVATAR_OPTIONS,
+} from '@/shared/profileAvatar'
 import { cn } from '@/utils/cn'
-
-// API 연결 전 임시 캐릭터 목록입니다. 추후 백엔드에서 받은 이미지 URL 목록으로 교체합니다.
-const CHARACTER_IMAGES = [
-  { id: 'yellow', src: yellowCharacterImage, label: '노란 캐릭터' },
-  { id: 'blue', src: blueCharacterImage, label: '파란 캐릭터' },
-  { id: 'orange', src: orangeCharacterImage, label: '주황 캐릭터' },
-  { id: 'pink', src: pinkCharacterImage, label: '분홍 캐릭터' },
-]
 
 type ProfileImageSelectFieldProps = {
   value?: string
@@ -29,19 +20,20 @@ export function ProfileImageSelectField({
   const [isOpen, setIsOpen] = useState(false)
   const [isActive, setIsActive] = useState(false)
 
-  // 선택값이 없으면 기본 캐릭터를 보여줍니다.
+  // 폼에는 서버로 보낼 profile_image_url을 저장하고,
+  // 화면 선택 상태는 공용 아바타 목록에서 다시 찾아서 보여줍니다.
   const selectedCharacter = useMemo(
     () =>
-      CHARACTER_IMAGES.find((character) => character.src === value) ??
-      CHARACTER_IMAGES[0],
+      PROFILE_AVATAR_OPTIONS.find(
+        (character) => character.imageUrl === value
+      ) ?? DEFAULT_PROFILE_AVATAR,
     [value]
   )
 
-  const handleSelectCharacter = (id: string) => {
-    const character = CHARACTER_IMAGES.find((item) => item.id === id)
+  const handleSelectCharacter = (code: string) => {
+    const character = PROFILE_AVATAR_OPTIONS.find((item) => item.code === code)
     if (!character) return
-
-    onChange(character.src)
+    onChange(character.imageUrl)
     setIsActive(true)
     setIsOpen(false)
   }
@@ -56,7 +48,7 @@ export function ProfileImageSelectField({
         onClick={() => setIsOpen(true)}
       >
         <img
-          src={selectedCharacter.src}
+          src={getProfileAvatarImageUrl(selectedCharacter.imageUrl)}
           alt={selectedCharacter.label}
           className="size-12 sm:size-16 rounded-full object-contain shrink-0"
         />
@@ -72,6 +64,8 @@ export function ProfileImageSelectField({
 
       {isOpen ? (
         <CharacterSelectModal
+          characters={PROFILE_AVATAR_OPTIONS}
+          defaultSelectedCode={selectedCharacter.code}
           onClose={() => setIsOpen(false)}
           onSelect={handleSelectCharacter}
         />
