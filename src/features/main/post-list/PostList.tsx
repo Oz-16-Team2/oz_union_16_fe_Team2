@@ -1,3 +1,5 @@
+import { Link } from 'react-router'
+
 import { AlertCircle, FileText } from 'lucide-react'
 
 import {
@@ -9,12 +11,12 @@ import {
 } from '@/components/common/ui'
 import { cn } from '@/utils/cn'
 
-import type {
-  PostListItem,
-  PostListProps,
-  PostSortOrder,
+import {
+  type PostListItem,
+  type PostListProps,
+  POSTS_PAGE_SIZE,
+  type PostSortOrder,
 } from './PostList.types'
-import { POSTS_PAGE_SIZE } from './PostList.types'
 
 export type { PostListItem, PostSortOrder }
 
@@ -134,7 +136,10 @@ const PostGrid = ({
         ))
       : posts.map(({ id, ...cardProps }) => (
           <li key={id}>
-            <PostCard {...cardProps} />
+            {/* TODO: 카드 클릭 → 상세 이동 로직 임시 연결 (추후 담당자 구현 시 제거/수정) */}
+            <Link to={`/post/${id}`} className="block">
+              <PostCard {...cardProps} />
+            </Link>
           </li>
         ))}
   </ul>

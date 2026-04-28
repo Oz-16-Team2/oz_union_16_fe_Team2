@@ -25,7 +25,7 @@ export const postApi = {
   getPost: (postId: number) =>
     apiClient.get<ApiPostResponse>(POST_ENDPOINTS.post(postId)),
 
-  // 게시글 생성
+  // 게시글 생성a
   createPost: (body: ApiPostCreateRequest) =>
     apiClient.post<ApiPostCreateResponse>(POST_ENDPOINTS.posts, body),
 
