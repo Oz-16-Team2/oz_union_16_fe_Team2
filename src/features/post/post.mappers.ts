@@ -1,8 +1,12 @@
+import type { Comment } from '@/components/common/ui/comment'
+
 import type {
   ApiGoalResponse,
   ApiPostCreateRequest,
   ApiPostResponse,
   ApiPostUpdateRequest,
+  CommentApiResponse,
+  GetCommentsApiResponse,
 } from './post.api.types'
 import type { GoalOption, PostDetailData, PostFormData } from './post.types'
 
@@ -128,4 +132,23 @@ export function toApiUpdateRequest(data: PostFormData): ApiPostUpdateRequest {
     vote: toApiVoteContent(data.vote),
     tag_ids: data.tagIds,
   }
+}
+
+export function mapCommentApiToComment(comment: CommentApiResponse): Comment {
+  return {
+    id: comment.id,
+    userId: comment.user_id ?? 0,
+    nickname: comment.nickname,
+    content: comment.content,
+    createdAt: comment.created_at,
+    likeCount: comment.like_count ?? 0,
+    isLiked: comment.is_liked ?? false,
+    profileImageUrl: comment.profile_image_url ?? null,
+  }
+}
+
+export function mapCommentsApiToComments(
+  response: GetCommentsApiResponse
+): Comment[] {
+  return response.results.map(mapCommentApiToComment)
 }

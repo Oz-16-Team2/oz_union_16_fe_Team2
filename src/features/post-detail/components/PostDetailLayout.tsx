@@ -46,7 +46,7 @@ export function PostDetailLayout({ post }: PostDetailLayoutProps) {
         <PostDetailActions />
       </div>
 
-      <PostDetailCommentSection />
+      <PostDetailCommentSection postId={post.postId} />
     </article>
   )
 }

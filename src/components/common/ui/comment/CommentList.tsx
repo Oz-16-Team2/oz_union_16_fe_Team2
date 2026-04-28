@@ -42,7 +42,7 @@ export function CommentList({
         <CommentItem
           key={comment.id}
           comment={comment}
-          isOwner={!!currentUserId && currentUserId === comment.user_id}
+          isOwner={!!currentUserId && currentUserId === comment.userId}
           isSelected={selectedId === comment.id}
           onSelect={() => setSelectedId(comment.id)}
           onLike={onLike}
