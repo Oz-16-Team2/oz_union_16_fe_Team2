@@ -2,7 +2,7 @@ import type { CharacterEyeStatus } from '@/features/auth/character/eye/useCharac
 
 type NullableField = string | null
 
-type UseAuthEyeStatusParams<TField extends NullableField> = {
+type UseCharacterEyeStatusParams<TField extends NullableField> = {
   emailFields: readonly Exclude<TField, null>[]
   errorTargetField: TField | null
   focusedField: TField | null
@@ -13,7 +13,7 @@ type UseAuthEyeStatusParams<TField extends NullableField> = {
   lastFocusedField: TField | null
 }
 
-export function useAuthEyeStatus<TField extends NullableField>({
+export function useCharacterEyeStatus<TField extends NullableField>({
   emailFields,
   errorTargetField,
   focusedField,
@@ -22,7 +22,7 @@ export function useAuthEyeStatus<TField extends NullableField>({
   isEntranceEyeActive,
   passwordFields,
   lastFocusedField,
-}: UseAuthEyeStatusParams<TField>): CharacterEyeStatus {
+}: UseCharacterEyeStatusParams<TField>): CharacterEyeStatus {
   const eyeTargetField = errorTargetField ?? focusedField ?? lastFocusedField
   const focusedNonNullField =
     focusedField === null ? null : (focusedField as Exclude<TField, null>)

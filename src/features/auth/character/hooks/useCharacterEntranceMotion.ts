@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 
-export function useAuthEntranceMotion() {
+export function useCharacterEntranceMotion() {
   const [isDropped, setIsDropped] = useState(false)
   const [isEntranceEyeActive, setIsEntranceEyeActive] = useState(true)
   const [isCompactMotion, setIsCompactMotion] = useState(false)
