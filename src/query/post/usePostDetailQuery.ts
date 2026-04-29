@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 
 import { postApi } from '@/apis/post/post.api'
-import { toPostDetailData } from '@/features/post/post.mappers.ts'
+import { toPostDetailData } from '@/features/post/post.mappers'
 
 export function usePostDetailQuery(postId: number) {
   return useQuery({
@@ -10,6 +10,6 @@ export function usePostDetailQuery(postId: number) {
       const res = await postApi.getPost(postId)
       return toPostDetailData(res.data)
     },
-    enabled: !!postId,
+    enabled: !Number.isNaN(postId),
   })
 }

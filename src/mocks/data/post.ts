@@ -188,6 +188,7 @@ export const mockPost: ApiPostResponse = {
   tags: ['운동'],
   like_count: 5,
   comment_count: 3,
+  is_liked: false,
   is_scrapped: false,
   has_goal: true,
   goal_info: {

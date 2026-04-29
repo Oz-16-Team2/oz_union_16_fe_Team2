@@ -25,7 +25,7 @@ export const postApi = {
   getPost: (postId: number) =>
     apiClient.get<ApiPostResponse>(POST_ENDPOINTS.post(postId)),
 
-  // 게시글 생성
+  // 게시글 생성a
   createPost: (body: ApiPostCreateRequest) =>
     apiClient.post<ApiPostCreateResponse>(POST_ENDPOINTS.posts, body),
 
@@ -33,6 +33,23 @@ export const postApi = {
   getPosts: (params?: ApiPostListParams) =>
     apiClient.get<ApiPostListResponse>(POST_ENDPOINTS.posts, { params }),
 
+  // 게시글 수정
   updatePost: (postId: number, body: ApiPostUpdateRequest) =>
     apiClient.patch<void>(POST_ENDPOINTS.post(postId), body),
+
+  // 게시글 좋아요 토글
+  toggleLike: (postId: number) =>
+    apiClient.post<void>(POST_ENDPOINTS.postLikes(postId)),
+
+  // 게시글 스크랩
+  scrapPost: (postId: number) =>
+    apiClient.post<void>(POST_ENDPOINTS.postScraps(postId)),
+
+  // 게시글 스크랩 취소
+  unscrapPost: (postId: number) =>
+    apiClient.delete<void>(POST_ENDPOINTS.postScraps(postId)),
+
+  // 게시글 신고
+  reportPost: (postId: number) =>
+    apiClient.post<void>(POST_ENDPOINTS.postReports(postId)),
 } as const
