@@ -8,8 +8,11 @@ export type CalendarViewMode = 'day' | 'month'
 
 // 목표 생성/투표 생성에서 같은 Calendar를 재사용하기 위한 외부 props
 export type CalendarProps = {
+  allowPastDates?: boolean
+  ariaLabel?: string
   defaultValue?: DateRange
   holidays?: Date[]
+  hideLabelOnMobile?: boolean
   label?: string
   minDate?: Date
   onChange?: (date: DateRange | null) => void

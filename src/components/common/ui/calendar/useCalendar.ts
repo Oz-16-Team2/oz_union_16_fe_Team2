@@ -33,6 +33,7 @@ const EMPTY_RANGE: DateRange = { start: null, end: null }
 
 // 캘린더의 상태와 날짜 계산을 UI에서 분리한 hook
 export function useCalendar({
+  allowPastDates = false,
   defaultValue,
   minDate,
   onChange,
@@ -52,8 +53,10 @@ export function useCalendar({
   const [isOpen, setIsOpen] = useState(false)
   const [viewMode, setViewMode] = useState<CalendarViewMode>('day')
 
-  // minDate가 없으면 오늘 이전 날짜를 선택하지 못하게 막음
-  const effectiveMinDate = startOfDay(minDate ?? new Date())
+  // 마이페이지 필터처럼 과거 날짜 조회가 필요한 경우에는 제한을 풀어줍니다.
+  const effectiveMinDate = allowPastDates
+    ? undefined
+    : startOfDay(minDate ?? new Date())
 
   // 현재 보고 있는 월의 날짜 목록과 앞/뒤 빈칸 수를 계산
   const monthStart = startOfMonth(currentDate)
@@ -98,6 +101,10 @@ export function useCalendar({
       if (prev) {
         setDraftDate(selectedDate)
         setViewMode('day')
+      } else {
+        // 캘린더를 다시 열 때는 외부에서 관리 중인 최신 선택값을 기준으로 맞춥니다.
+        setDraftDate(selectedDate)
+        setCurrentDate(selectedDate.start ?? new Date())
       }
 
       return !prev
