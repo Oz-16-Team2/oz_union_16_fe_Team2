@@ -1,39 +1,44 @@
-import { useState } from 'react'
+import { useLikeMutation } from '@/query/post/useLikeMutation'
+import { useScrapMutation } from '@/query/post/useScrapMutation'
 
 type UsePostCardActionsProps = {
+  postId: number
   likeCount: number
   isLiked: boolean
   isScrapped: boolean
-  onLike: () => void
-  onScrap: () => void
-  onShare: () => void
+  onShare?: () => void
 }
 
 export function usePostCardActions({
+  postId,
   likeCount,
   isLiked,
   isScrapped,
-  onLike,
-  onScrap,
-  onShare,
+  onShare = () => {},
 }: UsePostCardActionsProps) {
-  const [liked, setLiked] = useState(isLiked)
-  const [scrapped, setScrapped] = useState(isScrapped)
-  // 사용자 기준 count 값 --> like API 연동 후 필요없어질 상태
-  const [localLikeCount, setLocalLikeCount] = useState(likeCount)
+  const {
+    liked,
+    likeCount: localLikeCount,
+    toggleLike: mutateLike,
+  } = useLikeMutation({
+    postId,
+    initialLiked: isLiked,
+    initialLikeCount: likeCount,
+  })
+
+  const { scrapped, toggleScrap: mutateScrap } = useScrapMutation({
+    postId,
+    initialScrapped: isScrapped,
+  })
 
   const toggleLike = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation()
-    const newLiked = !liked
-    setLiked(newLiked)
-    setLocalLikeCount((prev) => (newLiked ? prev + 1 : prev - 1))
-    onLike()
+    mutateLike()
   }
 
   const toggleScrap = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation()
-    setScrapped((prev) => !prev)
-    onScrap()
+    mutateScrap()
   }
 
   const handleShare = (e: React.MouseEvent<HTMLButtonElement>) => {
