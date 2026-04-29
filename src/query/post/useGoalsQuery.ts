@@ -6,6 +6,7 @@ import { toGoalOption } from '@/features/post'
 export function useGoalsQuery() {
   return useQuery({
     queryKey: ['goals'], // staleTime, gcTime 설정 필요
-    queryFn: () => postApi.getGoals().then((res) => res.data.map(toGoalOption)),
+    queryFn: () =>
+      postApi.getGoals().then((res) => res.data.results.map(toGoalOption)),
   })
 }

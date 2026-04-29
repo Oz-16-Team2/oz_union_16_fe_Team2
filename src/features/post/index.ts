@@ -9,7 +9,6 @@ export type {
   PostImageItem,
   TagOption,
   VoteFormData,
-  VoteOptionFormData,
 } from './post.types'
 
 // API 요청/응답 타입 (서버 스펙 그대로)

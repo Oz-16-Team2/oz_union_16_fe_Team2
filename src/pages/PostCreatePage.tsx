@@ -10,8 +10,9 @@ export function PostCreatePage() {
 
   const { mutate: createPost, isPending } = useCreatePostMutation({
     onSuccess: () => {
-      navigate(-1)
-    }, // TODO: 추후 게시글 목록 페이지로 이동하도록 변경 필요
+      toast.success('게시글이 등록되었습니다.')
+      navigate('/')
+    },
     onError: () => toast.error('게시글 생성에 실패했습니다.'),
   })
 
@@ -19,7 +20,7 @@ export function PostCreatePage() {
     <PostFormLayout
       mode="create"
       onSubmit={createPost}
-      onCancel={() => navigate(-1)}
+      onCancel={() => navigate('/')}
       isPending={isPending}
     />
   )

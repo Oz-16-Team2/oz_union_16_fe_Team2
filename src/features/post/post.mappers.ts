@@ -16,9 +16,9 @@ export function toGoalOption(api: ApiGoalResponse): GoalOption {
   return {
     goalId: api.goal_id,
     title: api.title,
-    startDate: api.startDate,
-    endDate: api.endDate,
-    progressRate: api.progressRate,
+    startDate: api.start_date,
+    endDate: api.end_date,
+    progressRate: api.progress_rate,
     status: api.status,
   }
 }
@@ -36,10 +36,7 @@ export function toPostFormData(api: ApiPostResponse): PostFormData {
     hasVote: api.has_vote,
     vote: api.vote_info
       ? {
-          options: api.vote_info.options.map((o) => ({
-            content: o.content,
-            sortOrder: o.sort_order,
-          })),
+          options: api.vote_info.options.map((o) => o.content),
           startDate: api.vote_info.start_at,
           endDate: api.vote_info.end_at,
         }
@@ -95,12 +92,9 @@ export function toPostDetailData(api: ApiPostResponse): PostDetailData {
 function toApiVoteContent(vote?: PostFormData['vote']) {
   if (!vote) return undefined
   return {
-    options: vote.options.map((o) => ({
-      content: o.content,
-      sort_order: o.sortOrder,
-    })),
-    ...(vote.startDate && { start_date: vote.startDate }),
-    ...(vote.endDate && { end_date: vote.endDate }),
+    options: vote.options,
+    ...(vote.startDate && { start_at: vote.startDate }),
+    ...(vote.endDate && { end_at: vote.endDate }),
   }
 }
 

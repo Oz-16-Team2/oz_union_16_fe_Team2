@@ -18,8 +18,9 @@ export function PostEditPage() {
 
   const { mutate: updatePost, isPending } = useUpdatePostMutation(postId, {
     onSuccess: () => {
-      navigate(-1)
-    }, // TODO: 추후 게시글 목록으로 이동하도록 변경 필요
+      toast.success('게시글이 수정되었습니다.')
+      navigate('/')
+    },
     onError: () => toast.error('게시글 수정에 실패했습니다.'),
   })
 

@@ -23,9 +23,12 @@ export function usePostForm(
   const [title, setTitle] = useState(defaultValues?.title ?? '')
   const [content, setContent] = useState(defaultValues?.content ?? '')
 
-  // 이미지: 서버 이미지는 file 없이 previewUrl만 보유
+  // 이미지: edit 모드의 기존 이미지는 imageUrl이 이미 확정된 상태
   const [imageItems, setImageItems] = useState<PostImageItem[]>(
-    (defaultValues?.images ?? []).map((url) => ({ previewUrl: url }))
+    (defaultValues?.images ?? []).map((url) => ({
+      previewUrl: url,
+      imageUrl: url,
+    }))
   )
   // 언마운트 시 revoke할 blob URL 추적
   const blobUrlsRef = useRef<string[]>([])
@@ -48,7 +51,7 @@ export function usePostForm(
 
   // 투표
   const [voteOptions, setVoteOptions] = useState<string[]>(
-    defaultValues?.vote?.options.map((o) => o.content) ?? ['', '']
+    defaultValues?.vote?.options ?? ['', '']
   )
   const [votePeriod, setVotePeriod] = useState<DateRange | undefined>(() => {
     if (mode !== 'edit' || !defaultValues?.vote) return undefined
@@ -56,18 +59,21 @@ export function usePostForm(
     if (!startDate || !endDate) return undefined
     return { start: new Date(startDate), end: new Date(endDate) }
   })
+
   // 목표
   const [selectedGoalId, setSelectedGoalId] = useState<number | undefined>(
     mode === 'edit' ? defaultValues?.goalId : undefined
   )
 
-  // 기타 — 마운트 시 확정되는 값이므로 상태가 아닌 상수로 관리
+  // 마운트 시 확정되는 값이므로 상태가 아닌 상수로 관리
   const postId = defaultValues?.postId
 
   // 파생 값
   const titleLen = charLen(title)
   const contentLen = charLen(content)
-  const isSubmitDisabled = title.trim() === '' || content.trim() === ''
+  const isUploading = imageItems.some((item) => item.imageUrl === null)
+  const isSubmitDisabled =
+    title.trim() === '' || content.trim() === '' || isUploading
   const canAddImage = imageItems.length < MAX_IMAGES
 
   // 제목 / 내용
@@ -79,20 +85,45 @@ export function usePostForm(
     if (charLen(val) <= MAX_CONTENT) setContent(val)
   }
 
-  // 이미지
-  function addImages(files: File[]) {
+  // 이미지 추가: blob URL 생성 후 imageUrl=null(업로드 중)로 추가, blob URL 목록 반환
+  function addImages(files: File[]): string[] {
     const remaining = MAX_IMAGES - imageItems.length
-    const newItems = files.slice(0, remaining).map((file) => {
+    const sliced = files.slice(0, remaining)
+    const newItems = sliced.map((file) => {
       const previewUrl = URL.createObjectURL(file)
       blobUrlsRef.current.push(previewUrl)
-      return { file, previewUrl }
+      return { previewUrl, imageUrl: null }
     })
     setImageItems((prev) => [...prev, ...newItems])
+    return newItems.map((item) => item.previewUrl)
   }
 
+  // S3 업로드 완료: blob URL → image_url로 갱신
+  function resolveImages(blobUrls: string[], imageUrls: string[]) {
+    setImageItems((prev) =>
+      prev.map((item) => {
+        const idx = blobUrls.indexOf(item.previewUrl)
+        if (idx === -1) return item
+        return { ...item, imageUrl: imageUrls[idx] }
+      })
+    )
+  }
+
+  // S3 업로드 실패: 해당 이미지 제거
+  function removeImages(blobUrls: string[]) {
+    blobUrls.forEach((url) => {
+      URL.revokeObjectURL(url)
+      blobUrlsRef.current = blobUrlsRef.current.filter((u) => u !== url)
+    })
+    setImageItems((prev) =>
+      prev.filter((item) => !blobUrls.includes(item.previewUrl))
+    )
+  }
+
+  // X 버튼으로 단일 이미지 제거
   function removeImage(index: number) {
     const item = imageItems[index]
-    if (item?.file) {
+    if (item?.previewUrl.startsWith('blob:')) {
       URL.revokeObjectURL(item.previewUrl)
       blobUrlsRef.current = blobUrlsRef.current.filter(
         (u) => u !== item.previewUrl
@@ -121,12 +152,11 @@ export function usePostForm(
     setVotePeriod(date ?? undefined)
   }
 
-  // 최종 payload 빌드
-  // images: 서버 URL(이미 업로드됨)만 포함. 새 파일은 S3 업로드 후 URL이 확정되면 추가
+  // 최종 payload 빌드 — imageUrl이 확정된 이미지만 포함
   function buildFormData(): PostFormData {
-    const uploadedImages = imageItems
-      .filter((item) => !item.file)
-      .map((item) => item.previewUrl)
+    const images = imageItems
+      .filter((item) => item.imageUrl !== null)
+      .map((item) => item.imageUrl!)
 
     const hasActiveVote =
       Boolean(votePeriod?.start && votePeriod?.end) &&
@@ -136,7 +166,7 @@ export function usePostForm(
       ? {
           options: voteOptions
             .filter((c) => c.trim() !== '')
-            .map((c, i) => ({ content: c.trim(), sortOrder: i + 1 })),
+            .map((c) => c.trim()),
           startDate: votePeriod?.start?.toISOString().split('T')[0],
           endDate: votePeriod?.end?.toISOString().split('T')[0],
         }
@@ -145,7 +175,7 @@ export function usePostForm(
     const base: Omit<PostFormData, 'postId'> = {
       title: title.trim(),
       content: content.trim(),
-      images: uploadedImages,
+      images,
       hasGoal: selectedGoalId !== undefined,
       goalId: selectedGoalId,
       hasVote: hasActiveVote,
@@ -176,11 +206,14 @@ export function usePostForm(
     titleLen,
     contentLen,
     isSubmitDisabled,
+    isUploading,
     canAddImage,
     // 액션
     changeTitle,
     changeContent,
     addImages,
+    resolveImages,
+    removeImages,
     removeImage,
     initializeTags,
     toggleTag,
