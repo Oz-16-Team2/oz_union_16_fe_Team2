@@ -21,7 +21,7 @@ export const signupFormSchema = z
     password: signupPassword,
     passwordConfirm,
     nickname,
-    profile_image_url: profileImageUrl,
+    profile_image: profileImageUrl,
     email_token: emailToken,
   })
   .superRefine((data, ctx) => {

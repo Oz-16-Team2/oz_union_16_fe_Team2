@@ -36,7 +36,6 @@ export function useLoginMutation(
   >({
     mutationFn: async (payload) => {
       const loginResponse = await authApi.login(payload)
-      console.log('🔥 login 시작', payload)
       // 먼저 accessToken을 store에 저장 (interceptor가 사용)
       const { setAccessToken } = useAuthStore.getState()
       setAccessToken(loginResponse.access_token)

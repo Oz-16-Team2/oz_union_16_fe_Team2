@@ -18,7 +18,7 @@ export const signupRequestSchema = z.object({
   email,
   password,
   nickname,
-  profile_image_url: profileImageUrl,
+  profile_image: profileImageUrl,
   email_token: emailToken,
 })
 
