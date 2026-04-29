@@ -38,15 +38,18 @@ export const postApi = {
     apiClient.patch<void>(POST_ENDPOINTS.post(postId), body),
 
   // 게시글 좋아요 토글
-  toggleLike: (postId: number) => apiClient.post(`/posts/${postId}/likes/`),
+  toggleLike: (postId: number) =>
+    apiClient.post<void>(POST_ENDPOINTS.postLikes(postId)),
 
   // 게시글 스크랩
-  scrapPost: (postId: number) => apiClient.post(`/posts/${postId}/scraps`),
+  scrapPost: (postId: number) =>
+    apiClient.post<void>(POST_ENDPOINTS.postScraps(postId)),
 
   // 게시글 스크랩 취소
-  unscrapPost: (postId: number) => apiClient.delete(`/posts/${postId}/scraps`),
+  unscrapPost: (postId: number) =>
+    apiClient.delete<void>(POST_ENDPOINTS.postScraps(postId)),
 
   // 게시글 신고
   reportPost: (postId: number) =>
-    apiClient.post<void>(`/posts/${postId}/reports/`),
+    apiClient.post<void>(POST_ENDPOINTS.postReports(postId)),
 } as const
