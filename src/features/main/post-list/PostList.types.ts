@@ -1,19 +1,33 @@
-import type { PostCardProps } from '@/components/common/ui/card/PostCard.types'
+export type PostSortOrder = 'latest' | 'trending' | 'suggested'
 
-export type PostSortOrder = 'latest' | 'popular'
-
-export type PostListItem = PostCardProps & { id: number }
+export type PostListItem = {
+  postId: number
+  images: string
+  profileImageUrl: string
+  nickname: string
+  createdAt: string
+  title: string
+  tags: string[]
+  contentPreview: string
+  likeCount: number
+  commentCount: number
+  isLiked: boolean
+  isScrapped: boolean
+  isOwner: boolean
+}
 
 export type PostListProps = {
   posts: PostListItem[]
   totalPages: number
   currentPage: number
-  sortOrder: PostSortOrder
+  searchValue?: string
   isLoading?: boolean
   isError?: boolean
   errorMessage?: string
-  onSearch: (query: string) => void
-  onSortChange: (sort: PostSortOrder) => void
+  filterArea?: React.ReactNode
+  emptyView?: React.ReactNode
+  onSearch: (keyword: string) => void
+  onSearchChange?: (value: string) => void
   onPageChange: (page: number) => void
 }
 

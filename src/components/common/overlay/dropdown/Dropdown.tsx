@@ -59,6 +59,7 @@ type DropdownProps = {
   size?: 'md' // 추가 가능
   value?: string
   onChange?: (value: string) => void
+  disabled?: boolean
 }
 
 export function Dropdown({
@@ -68,6 +69,7 @@ export function Dropdown({
   size = 'md',
   value,
   onChange,
+  disabled = false,
 }: DropdownProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [isClosing, setIsClosing] = useState(false)
@@ -95,9 +97,10 @@ export function Dropdown({
         onClick={() => (isOpen ? close() : setIsOpen(true))}
         className={cn(
           dropdownTriggerVariants({ size }),
-          (isOpen || value) && 'border-border-active',
+          isOpen && 'border-border-active',
           value && 'text-text-primary cursor-pointer'
         )}
+        disabled={disabled}
       >
         <span>{selectedLabel ?? placeholder}</span>
         <ChevronDown

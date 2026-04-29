@@ -10,21 +10,28 @@ export type SearchBarProps = {
   onSearch?: (value: string) => void
 } & Omit<React.ComponentProps<'input'>, 'type'>
 
+// controlledValue 추가 해서 외부에서 값을 제어할 수 있게 함
+// value: controlledValue로 변경
+// controlledValue가 없으면 내부적으로 값을 관리하는 useState 사용
+
 export function SearchBar({
+  value: controlledValue,
   onSearch,
   className,
   onChange,
   placeholder = '검색',
   ...props
 }: SearchBarProps) {
-  const [value, setValue] = useState('')
+  const isControlled = controlledValue !== undefined
+  const [internalValue, setInternalValue] = useState('')
+  const value = isControlled ? (controlledValue as string) : internalValue
 
   const handleSearch = () => {
     onSearch?.(value)
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(e.target.value)
+    if (!isControlled) setInternalValue(e.target.value)
     onChange?.(e)
   }
 

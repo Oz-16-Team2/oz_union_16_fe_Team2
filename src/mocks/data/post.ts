@@ -1,66 +1,5 @@
 import type { ApiPostListItem } from '@/features/main/post-list/PostList.api.types'
-import type {
-  ApiGoalResponse,
-  ApiPostResponse,
-  ApiTagResponse,
-} from '@/features/post/post.api.types'
-
-const PLACEHOLDER_COLORS = [
-  '%23f87171',
-  '%2360a5fa',
-  '%2334d399',
-  '%23fbbf24',
-  '%23a78bfa',
-  '%23f472b6',
-  '%2338bdf8',
-  '%234ade80',
-]
-
-function makePlaceholderImage(index: number): string {
-  const color = PLACEHOLDER_COLORS[index % PLACEHOLDER_COLORS.length]
-  return `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300'%3E%3Crect width='400' height='300' fill='${color}' opacity='0.3'/%3E%3C/svg%3E`
-}
-
-export const mockGoals: ApiGoalResponse[] = [
-  {
-    goal_id: 101,
-    title: '매일 1시간 운동',
-    startDate: '2026-04-08',
-    endDate: '2026-05-08',
-    status: 'IN_PROGRESS',
-    created_at: '2026-04-08T19:00:00',
-    progressRate: 48,
-    isCheckedToday: true,
-  },
-  {
-    goal_id: 102,
-    title: '하루 30분 독서',
-    startDate: '2026-04-01',
-    endDate: '2026-04-30',
-    status: 'IN_PROGRESS',
-    created_at: '2026-04-01T09:00:00',
-    progressRate: 65,
-    isCheckedToday: false,
-  },
-  {
-    goal_id: 103,
-    title: '주 3회 영어 공부',
-    startDate: '2026-03-01',
-    endDate: '2026-03-31',
-    status: 'COMPLETED',
-    created_at: '2026-03-01T08:00:00',
-    progressRate: 100,
-    isCheckedToday: false,
-  },
-]
-
-export const mockTags: ApiTagResponse[] = [
-  { id: 1, name: '운동' },
-  { id: 2, name: '독서' },
-  { id: 3, name: '공부' },
-  { id: 4, name: '식단' },
-  { id: 5, name: '명상' },
-]
+import type { ApiPostResponse } from '@/features/post/post.api.types'
 
 export const mockPostList: ApiPostListItem[] = [
   {
@@ -75,6 +14,7 @@ export const mockPostList: ApiPostListItem[] = [
       '오늘도 열심히 운동했습니다. 벤치프레스 100kg 달성! 목표를 향해 꾸준히 달려가겠습니다.',
     like_count: 1,
     comment_count: 8,
+    is_liked: true,
     is_scrapped: false,
   },
   {
@@ -89,6 +29,7 @@ export const mockPostList: ApiPostListItem[] = [
       '오늘 새벽 6시에 일어나서 10km를 달렸습니다. 날씨가 너무 좋아서 기분이 최고였어요.',
     like_count: 35,
     comment_count: 5,
+    is_liked: true,
     is_scrapped: true,
   },
   {
@@ -103,6 +44,7 @@ export const mockPostList: ApiPostListItem[] = [
       '아침 요가로 하루를 시작했습니다. 몸과 마음이 맑아지는 느낌이에요.',
     like_count: 28,
     comment_count: 3,
+    is_liked: true,
     is_scrapped: false,
   },
   {
@@ -117,6 +59,7 @@ export const mockPostList: ApiPostListItem[] = [
       '드디어 스쿼트 200개 챌린지를 완료했습니다! 허벅지가 떨리지만 너무 뿌듯합니다.',
     like_count: 61,
     comment_count: 12,
+    is_liked: false,
     is_scrapped: false,
   },
   {
@@ -131,11 +74,12 @@ export const mockPostList: ApiPostListItem[] = [
       '오늘 수영장에서 1km를 쉬지 않고 완주했습니다. 자유형 위주로 훈련 중이에요.',
     like_count: 19,
     comment_count: 6,
+    is_liked: true,
     is_scrapped: false,
   },
   {
     post_id: 307,
-    images: [makePlaceholderImage(5)],
+    images: [],
     profile_image_url: null,
     nickname: '운동왕',
     created_at: '2026-04-15',
@@ -145,11 +89,12 @@ export const mockPostList: ApiPostListItem[] = [
       '오늘 줄넘기 500회를 달성했습니다. 30분 만에 완료! 다음 목표는 1000회입니다.',
     like_count: 33,
     comment_count: 9,
+    is_liked: false,
     is_scrapped: false,
   },
   {
     post_id: 308,
-    images: [makePlaceholderImage(6)],
+    images: [],
     profile_image_url: null,
     nickname: '달리기선수',
     created_at: '2026-04-14',
@@ -159,11 +104,12 @@ export const mockPostList: ApiPostListItem[] = [
       '드디어 풀업 20개를 연속으로 달성했습니다. 6개월간의 노력이 결실을 맺었네요.',
     like_count: 47,
     comment_count: 14,
+    is_liked: false,
     is_scrapped: true,
   },
   {
     post_id: 309,
-    images: [makePlaceholderImage(7)],
+    images: [],
     profile_image_url: null,
     nickname: '요가고수',
     created_at: '2026-04-13',
@@ -173,6 +119,7 @@ export const mockPostList: ApiPostListItem[] = [
       '오늘 처음으로 필라테스 수업을 들었습니다. 생각보다 훨씬 어렵고 코어 운동에 효과적이었어요.',
     like_count: 22,
     comment_count: 7,
+    is_liked: false,
     is_scrapped: false,
   },
 ]

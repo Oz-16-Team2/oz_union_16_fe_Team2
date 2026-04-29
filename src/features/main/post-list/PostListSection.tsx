@@ -1,23 +1,40 @@
-import { useState } from 'react'
+import { useMemo } from 'react'
+import { Link } from 'react-router'
+
+import { PenLine, Sparkles } from 'lucide-react'
 
 import { formatError } from '@/apis/api.utils'
-import { pinkCharacterImage } from '@/assets/images'
-import { usePostsQuery } from '@/query/main/usePostsQuery'
+import { TabButton } from '@/components/common/ui'
+import { buttonVariants } from '@/components/common/ui/button/Button.style'
+import { usePostListQuery } from '@/query/main/usePostListQuery'
+import { useAuthStore } from '@/store/authStore'
+import { cn } from '@/utils/cn'
 
-import { PostList } from './PostList'
+import { PostList, PostStatusView } from './PostList'
 import type { ApiPostListItem } from './PostList.api.types'
 import {
   type PostListItem,
   POSTS_PAGE_SIZE,
   type PostSortOrder,
 } from './PostList.types'
+import { usePostListFilters } from './usePostListFilters'
 
-// API 명세서 상 snake_case 를 컴포넌트에서 사용할 camelCase 로 변환하는 함수
-function toPostListItem(item: ApiPostListItem): PostListItem {
+const SORT_ORDERS: PostSortOrder[] = ['latest', 'trending', 'suggested']
+
+const SORT_LABELS: Record<PostSortOrder, string> = {
+  latest: '최신순',
+  trending: '인기순',
+  suggested: '추천순',
+}
+
+function toPostListItem(
+  item: ApiPostListItem,
+  currentNickname: string | null
+): PostListItem {
   return {
-    id: item.post_id,
-    image: item.images[0],
-    profileImage: item.profile_image_url ?? pinkCharacterImage,
+    postId: item.post_id,
+    images: item.images[0] ?? '',
+    profileImageUrl: item.profile_image_url,
     nickname: item.nickname,
     createdAt: item.created_at,
     title: item.title,
@@ -25,46 +42,107 @@ function toPostListItem(item: ApiPostListItem): PostListItem {
     contentPreview: item.content_preview,
     likeCount: item.like_count,
     commentCount: item.comment_count,
+    isLiked: item.is_liked,
     isScrapped: item.is_scrapped,
-    onLike: () => {},
-    onShare: () => {},
-    onScrap: () => {},
+    isOwner: currentNickname !== null && item.nickname === currentNickname,
   }
 }
 
 export function PostListSection() {
-  const [sortOrder, setSortOrder] = useState<PostSortOrder>('latest')
-  const [currentPage, setCurrentPage] = useState(1)
+  const user = useAuthStore((state) => state.user)
+  const {
+    filters,
+    mode,
+    inputValue,
+    setInputValue,
+    handleSearch,
+    handleSortChange,
+    handlePageChange,
+  } = usePostListFilters()
 
-  const { data, isLoading, isError, error } = usePostsQuery({
-    page: currentPage - 1,
-    sortBy: sortOrder,
-  })
+  const { sort, page } = filters
 
-  const posts = (data?.posts ?? []).map(toPostListItem)
-  const totalPages = Math.max(
-    1,
-    Math.ceil((data?.total_count ?? 0) / (data?.size ?? POSTS_PAGE_SIZE))
+  const { data, isLoading, isError, error } = usePostListQuery(
+    mode,
+    POSTS_PAGE_SIZE
   )
 
-  const errorDetail = error?.response?.data.error_detail
-  const errorMessage = errorDetail ? formatError(errorDetail) : undefined
+  const posts = useMemo(
+    () =>
+      (data?.posts ?? []).map((item) =>
+        toPostListItem(item, user?.nickname ?? null)
+      ),
+    [data?.posts, user?.nickname]
+  )
+
+  const totalPages = useMemo(
+    () =>
+      Math.max(
+        1,
+        Math.ceil((data?.total_count ?? 0) / (data?.size ?? POSTS_PAGE_SIZE))
+      ),
+    [data?.total_count, data?.size]
+  )
+
+  const errorMessage = useMemo(() => {
+    const detail = error?.response?.data.error_detail
+    return detail ? formatError(detail) : undefined
+  }, [error])
+
+  // 최신순, 인기순, 추천순 정렬 버튼 + 글쓰기 버튼
+  const filterArea = (
+    <div className="flex items-center justify-between">
+      <div className="flex gap-2">
+        {SORT_ORDERS.map((order) => (
+          <TabButton
+            key={order}
+            isActive={sort === order}
+            onClick={() => handleSortChange(order)}
+            className="cursor-pointer"
+          >
+            {SORT_LABELS[order]}
+          </TabButton>
+        ))}
+      </div>
+
+      {user && (
+        <Link
+          to="/post/create"
+          className={cn(
+            buttonVariants({ variant: 'primary', size: 'sm', rounded: 'full' }),
+            'px-5 py-2 text-sm'
+          )}
+        >
+          <PenLine size={16} />
+          글쓰기
+        </Link>
+      )}
+    </div>
+  )
+
+  // 추천순 필터링 시 빈화면 따로 처리 해줌
+  const suggestedEmptyState = (
+    <PostStatusView
+      icon={<Sparkles size={48} />}
+      message="아직 추천할 게시글이 없어요."
+      subMessage="게시글을 작성하거나 좋아요를 눌러보세요. 활동 기반으로 추천이 시작됩니다."
+    />
+  )
 
   return (
     <PostList
       posts={posts}
       totalPages={totalPages}
-      currentPage={currentPage}
-      sortOrder={sortOrder}
+      currentPage={page}
+      searchValue={inputValue}
       isLoading={isLoading}
       isError={isError}
       errorMessage={errorMessage}
-      onSearch={() => {}}
-      onSortChange={(sort) => {
-        setSortOrder(sort)
-        setCurrentPage(1)
-      }}
-      onPageChange={setCurrentPage}
+      filterArea={filterArea}
+      emptyView={sort === 'suggested' ? suggestedEmptyState : undefined}
+      onSearch={handleSearch}
+      onSearchChange={setInputValue}
+      onPageChange={handlePageChange}
     />
   )
 }
