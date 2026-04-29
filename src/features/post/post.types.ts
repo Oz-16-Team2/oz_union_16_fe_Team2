@@ -68,6 +68,7 @@ export type PostDetailData = {
   content: string
   tags: string[]
   likeCount: number
+  isLiked: boolean
   commentCount: number
   isScrapped: boolean
   hasGoal: boolean
