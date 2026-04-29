@@ -7,7 +7,6 @@ import '@fontsource/pretendard/500.css'
 import '@fontsource/pretendard/700.css'
 import './index.css'
 
-/*
 async function enableMocking() {
   if (import.meta.env.DEV) {
     const { worker } = await import('./mocks/browser.ts')
@@ -17,6 +16,3 @@ async function enableMocking() {
 enableMocking().then(() => {
   createRoot(document.getElementById('root')!).render(<App />)
 })
-*/
-
-createRoot(document.getElementById('root')!).render(<App />)
