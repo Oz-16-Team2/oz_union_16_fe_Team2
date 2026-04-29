@@ -10,7 +10,7 @@ export type ApiPostListItem = {
   content_preview: string
   like_count: number
   comment_count: number
-  // is_liked: boolean 존재 해야 하는데 like API 만들어지면 추가 예정
+  is_liked: boolean
   is_scrapped: boolean
 }
 
@@ -28,4 +28,39 @@ export type ApiPostListParams = {
   sortBy?: string
   page?: number
   size?: number
+}
+
+// GET /api/v1/posts/search — 요청 쿼리 파라미터
+export type ApiPostSearchParams = {
+  keyword: string
+  type: 'title' | 'content'
+  page?: number
+  size?: number
+}
+
+// GET /api/v1/posts/search — 응답
+export type ApiPostSearchResponse = {
+  search_results: ApiPostListItem[]
+  keyword: string
+  total_count: number
+  sort_by: string
+  page: number
+  size: number
+}
+
+// GET /api/v1/posts/trending — 요청 쿼리 파라미터
+export type ApiTrendingParams = {
+  period: 'day' | 'week'
+  page?: number
+  size?: number
+}
+
+// GET /api/v1/posts/trending — 응답
+export type ApiTrendingResponse = {
+  detail: {
+    posts: ApiPostListItem[]
+    total_count: number
+    page: number
+    size: number
+  }
 }

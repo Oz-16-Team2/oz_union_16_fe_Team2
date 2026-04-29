@@ -1,9 +1,10 @@
 import { useRef, useState } from 'react'
 
-import { ImagePlus, X } from 'lucide-react'
+import { ImagePlus, Loader2, X } from 'lucide-react'
 
-import { Button, Input, Textarea } from '@/components/common/ui'
+import { Button, Input, Textarea, useToast } from '@/components/common/ui'
 import { cn } from '@/utils/cn'
+import { uploadFilesToS3 } from '@/utils/uploadToS3'
 
 import { usePostForm } from '../hooks/usePostForm'
 import { MAX_CONTENT, MAX_IMAGES, MAX_TITLE } from '../post.constants'
@@ -31,23 +32,48 @@ export function PostFormLayout({
   isPending = false,
 }: PostFormLayoutProps) {
   const form = usePostForm(mode, defaultValues)
+  const toast = useToast()
 
-  // 드래그 시각 피드백
   const [isDragging, setIsDragging] = useState(false)
   const imageInputRef = useRef<HTMLInputElement>(null)
 
+  const ALLOWED_IMAGE_TYPES = [
+    'image/jpeg',
+    'image/png',
+    'image/gif',
+    'image/webp',
+  ]
+
+  async function uploadImages(files: File[]) {
+    const imageFiles = files.filter((f) => ALLOWED_IMAGE_TYPES.includes(f.type))
+    if (imageFiles.length === 0 || !form.canAddImage) return
+
+    if (imageFiles.length < files.length) {
+      toast.error('JPEG, PNG, GIF, WEBP 형식의 이미지만 업로드할 수 있습니다.')
+    }
+
+    const blobUrls = form.addImages(imageFiles)
+    const filesToUpload = imageFiles.slice(0, blobUrls.length)
+
+    try {
+      const imageUrls = await uploadFilesToS3(filesToUpload)
+      form.resolveImages(blobUrls, imageUrls)
+    } catch {
+      form.removeImages(blobUrls)
+      toast.error('이미지 업로드에 실패했습니다.')
+    }
+  }
+
   function handleImageSelect(e: React.ChangeEvent<HTMLInputElement>) {
-    form.addImages(Array.from(e.target.files ?? []))
+    const files = Array.from(e.target.files ?? [])
     e.target.value = ''
+    uploadImages(files)
   }
 
   function handleDrop(e: React.DragEvent) {
     e.preventDefault()
     setIsDragging(false)
-    const files = Array.from(e.dataTransfer.files).filter((f) =>
-      f.type.startsWith('image/')
-    )
-    form.addImages(files)
+    uploadImages(Array.from(e.dataTransfer.files))
   }
 
   function handleSubmit(e: React.FormEvent) {
@@ -102,16 +128,22 @@ export function PostFormLayout({
                       alt={`첨부한 이미지 ${i + 1} 번째`}
                       className="size-full rounded-xl object-cover"
                     />
-                    <button
-                      type="button"
-                      onClick={(e) => {
-                        e.stopPropagation()
-                        form.removeImage(i)
-                      }}
-                      className="absolute -right-1.5 -top-1.5 flex size-6 cursor-pointer items-center justify-center rounded-full bg-gray-700 text-white shadow dark:bg-gray-600"
-                    >
-                      <X className="size-3.5" />
-                    </button>
+                    {item.imageUrl === null ? (
+                      <div className="absolute inset-0 flex items-center justify-center rounded-xl bg-black/40">
+                        <Loader2 className="size-6 animate-spin text-white" />
+                      </div>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          form.removeImage(i)
+                        }}
+                        className="absolute -right-1.5 -top-1.5 flex size-6 cursor-pointer items-center justify-center rounded-full bg-gray-700 text-white shadow dark:bg-gray-600"
+                      >
+                        <X className="size-3.5" />
+                      </button>
+                    )}
                   </div>
                 ))}
               </div>
@@ -129,7 +161,7 @@ export function PostFormLayout({
       <input
         ref={imageInputRef}
         type="file"
-        accept="image/*"
+        accept="image/jpeg,image/png,image/gif,image/webp"
         multiple
         className="hidden"
         onChange={handleImageSelect}

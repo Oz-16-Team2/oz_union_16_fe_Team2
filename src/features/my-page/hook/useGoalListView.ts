@@ -15,9 +15,9 @@ const FILTER_STATUS_MAP: Record<
   GoalStatus | undefined
 > = {
   '전체 보기': undefined,
-  진행중: 'IN_PROGRESS',
-  미달성: 'FAILED',
-  완료: 'COMPLETED',
+  진행중: 'in_progress',
+  미달성: 'failed',
+  완료: 'completed',
 }
 
 export function useGoalListView(goals: Goal[]) {

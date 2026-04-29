@@ -1,20 +1,20 @@
 import type { DateRange } from '@/components/common/ui/calendar/Calendar.type'
 
-export type GoalStatus = 'COMPLETED' | 'IN_PROGRESS' | 'FAILED'
+export type GoalStatus = 'completed' | 'in_progress' | 'failed'
 
 export const STATUS_BADGE_VARIANT: Record<
   GoalStatus,
   'success' | 'inProgress' | 'failed'
 > = {
-  COMPLETED: 'success',
-  IN_PROGRESS: 'inProgress',
-  FAILED: 'failed',
+  completed: 'success',
+  in_progress: 'inProgress',
+  failed: 'failed',
 }
 
 export const STATUS_LABEL: Record<GoalStatus, string> = {
-  COMPLETED: '완료',
-  IN_PROGRESS: '진행중',
-  FAILED: '미달성',
+  completed: '완료',
+  in_progress: '진행중',
+  failed: '미달성',
 }
 
 export type GoalCardProps = {

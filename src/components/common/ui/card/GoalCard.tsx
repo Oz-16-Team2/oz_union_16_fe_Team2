@@ -30,9 +30,9 @@ export function GoalCard({
   onDelete, // 삭제 버튼 클릭 이벤트
 }: GoalCardProps) {
   const badgeClassName =
-    status === 'COMPLETED'
+    status === 'completed'
       ? 'min-w-0 border border-transparent px-3 py-1 text-xs bg-[#EAFBF3] text-[#75B965] dark:bg-transparent dark:border-emerald-200/50 dark:text-emerald-200'
-      : status === 'FAILED'
+      : status === 'failed'
         ? 'min-w-0 border border-transparent px-3 py-1 text-xs bg-[#FFEEE2] text-[#FF5550] dark:bg-transparent dark:border-red-200/50 dark:text-red-200'
         : 'min-w-0 border border-transparent px-3 py-1 text-xs bg-[#F1F0FF] text-[#845FFF] dark:bg-transparent dark:border-violet-200/50 dark:text-violet-200'
 
@@ -41,7 +41,7 @@ export function GoalCard({
       {/* 상단 */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          {status === 'IN_PROGRESS' && onCheck ? (
+          {status === 'in_progress' && onCheck ? (
             <button
               type="button"
               aria-label="목표 체크"
@@ -56,7 +56,7 @@ export function GoalCard({
               <Check className="size-2.5" strokeWidth={4} />
             </button>
           ) : null}
-          {status !== 'IN_PROGRESS' || !onCheck ? (
+          {status !== 'in_progress' || !onCheck ? (
             <div className="size-3.5 rounded-xs" />
           ) : null}
           <span className="text-text-primary font-bold text-lg">{label}</span>
@@ -93,7 +93,7 @@ export function GoalCard({
 
       {/* 하단 */}
       <div className="mt-auto flex justify-end gap-2">
-        {status === 'IN_PROGRESS' && onEdit ? (
+        {status === 'in_progress' && onEdit ? (
           <Button variant="primary" size="sm" rounded="md" onClick={onEdit}>
             수정
           </Button>

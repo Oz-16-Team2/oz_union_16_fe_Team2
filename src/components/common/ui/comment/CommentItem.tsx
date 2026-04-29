@@ -2,23 +2,9 @@ import { Heart, MoreHorizontal } from 'lucide-react'
 
 import { Button } from '@/components/common/ui/button/Button'
 import { cn } from '@/utils/cn'
+import { formatRelativeTime } from '@/utils/formatRelativeTime'
 
 import type { Comment } from './Comment.type'
-
-const formatTime = (dateString: string) => {
-  const now = new Date()
-  const date = new Date(dateString)
-
-  const diff = Math.floor((now.getTime() - date.getTime()) / 1000)
-
-  {
-    /* 분리예정 */
-  }
-  if (diff < 60) return '방금 전'
-  if (diff < 3600) return `${Math.floor(diff / 60)}분 전`
-  if (diff < 86400) return `${Math.floor(diff / 3600)}시간 전`
-  return `${Math.floor(diff / 86400)}일 전`
-}
 
 type CommentItemProps = {
   comment: Comment
@@ -73,7 +59,7 @@ export function CommentItem({
               {nickname}
             </span>
             <span className="text-xs text-text-muted">
-              {formatTime(createdAt)}
+              {formatRelativeTime(createdAt)}
             </span>
           </div>
 

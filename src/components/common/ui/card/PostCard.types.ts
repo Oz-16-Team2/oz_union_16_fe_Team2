@@ -1,6 +1,7 @@
 export type PostCardProps = {
-  image?: string
-  profileImage: string
+  postId: number
+  images: string[]
+  profileImageUrl: string | null
   nickname: string
   createdAt: string
   title: string
@@ -10,8 +11,6 @@ export type PostCardProps = {
   commentCount: number
   isScrapped?: boolean
   isLiked?: boolean
-  onClick?: () => void
-  onLike: () => void
-  onShare: () => void
-  onScrap: () => void
+  isOwner?: boolean
+  onShare?: () => void
 }

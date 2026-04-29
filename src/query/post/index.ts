@@ -1,5 +1,8 @@
 export { useCreatePostMutation } from './useCreatePostMutation'
+export { useDeletePostMutation } from './useDeletePostMutation'
 export { useGoalsQuery } from './useGoalsQuery'
+export { useLikeMutation } from './useLikeMutation'
 export { usePostQuery } from './usePostQuery'
+export { useScrapMutation } from './useScrapMutation'
 export { useTagsQuery } from './useTagsQuery'
 export { useUpdatePostMutation } from './useUpdatePostMutation'

@@ -1,15 +1,39 @@
-import { Bookmark, Heart, MessageCircle, Share2 } from 'lucide-react'
+import { useState } from 'react'
+import { useNavigate } from 'react-router'
 
-import { Button } from '@/components/common/ui'
+import {
+  Bookmark,
+  Heart,
+  MessageCircle,
+  MoreVertical,
+  Share2,
+} from 'lucide-react'
+
+import { ActionMenu } from '@/components/common/overlay/dropdown/action-menu/ActionMenu'
+import { ConfirmModal } from '@/components/common/overlay/modal/confirm/ConfirmModal'
+import { ReportFormModal } from '@/components/common/overlay/modal/form/ReportFormModal'
+import { useToast } from '@/components/common/ui/toast/useToast'
+import { useDeletePostMutation } from '@/query/post'
 import { cn } from '@/utils/cn'
+import { formatRelativeTime } from '@/utils/formatRelativeTime'
 
+import { Button } from '../button/Button'
 import { Card } from './Card'
 import type { PostCardProps } from './PostCard.types'
 import { usePostCardActions } from './usePostCardActions'
 
+const REPORT_REASONS = [
+  { label: '스팸/광고', value: 'spam' },
+  { label: '욕설/비방', value: 'abuse' },
+  { label: '음란/성인', value: 'adult' },
+  { label: '개인정보 노출', value: 'privacy' },
+  { label: '기타', value: 'etc' },
+]
+
 export function PostCard({
-  image,
-  profileImage,
+  postId,
+  images,
+  profileImageUrl,
   nickname,
   createdAt,
   title,
@@ -19,11 +43,15 @@ export function PostCard({
   commentCount,
   isScrapped = false,
   isLiked = false,
-  onClick,
-  onLike,
+  isOwner = false,
   onShare,
-  onScrap,
 }: PostCardProps) {
+  const navigate = useNavigate()
+  const toast = useToast()
+
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
+  const [showReportForm, setShowReportForm] = useState(false)
+
   const {
     liked,
     scrapped,
@@ -31,59 +59,123 @@ export function PostCard({
     toggleLike,
     toggleScrap,
     handleShare,
-  } = usePostCardActions({
-    likeCount,
-    isLiked,
-    isScrapped,
-    onLike,
-    onScrap,
-    onShare,
-  })
+  } = usePostCardActions({ postId, likeCount, isLiked, isScrapped, onShare })
+
+  const { mutate: deletePost } = useDeletePostMutation()
+
+  const handleDelete = () => {
+    deletePost(postId, {
+      onSuccess: () => {
+        toast.success('게시글이 삭제되었습니다.')
+        setShowDeleteConfirm(false)
+      },
+      onError: () => {
+        toast.error('게시글 삭제에 실패했습니다.')
+        setShowDeleteConfirm(false)
+      },
+    })
+  }
+
+  const ownerMenuItems = [
+    { label: '수정', onClick: () => navigate(`/post/${postId}/edit`) },
+    {
+      label: '삭제',
+      onClick: () => setShowDeleteConfirm(true),
+      variant: 'danger' as const,
+    },
+    { label: '신고', onClick: () => setShowReportForm(true) },
+  ]
+
+  const guestMenuItems = [
+    { label: '신고', onClick: () => setShowReportForm(true) },
+  ]
+
+  const actionMenu = (
+    <div onClick={(e) => e.stopPropagation()}>
+      <ActionMenu
+        trigger={
+          <MoreVertical
+            size={16}
+            className="text-text-muted hover:text-text-primary transition-colors"
+          />
+        }
+        items={isOwner ? ownerMenuItems : guestMenuItems}
+        align="right"
+        size="sm"
+      />
+    </div>
+  )
 
   return (
-    <Card
-      className="p-0 h-84 overflow-hidden flex flex-col cursor-pointer"
-      onClick={onClick}
-    >
-      <PostCardImage src={image} title={title} />
+    <>
+      <Card
+        className="p-0 h-84 flex flex-col cursor-pointer"
+        onClick={() => navigate(`/post/${postId}`)}
+      >
+        <PostCardImage src={images} title={title} />
 
-      <div className="flex flex-col flex-1 min-h-0 px-4 py-5">
-        <PostCardProfile
-          image={profileImage}
-          nickname={nickname}
-          createdAt={createdAt}
+        <div className="flex flex-col flex-1 min-h-0 px-4 py-5">
+          <PostCardProfile
+            image={profileImageUrl}
+            nickname={nickname}
+            createdAt={createdAt}
+            actionMenu={actionMenu}
+          />
+
+          <h3 className="text-text-primary line-clamp-1 mb-0 font-semibold">
+            {title}
+          </h3>
+
+          <PostCardTags tags={tags} />
+
+          <p className="text-sm text-text-muted line-clamp-2">
+            {contentPreview}
+          </p>
+        </div>
+
+        <PostCardFooter
+          liked={liked}
+          likeCount={localLikeCount}
+          commentCount={commentCount}
+          scrapped={scrapped}
+          onLike={toggleLike}
+          onShare={handleShare}
+          onScrap={toggleScrap}
         />
+      </Card>
 
-        <h3 className="text-text-primary line-clamp-1 mb-0 font-semibold">
-          {title}
-        </h3>
+      {showDeleteConfirm && (
+        <ConfirmModal
+          description="게시글을 삭제하시겠습니까? 삭제된 게시글은 복구할 수 없습니다."
+          confirmLabel="삭제"
+          onConfirm={handleDelete}
+          onClose={() => setShowDeleteConfirm(false)}
+        />
+      )}
 
-        <PostCardTags tags={tags} />
-
-        <p className="text-sm text-text-muted line-clamp-2">{contentPreview}</p>
-      </div>
-
-      <PostCardFooter
-        liked={liked}
-        likeCount={localLikeCount}
-        commentCount={commentCount}
-        scrapped={scrapped}
-        onLike={toggleLike}
-        onShare={handleShare}
-        onScrap={toggleScrap}
-      />
-    </Card>
+      {showReportForm && (
+        <ReportFormModal
+          title="게시글 신고"
+          options={REPORT_REASONS}
+          onSubmit={() => {
+            toast.success('신고가 접수되었습니다.')
+            setShowReportForm(false)
+          }}
+          onClose={() => setShowReportForm(false)}
+        />
+      )}
+    </>
   )
 }
 
 // --- 내부 서브 컴포넌트 ---
 
-const PostCardImage = ({ src, title }: { src?: string; title: string }) => {
-  if (!src) return null
+const PostCardImage = ({ src, title }: { src?: string[]; title: string }) => {
+  if (!src || src.length === 0) return null
   return (
-    <div className="w-full h-32 shrink-0 bg-border-default overflow-hidden">
+    <div className="w-full h-32 shrink-0 bg-border-default overflow-hidden rounded-t-2xl">
       <img
-        src={src}
+        src={src[0]}
         alt={`${title} 이미지`}
         loading="lazy"
         decoding="async"
@@ -97,23 +189,32 @@ const PostCardProfile = ({
   image,
   nickname,
   createdAt,
+  actionMenu,
 }: {
-  image: string
+  image: string | null
   nickname: string
   createdAt: string
+  actionMenu: React.ReactNode
 }) => (
-  <div className="flex items-center gap-2 mb-2">
-    <img
-      src={image}
-      alt={nickname}
-      loading="lazy"
-      decoding="async"
-      className="size-7 rounded-full object-cover shrink-0"
-    />
-    <div className="min-w-0 text-2xs">
-      <p className="font-semibold text-text-primary truncate">{nickname}</p>
-      <p className="text-text-muted">{createdAt}</p>
+  <div className="flex items-center justify-between gap-2 mb-2">
+    <div className="flex items-center gap-2 min-w-0">
+      {image ? (
+        <img
+          src={image}
+          alt={nickname}
+          className="size-7 rounded-full object-cover shrink-0"
+        />
+      ) : (
+        <div className="size-7 rounded-full bg-border-default shrink-0 flex items-center justify-center text-[10px] font-bold text-text-muted">
+          {nickname[0]}
+        </div>
+      )}
+      <div className="min-w-0 text-2xs">
+        <p className="font-semibold text-text-primary truncate">{nickname}</p>
+        <p className="text-text-muted">{formatRelativeTime(createdAt)}</p>
+      </div>
     </div>
+    {actionMenu}
   </div>
 )
 

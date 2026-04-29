@@ -20,13 +20,23 @@ export function PostGoalSection({
   onChange,
 }: PostGoalSectionProps) {
   const toast = useToast()
-  const { data: goals = [], isError } = useGoalsQuery()
+  const { data: goals = [], isError, isLoading } = useGoalsQuery()
 
   useEffect(() => {
     if (isError) toast.error('목표 목록을 불러오지 못했습니다.')
   }, [isError, toast])
 
   const selectedGoal = goals.find((g) => g.goalId === selectedGoalId)
+
+  const dropdownPlaceholder = isLoading
+    ? '진행 중인 목표를 불러오는 중입니다.'
+    : isError
+      ? '목표 목록을 불러오지 못했습니다.'
+      : goals.length === 0
+        ? '진행 중인 목표가 없습니다.'
+        : '목표를 선택해주세요.'
+
+  const isDropdownDisabled = isLoading || isError || goals.length === 0
 
   return (
     <div className="flex flex-col gap-4 rounded-2xl border border-border-default bg-surface p-4">
@@ -43,7 +53,8 @@ export function PostGoalSection({
           const id = Number(val)
           onChange(Number.isNaN(id) ? undefined : id)
         }}
-        placeholder="목표를 선택해주세요."
+        placeholder={dropdownPlaceholder}
+        disabled={isDropdownDisabled}
       />
 
       {selectedGoal && (

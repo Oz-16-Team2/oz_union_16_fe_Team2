@@ -20,7 +20,7 @@ export function PostTagSection({
   onInitialize,
 }: PostTagSectionProps) {
   const toast = useToast()
-  const { data: tags = [], isError } = useTagsQuery()
+  const { data: tags = [], isError, isLoading } = useTagsQuery()
 
   useEffect(() => {
     if (isError) toast.error('태그 목록을 불러오지 못했습니다.')
@@ -37,6 +37,10 @@ export function PostTagSection({
   }, [tags, defaultTagNames, onInitialize])
 
   const isMaxReached = selectedTagIds.length >= MAX_TAGS
+
+  if (!isLoading && !isError && tags.length === 0) {
+    return <p className="pl-2 text-text-muted">등록된 태그가 없습니다.</p>
+  }
 
   return (
     <div className="flex flex-wrap gap-2">

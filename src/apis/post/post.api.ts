@@ -2,30 +2,39 @@ import { apiClient } from '@/apis/apiClient'
 import type {
   ApiPostListParams,
   ApiPostListResponse,
+  ApiPostSearchParams,
+  ApiPostSearchResponse,
+  ApiTrendingParams,
+  ApiTrendingResponse,
 } from '@/features/main/post-list/PostList.api.types'
 import type {
-  ApiGoalResponse,
+  ApiGoalListResponse,
   ApiPostCreateRequest,
   ApiPostCreateResponse,
   ApiPostResponse,
   ApiPostUpdateRequest,
-  ApiTagResponse,
+  ApiPresignedUrlRequest,
+  ApiPresignedUrlResponse,
+  ApiTagListResponse,
 } from '@/features/post/post.api.types'
 
 import { POST_ENDPOINTS } from './endpoints'
 
 export const postApi = {
-  // 전체 목표 조회
-  getGoals: () => apiClient.get<ApiGoalResponse[]>(POST_ENDPOINTS.goals),
+  // 진행 중인 목표 조회
+  getGoals: () =>
+    apiClient.get<ApiGoalListResponse>(POST_ENDPOINTS.goals, {
+      params: { status: 'in_progress' },
+    }),
 
-  // 전체 태그 조회
-  getTags: () => apiClient.get<ApiTagResponse[]>(POST_ENDPOINTS.tags),
+  // 태그 목록 조회
+  getTags: () => apiClient.get<ApiTagListResponse>(POST_ENDPOINTS.tags),
 
   // 단일 게시글 조회
   getPost: (postId: number) =>
     apiClient.get<ApiPostResponse>(POST_ENDPOINTS.post(postId)),
 
-  // 게시글 생성a
+  // 게시글 생성
   createPost: (body: ApiPostCreateRequest) =>
     apiClient.post<ApiPostCreateResponse>(POST_ENDPOINTS.posts, body),
 
@@ -52,4 +61,26 @@ export const postApi = {
   // 게시글 신고
   reportPost: (postId: number) =>
     apiClient.post<void>(POST_ENDPOINTS.postReports(postId)),
+
+  // 게시글 삭제
+  deletePost: (postId: number) =>
+    apiClient.delete<void>(POST_ENDPOINTS.post(postId)),
+
+  // 이미지 S3 업로드용 presigned URL 발급
+  getPresignedUrl: (body: ApiPresignedUrlRequest) =>
+    apiClient.post<ApiPresignedUrlResponse>(POST_ENDPOINTS.presignedUrl, body),
+
+  // 게시글 검색
+  searchPosts: (params: ApiPostSearchParams) =>
+    apiClient.get<ApiPostSearchResponse>(POST_ENDPOINTS.postSearch, { params }),
+
+  // 인기 게시글 조회
+  getTrendingPosts: (params: ApiTrendingParams) =>
+    apiClient.get<ApiTrendingResponse>(POST_ENDPOINTS.postTrending, { params }),
+
+  // 추천 게시글 조회
+  getSuggestedPosts: (params: { page?: number; size?: number }) =>
+    apiClient.get<ApiTrendingResponse>(POST_ENDPOINTS.postSuggestions, {
+      params,
+    }),
 } as const

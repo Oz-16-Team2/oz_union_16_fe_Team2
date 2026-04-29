@@ -10,15 +10,15 @@ type PostGoalSectionProps = {
 }
 
 const goalStatusMap = {
-  IN_PROGRESS: {
+  in_progress: {
     label: '진행중',
     badgeVariant: 'inProgress',
   },
-  COMPLETED: {
+  completed: {
     label: '완료',
     badgeVariant: 'success',
   },
-  FAILED: {
+  failed: {
     label: '실패',
     badgeVariant: 'failed',
   },

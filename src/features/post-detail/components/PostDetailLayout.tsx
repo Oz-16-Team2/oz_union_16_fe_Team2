@@ -37,7 +37,7 @@ export function PostDetailLayout({ post }: PostDetailLayoutProps) {
             startDate={post.goalInfo.startDate ?? ''}
             endDate={post.goalInfo.endDate ?? ''}
             progressRate={post.goalInfo.progressRate ?? 0}
-            status="IN_PROGRESS"
+            status="in_progress"
           />
         </div>
       )}
