@@ -2,8 +2,8 @@ export type PostSortOrder = 'latest' | 'trending' | 'suggested'
 
 export type PostListItem = {
   postId: number
-  images: string
-  profileImageUrl: string
+  images: string[]
+  profileImageUrl: string | null
   nickname: string
   createdAt: string
   title: string

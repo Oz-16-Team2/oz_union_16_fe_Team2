@@ -33,7 +33,7 @@ function toPostListItem(
 ): PostListItem {
   return {
     postId: item.post_id,
-    images: item.images[0] ?? '',
+    images: item.images,
     profileImageUrl: item.profile_image_url,
     nickname: item.nickname,
     createdAt: item.created_at,

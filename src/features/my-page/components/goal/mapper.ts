@@ -7,13 +7,13 @@ import type {
 import type { CreateGoalRequest, Goal, UpdateGoalRequest } from './goal.types'
 
 const normalizeGoalStatus = (status: string): Goal['status'] => {
-  switch (status.toUpperCase()) {
-    case 'COMPLETED':
-      return 'COMPLETED'
-    case 'FAILED':
-      return 'FAILED'
+  switch (status) {
+    case 'completed':
+      return 'completed'
+    case 'failed':
+      return 'failed'
     default:
-      return 'IN_PROGRESS'
+      return 'in_progress'
   }
 }
 

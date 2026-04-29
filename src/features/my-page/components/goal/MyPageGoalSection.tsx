@@ -161,7 +161,7 @@ export function MyPageGoalSection() {
               initialTitle=""
               initialDateRange={{ start: null, end: null }}
               initialProgressRate={0}
-              initialStatus="IN_PROGRESS"
+              initialStatus="in_progress"
               onClose={() => setIsCreateOpen(false)}
               onSubmit={handleCreateSubmit}
             />

@@ -4,15 +4,10 @@
 
 export type PostFormMode = 'create' | 'edit'
 
-export type GoalStatus = 'IN_PROGRESS' | 'FAILED' | 'COMPLETED'
-
-export type VoteOptionFormData = {
-  content: string
-  sortOrder: number
-}
+export type GoalStatus = 'in_progress' | 'failed' | 'completed'
 
 export type VoteFormData = {
-  options: VoteOptionFormData[]
+  options: string[]
   startDate?: string
   endDate?: string
 }
@@ -34,11 +29,11 @@ export type PostFormData = {
 }
 
 // 이미지 업로드 아이템
-// file 있음 → 새로 선택한 파일 (S3 업로드 대기)
-// file 없음 → 이미 업로드된 서버 이미지
+// imageUrl === null → S3 업로드 진행 중
+// imageUrl === string → S3 업로드 완료된 URL
 export type PostImageItem = {
-  file?: File
-  previewUrl: string
+  previewUrl: string // blob URL (미리보기용)
+  imageUrl: string | null
 }
 
 // 목표 드롭다운에서 사용하는 프론트 전용 타입

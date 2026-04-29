@@ -10,7 +10,7 @@ type DonutChartProps = {
 
 export function DonutChart({
   progressRate,
-  status = 'IN_PROGRESS',
+  status = 'in_progress',
   size = 140,
 }: DonutChartProps) {
   const percentage = Math.min(100, Math.max(0, progressRate))
@@ -20,7 +20,7 @@ export function DonutChart({
 
   // 상태별 색상
   const gaugeColor =
-    status === 'FAILED' ? 'var(--color-danger-500)' : 'var(--color-primary-500)'
+    status === 'failed' ? 'var(--color-danger-500)' : 'var(--color-primary-500)'
 
   return (
     <div className="relative flex items-center justify-center">

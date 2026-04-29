@@ -1,30 +1,38 @@
 import type { GoalStatus } from './post.types'
 
-// 현재 API 명세서 기준 snake_case와 camelCase가 혼용되어 있어 타입이 다소 복잡합니다.
-// 추후 API 명세가 바뀌면 바뀌는 타입에 맞춰 수정해야합니다.
-
-// GET /api/v1/goals 응답
+// GET /api/v1/goals/ 응답
 export type ApiGoalResponse = {
   goal_id: number
   title: string
-  startDate: string
-  endDate: string
+  start_date: string
+  end_date: string
   status: GoalStatus
   created_at: string
-  progressRate: number
-  isCheckedToday: boolean
+  progress_rate: number
+  is_checked_today: boolean
 }
 
-// GET /api/v1/tags 응답
+export type ApiGoalListResponse = {
+  count: number
+  next: string | null
+  previous: string | null
+  results: ApiGoalResponse[]
+}
+
+// GET /api/v1/posts/tags 응답
 export type ApiTagResponse = {
   id: number
   name: string
 }
 
+export type ApiTagListResponse = {
+  results: ApiTagResponse[]
+}
+
 export type VoteContent = {
-  options: Array<{ content: string; sort_order: number }>
-  start_date?: string
-  end_date?: string
+  options: string[]
+  start_at?: string
+  end_at?: string
 }
 
 // POST /api/v1/posts 요청
@@ -49,7 +57,7 @@ export type ApiPostCreateResponse = {
 export type ApiPostResponse = {
   post_id: number
   images: string[]
-  profile_image_url: string | null
+  profile_image_url: string
   nickname: string
   created_at: string
   title: string
@@ -79,6 +87,19 @@ export type ApiPostResponse = {
       sort_order: number
     }>
   } | null
+}
+
+// POST /api/v1/posts/presigned-url 요청/응답
+export type ApiPresignedUrlRequest = {
+  filename: string
+  content_type: string
+}
+
+export type ApiPresignedUrlResponse = {
+  detail: {
+    presigned_url: string
+    image_url: string
+  }
 }
 
 // PATCH /api/v1/posts/:postId 요청

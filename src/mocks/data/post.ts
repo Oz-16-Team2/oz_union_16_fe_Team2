@@ -127,7 +127,7 @@ export const mockPostList: ApiPostListItem[] = [
 export const mockPost: ApiPostResponse = {
   post_id: 305,
   images: [],
-  profile_image_url: null,
+  profile_image_url: '',
   nickname: '테스트유저',
   created_at: '2026-04-20T10:00:00',
   title: '오늘의 운동 기록',
