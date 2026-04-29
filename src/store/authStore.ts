@@ -2,6 +2,7 @@ import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
 type AuthUser = {
+  id?: number // 로그인 유저 식별용 (댓글 내/타 구분)
   nickname: string
   profileImageUrl: string
 }
