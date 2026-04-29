@@ -20,20 +20,19 @@ export function ProfileImageSelectField({
   const [isOpen, setIsOpen] = useState(false)
   const [isActive, setIsActive] = useState(false)
 
-  // 폼에는 서버로 보낼 profile_image_url을 저장하고,
-  // 화면 선택 상태는 공용 아바타 목록에서 다시 찾아서 보여줍니다.
+  // 폼에는 서버로 보낼 profile_image (code)를 저장하고,
+  // 화면에서는 해당 code로 avatar를 찾아서 보여줍니다.
   const selectedCharacter = useMemo(
     () =>
-      PROFILE_AVATAR_OPTIONS.find(
-        (character) => character.imageUrl === value
-      ) ?? DEFAULT_PROFILE_AVATAR,
+      PROFILE_AVATAR_OPTIONS.find((character) => character.code === value) ??
+      DEFAULT_PROFILE_AVATAR,
     [value]
   )
 
   const handleSelectCharacter = (code: string) => {
     const character = PROFILE_AVATAR_OPTIONS.find((item) => item.code === code)
     if (!character) return
-    onChange(character.imageUrl)
+    onChange(character.code)
     setIsActive(true)
     setIsOpen(false)
   }

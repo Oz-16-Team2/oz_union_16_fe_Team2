@@ -55,7 +55,7 @@ export function SignupPage() {
       nickname: '',
       password: '',
       passwordConfirm: '',
-      profile_image_url: '',
+      profile_image: '',
       email_token: '',
     },
   })
@@ -66,7 +66,7 @@ export function SignupPage() {
     setError,
     setValue,
   } = methods
-  const profileImageUrl = useWatch({ control, name: 'profile_image_url' })
+  const profileImageUrl = useWatch({ control, name: 'profile_image' })
 
   const SignupField = AuthForm.FormField<SignupFormSchema>
   const passwordVisibility = usePasswordVisibility()
@@ -123,13 +123,13 @@ export function SignupPage() {
     email_token,
     password,
     nickname,
-    profile_image_url,
+    profile_image,
   }: SignupFormSchema) => {
     signupMutation.mutate({
       email,
       password,
       nickname,
-      profile_image_url,
+      profile_image,
       email_token,
     })
   }
@@ -160,8 +160,8 @@ export function SignupPage() {
           >
             <Button
               className={cn(
-                'py-1 min-w-17 px-0 bg-transparent hover:text-white disabled:bg-transparent disabled:text-white',
-                nicknameCheck.isChecked && 'text-white'
+                'py-1 min-w-17 px-0 bg-transparent hover:text-text-primary disabled:bg-transparent disabled:text-text-muted',
+                nicknameCheck.isChecked && 'text-text-primary'
               )}
               size={'sm'}
               variant="outline"
@@ -189,7 +189,7 @@ export function SignupPage() {
           >
             <Button
               className={cn(
-                'py-1 min-w-17 px-0 bg-transparent hover:text-white disabled:bg-transparent disabled:text-white',
+                'py-1 min-w-17 px-0 bg-transparent hover:text-text-primary disabled:bg-transparent disabled:text-text-muted',
                 emailVerification.isVerified && 'text-white'
               )}
               size={'sm'}
@@ -276,7 +276,7 @@ export function SignupPage() {
           <ProfileImageSelectField
             value={profileImageUrl}
             onChange={(value) =>
-              setValue('profile_image_url', value, {
+              setValue('profile_image', value, {
                 shouldDirty: true,
                 shouldValidate: true,
               })
