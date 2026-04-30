@@ -1,0 +1,1 @@
+export { MyPageHeatmap } from './MyPageHeatmap'

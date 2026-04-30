@@ -1,8 +1,8 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 import { goalApi } from '@/apis/goal'
-import type { CreateGoalRequest } from '@/features/my-page/components/goal/goal.types'
-import { toApiCreateGoalRequest } from '@/features/my-page/components/goal/mapper'
+import type { CreateGoalRequest } from '@/features/my-page/goal/goal.types'
+import { toApiCreateGoalRequest } from '@/features/my-page/goal/mapper'
 
 type Options = {
   onSuccess?: () => void
@@ -17,6 +17,7 @@ export function useCreateGoalMutation(options: Options = {}) {
       goalApi.createGoal(toApiCreateGoalRequest(data)),
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ['goals'] })
+      await queryClient.invalidateQueries({ queryKey: ['activitySummary'] })
       options.onSuccess?.()
     },
     onError: () => {

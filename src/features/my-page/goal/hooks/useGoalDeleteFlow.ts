@@ -35,10 +35,14 @@ export function useGoalDeleteFlow({
           queryKey: ['goals'],
           refetchType: 'none',
         })
+        await queryClient.invalidateQueries({
+          queryKey: ['activitySummary'],
+        })
         return
       }
 
       await queryClient.invalidateQueries({ queryKey: ['goals'] })
+      await queryClient.invalidateQueries({ queryKey: ['activitySummary'] })
     } catch {
       // 삭제 실패 토스트도 동일한 흐름 안에서 처리해 책임을 분산시키지 않습니다.
       toast.error('목표 삭제에 실패했습니다.')

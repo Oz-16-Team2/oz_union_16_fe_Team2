@@ -1,5 +1,4 @@
 import { apiClient } from '@/apis/apiClient'
-
 import type {
   ApiCheckGoalResponse,
   ApiCreateGoalRequest,
@@ -9,7 +8,8 @@ import type {
   ApiGoalListResponse,
   ApiUpdateGoalRequest,
   ApiUpdateGoalResponse,
-} from '../../features/my-page/components/goal/goal.api.types'
+} from '@/features/my-page/goal/goal.api.types'
+
 import { GOAL_ENDPOINTS } from './endpoint'
 
 export const goalApi = {

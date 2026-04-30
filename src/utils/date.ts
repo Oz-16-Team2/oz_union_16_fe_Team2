@@ -1,5 +1,5 @@
 import type { DateRange } from '@/components/common/ui/calendar/Calendar.type'
-import type { Goal } from '@/features/my-page/components/goal/goal.types'
+import type { Goal } from '@/features/my-page/goal/goal.types'
 
 // 문자열 날짜를 로컬 Date 객체로 변환
 // 'YYYY-MM-DD' 형식일 경우 UTC로 처리되며 하루 밀리는 문제를 방지하기 위해
