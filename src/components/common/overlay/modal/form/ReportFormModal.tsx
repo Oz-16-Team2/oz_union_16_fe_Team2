@@ -8,12 +8,14 @@ import { Modal, type ModalProps } from '../base/Modal'
 type ReportFormModalProps = {
   options: DropdownOption[]
   title: string
+  isSubmitting?: boolean
   onSubmit: (data: { reason: string; content: string }) => void
 } & Omit<ModalProps, 'children'>
 
 export function ReportFormModal({
   options,
   title = '제목',
+  isSubmitting = false,
   className,
   onSubmit,
   onClose,
@@ -85,9 +87,10 @@ export function ReportFormModal({
             variant="primary"
             rounded="lg"
             type="submit"
+            disabled={isSubmitting}
             className="px-5 py-1.5 text-xs font-light"
           >
-            등록
+            {isSubmitting ? '처리중...' : '등록'}
           </Button>
         </Modal.Footer>
       </form>
