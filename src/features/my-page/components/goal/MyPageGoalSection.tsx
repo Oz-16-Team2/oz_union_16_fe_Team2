@@ -11,25 +11,25 @@ import {
   Pagination,
   TabButton,
 } from '@/components/common/ui'
-import type { DateRange } from '@/components/common/ui/calendar/Calendar.type'
-import { useGoalActions } from '@/features/my-page/hook/useGoalActions'
 import {
   GOAL_FILTERS,
+  useGoalActions,
+  useGoalDeleteFlow,
+  useGoalFormHandlers,
   useGoalListView,
-} from '@/features/my-page/hook/useGoalListView'
-import { useGoalsQuery } from '@/query/goal'
-import { toDateRange, toLocalDateString } from '@/utils/date'
+} from '@/features/my-page/components/goal/hooks'
+import { toDateRange } from '@/utils/date'
 
 export function MyPageGoalSection() {
   const [isCreateOpen, setIsCreateOpen] = useState(false)
   const [editingGoalId, setEditingGoalId] = useState<number | null>(null)
 
-  const { data: goals = [] } = useGoalsQuery()
   const {
     activeFilter,
     selectedPeriod,
+    currentPage,
+    goals,
     safePage,
-    pageGoals,
     totalPages,
     isEmpty,
     emptyStateMessage,
@@ -38,8 +38,8 @@ export function MyPageGoalSection() {
     setPeriod,
     resetFilters,
     setCurrentPage,
-  } = useGoalListView(goals)
-  const { createGoal, deleteGoal, checkGoal, updateGoal } = useGoalActions({
+  } = useGoalListView()
+  const { createGoal, checkGoal, updateGoal } = useGoalActions({
     onCreateSuccess: () => {
       setIsCreateOpen(false)
     },
@@ -47,104 +47,82 @@ export function MyPageGoalSection() {
       setEditingGoalId(null)
     },
   })
-
-  const handleEditSubmit = ({
-    goalId,
-    title,
-  }: {
-    goalId: number
-    title: string
-  }) => {
-    const trimmedTitle = title.trim()
-
-    if (!trimmedTitle) {
-      return
-    }
-
-    updateGoal({
-      goalId,
-      data: {
-        title: trimmedTitle,
-      },
-    })
-  }
-
-  const handleCreateSubmit = ({
-    title,
-    dateRange,
-  }: {
-    title: string
-    dateRange: DateRange
-  }) => {
-    const trimmedTitle = title.trim()
-    const startDate = dateRange.start
-      ? toLocalDateString(dateRange.start)
-      : undefined
-    // 하루짜리 목표는 종료일을 따로 고르지 않아도 시작일과 동일하게 처리합니다.
-    const endDate = dateRange.end ? toLocalDateString(dateRange.end) : startDate
-
-    if (!trimmedTitle || !startDate || !endDate) {
-      return
-    }
-
-    createGoal({
-      title: trimmedTitle,
-      startDate,
-      endDate,
-    })
-  }
+  const { handleCreateSubmit, handleEditSubmit } = useGoalFormHandlers({
+    createGoal,
+    updateGoal,
+  })
+  const { handleDeleteGoal } = useGoalDeleteFlow({
+    currentPage,
+    goalCountOnPage: goals.length,
+    setCurrentPage,
+  })
 
   return (
     <section className="flex flex-col gap-8">
-      <div className="flex items-center justify-between">
-        <div className="flex flex-wrap items-center gap-0.5">
-          {GOAL_FILTERS.map((filter) => (
-            <TabButton
-              key={filter}
-              type="button"
-              isActive={activeFilter === filter}
-              onClick={() => setFilter(filter)}
-              className="px-2 py-1"
+      <div className="flex flex-wrap items-start justify-between gap-x-3 gap-y-2">
+        <div className="min-w-0 flex-1">
+          <div className="flex flex-wrap items-center gap-x-1 gap-y-2 sm:gap-0.5">
+            {GOAL_FILTERS.map((filter) => (
+              <TabButton
+                key={filter}
+                type="button"
+                isActive={activeFilter === filter}
+                onClick={() => setFilter(filter)}
+                className="min-w-0 whitespace-nowrap px-2 py-1 text-xs sm:min-w-18 sm:text-sm"
+              >
+                {filter}
+              </TabButton>
+            ))}
+            <span
+              className="mt-1 hidden text-text-muted/35 sm:inline"
+              aria-hidden="true"
             >
-              {filter}
-            </TabButton>
-          ))}
-          <span className="mt-1 text-text-muted/35" aria-hidden="true">
-            |
-          </span>
-          <div className="w-fit">
-            <Calendar
-              className="w-fit"
-              label="기간 설정"
-              value={selectedPeriod}
-              onChange={(value) =>
-                setPeriod(value ?? { start: null, end: null })
-              }
-            />
+              |
+            </span>
+            <div className="w-fit shrink-0">
+              <Calendar
+                className="w-fit"
+                label="기간 설정"
+                ariaLabel="기간 설정"
+                hideLabelOnMobile
+                // 마이페이지 목표 필터는 과거 기간 조회가 가능해야 하므로 제한을 해제합니다.
+                allowPastDates
+                value={selectedPeriod}
+                onChange={(value) =>
+                  setPeriod(value ?? { start: null, end: null })
+                }
+              />
+            </div>
+            <span
+              className="mt-1 hidden text-text-muted/35 sm:inline"
+              aria-hidden="true"
+            >
+              |
+            </span>
+            <Button
+              variant="ghost"
+              rounded="full"
+              aria-label="필터 초기화"
+              leftIcon={<RotateCcw className="size-4" aria-hidden="true" />}
+              onClick={resetFilters}
+              className="h-8 shrink-0 px-2 text-sm text-text-muted hover:bg-transparent hover:text-tab-active-text sm:px-3"
+            >
+              <span className="hidden sm:inline">초기화</span>
+            </Button>
           </div>
-          <span className="mt-1 text-text-muted/35" aria-hidden="true">
-            |
-          </span>
-          <Button
-            variant="ghost"
-            rounded="full"
-            leftIcon={<RotateCcw className="size-4" aria-hidden="true" />}
-            onClick={resetFilters}
-            className="h-8 px-3 text-sm text-text-muted hover:bg-transparent hover:text-tab-active-text"
-          >
-            초기화
-          </Button>
         </div>
 
-        <Button
-          size="md"
-          rounded="full"
-          leftIcon={<Plus className="size-4" aria-hidden="true" />}
-          onClick={() => setIsCreateOpen(true)}
-          className="w-fit"
-        >
-          목표 생성
-        </Button>
+        <div className="flex basis-full justify-end sm:basis-auto">
+          <Button
+            size="md"
+            rounded="full"
+            leftIcon={<Plus className="size-4" aria-hidden="true" />}
+            onClick={() => setIsCreateOpen(true)}
+            className="shrink-0 whitespace-nowrap"
+          >
+            목표 생성
+          </Button>
+        </div>
       </div>
 
       {isEmpty && !isCreateOpen ? (
@@ -166,7 +144,8 @@ export function MyPageGoalSection() {
               onSubmit={handleCreateSubmit}
             />
           )}
-          {pageGoals.map((goal) => {
+          {/* 서버 페이지네이션 결과만 렌더링해서 현재 페이지와 API 응답을 일치시킵니다. */}
+          {goals.map((goal) => {
             const isEditing = editingGoalId === goal.goalId
 
             return isEditing ? (
@@ -193,12 +172,9 @@ export function MyPageGoalSection() {
                 progressRate={goal.progressRate}
                 period={toDateRange(goal)}
                 isCheckedToday={goal.isCheckedToday}
-                onCheck={() => {
-                  if (goal.isCheckedToday) return
-                  checkGoal(goal.goalId)
-                }}
+                onCheck={() => checkGoal(goal.goalId)}
                 onEdit={() => setEditingGoalId(goal.goalId)}
-                onDelete={() => deleteGoal(goal.goalId)}
+                onDelete={() => void handleDeleteGoal(goal.goalId)}
               />
             )
           })}

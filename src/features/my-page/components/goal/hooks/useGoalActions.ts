@@ -2,7 +2,6 @@ import { useToast } from '@/components/common/ui'
 import {
   useCheckGoalMutation,
   useCreateGoalMutation,
-  useDeleteGoalMutation,
   useUpdateGoalMutation,
 } from '@/query/goal'
 
@@ -27,15 +26,6 @@ export function useGoalActions({
     },
   })
 
-  const deleteGoalMutation = useDeleteGoalMutation({
-    onSuccess: () => {
-      toast.success('목표를 삭제했습니다.')
-    },
-    onError: () => {
-      toast.error('목표 삭제에 실패했습니다.')
-    },
-  })
-
   const checkGoalMutation = useCheckGoalMutation({
     onSuccess: () => {
       toast.success('오늘의 목표를 체크했습니다.')
@@ -57,7 +47,6 @@ export function useGoalActions({
 
   return {
     createGoal: createGoalMutation.mutate,
-    deleteGoal: deleteGoalMutation.mutate,
     checkGoal: checkGoalMutation.mutate,
     updateGoal: updateGoalMutation.mutate,
   }

@@ -1,4 +1,4 @@
-import type { GoalStatus } from '@/components/common/ui'
+export type ApiGoalListStatus = 'in_progress' | 'failed' | 'completed'
 
 // GET /api/v1/goals 응답의 개별 목표 타입
 export type ApiGoalResponse = {
@@ -27,9 +27,11 @@ export type ApiGoalListResponse = {
 
 // GET /api/v1/goals 요청 쿼리
 export type ApiGoalListParams = {
-  status?: GoalStatus
+  status?: ApiGoalListStatus
   page?: number
   size?: number
+  start?: string
+  end?: string
 }
 
 // POST /api/v1/goals 요청
