@@ -9,8 +9,12 @@ const YEAR = DAY * 365
  * 서버에서 받은 KST 날짜 문자열을 상대 시간으로 변환합니다.
  * 예: "2026-04-27 14:54:10" → "3분 전"
  */
-export function formatRelativeTime(dateStr: string): string {
-  const past = new Date(dateStr.replace(' ', 'T') + '+09:00')
+export function formatRelativeTime(dateStr?: string): string {
+  if (!dateStr) return '방금 전'
+
+  const past = new Date(dateStr)
+  if (Number.isNaN(past.getTime())) return '방금 전'
+
   const diffSeconds = Math.floor((Date.now() - past.getTime()) / 1000)
 
   if (diffSeconds < MINUTE) return '방금 전'
