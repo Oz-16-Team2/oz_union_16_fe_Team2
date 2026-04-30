@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { Link } from 'react-router'
 
 import { PenLine, Sparkles } from 'lucide-react'
@@ -62,7 +62,7 @@ export function PostListSection() {
 
   const { sort, page } = filters
 
-  const { data, isLoading, isError, error } = usePostListQuery(
+  const { data, isLoading, isFetching, isError, error } = usePostListQuery(
     mode,
     POSTS_PAGE_SIZE
   )
@@ -83,6 +83,12 @@ export function PostListSection() {
       ),
     [data?.total_count, data?.size]
   )
+
+  useEffect(() => {
+    if (!isFetching && data?.posts.length === 0 && page > 1) {
+      handlePageChange(page - 1)
+    }
+  }, [data, isFetching, page, handlePageChange])
 
   const errorMessage = useMemo(() => {
     const detail = error?.response?.data.error_detail
