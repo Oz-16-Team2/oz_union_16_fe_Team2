@@ -9,6 +9,9 @@ type CommentListProps = {
   isLoading?: boolean
   emptyMessage?: string
   onLike?: (id: number) => void
+  onDelete?: (id: number) => void
+  onReport?: (id: number) => void
+  onEdit?: (id: number, content: string) => void
 }
 
 export function CommentList({
@@ -17,6 +20,9 @@ export function CommentList({
   isLoading = false,
   emptyMessage = '아직 댓글이 없어요. 첫 댓글을 남겨보세요.',
   onLike,
+  onDelete,
+  onReport,
+  onEdit,
 }: CommentListProps) {
   const [selectedId, setSelectedId] = useState<number | null>(null)
 
@@ -46,6 +52,9 @@ export function CommentList({
           isSelected={selectedId === comment.id}
           onSelect={() => setSelectedId(comment.id)}
           onLike={onLike}
+          onDelete={onDelete}
+          onReport={onReport}
+          onEdit={onEdit}
         />
       ))}
     </div>

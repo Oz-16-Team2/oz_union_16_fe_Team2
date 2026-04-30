@@ -1,6 +1,8 @@
+import { useState } from 'react'
+
 import { Heart, MoreHorizontal } from 'lucide-react'
 
-import { Button } from '@/components/common/ui/button/Button'
+import { ActionMenu } from '@/components/common/overlay'
 import { cn } from '@/utils/cn'
 import { formatRelativeTime } from '@/utils/formatRelativeTime'
 
@@ -12,6 +14,9 @@ type CommentItemProps = {
   isSelected?: boolean
   onSelect?: () => void
   onLike?: (id: number) => void
+  onEdit?: (id: number, content: string) => void
+  onDelete?: (id: number) => void
+  onReport?: (id: number) => void
 }
 
 export function CommentItem({
@@ -20,6 +25,9 @@ export function CommentItem({
   isSelected = false,
   onSelect,
   onLike,
+  onEdit,
+  onDelete,
+  onReport,
 }: CommentItemProps) {
   const {
     id,
@@ -30,6 +38,22 @@ export function CommentItem({
     isLiked,
     profileImageUrl,
   } = comment
+
+  const [isEditing, setIsEditing] = useState(false)
+  const [editContent, setEditContent] = useState(content)
+
+  const handleSaveEdit = () => {
+    const trimmedContent = editContent.trim()
+    if (!trimmedContent) return
+
+    onEdit?.(id, trimmedContent)
+    setIsEditing(false)
+  }
+
+  const handleCancelEdit = () => {
+    setEditContent(content)
+    setIsEditing(false)
+  }
 
   return (
     <div
@@ -50,9 +74,9 @@ export function CommentItem({
         ) : null}
       </div>
 
-      {/* 내용 */}
+      {/* 댓글 내용 */}
       <div className="flex min-w-0 flex-1 flex-col gap-1">
-        {/* 상단 */}
+        {/* 작성자 / 작성 시간 / 더보기 */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <span className="text-sm font-semibold text-text-primary">
@@ -63,27 +87,71 @@ export function CommentItem({
             </span>
           </div>
 
-          {/* 더보기 */}
-          {isOwner ? (
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={(e) => {
-                e.stopPropagation()
-                console.log('more', id)
-              }}
-            >
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          ) : null}
+          {/* 액션 메뉴: 본인 댓글은 수정/삭제, 타인 댓글은 신고 */}
+          <ActionMenu
+            trigger={<MoreHorizontal className="h-4 w-4" />}
+            items={
+              isOwner
+                ? [
+                    {
+                      label: '수정',
+                      onClick: () => setIsEditing(true),
+                    },
+                    {
+                      label: '삭제',
+                      onClick: () => onDelete?.(id),
+                    },
+                  ]
+                : [
+                    {
+                      label: '신고',
+                      onClick: () => onReport?.(id),
+                    },
+                  ]
+            }
+          />
         </div>
 
-        {/* 본문 */}
-        <p className="max-w-full break-all whitespace-pre-wrap text-sm text-text-primary">
-          {content}
-        </p>
+        {/* 본문 / 수정 모드 */}
+        {isEditing ? (
+          <div className="flex flex-col gap-2">
+            <textarea
+              value={editContent}
+              onChange={(e) => setEditContent(e.target.value)}
+              onClick={(e) => e.stopPropagation()}
+              className="min-h-20 w-full resize-none rounded-md border border-border-subtle bg-white px-3 py-2 text-sm text-text-primary outline-none focus:border-focus-border"
+            />
 
-        {/* 하단 액션 */}
+            <div className="flex justify-end gap-2">
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  handleCancelEdit()
+                }}
+                className="rounded-md px-3 py-1 text-xs text-text-muted hover:bg-gray-100"
+              >
+                취소
+              </button>
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  handleSaveEdit()
+                }}
+                className="rounded-md bg-primary-500 px-3 py-1 text-xs text-white hover:bg-primary-600"
+              >
+                저장
+              </button>
+            </div>
+          </div>
+        ) : (
+          <p className="max-w-full break-all whitespace-pre-wrap text-sm text-text-primary">
+            {content}
+          </p>
+        )}
+
+        {/* 좋아요 */}
         <div className="flex items-center gap-2">
           <button
             type="button"

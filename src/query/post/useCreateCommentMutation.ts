@@ -1,3 +1,5 @@
+// 댓글 작성 API
+
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 import { apiClient } from '@/apis/apiClient'
