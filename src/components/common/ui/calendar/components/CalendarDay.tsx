@@ -8,7 +8,7 @@ import type { DateRange } from '../Calendar.type'
 type CalendarDayProps = {
   day: Date
   holidays: Date[]
-  minDate: Date
+  minDate?: Date
   onSelect: (date: Date) => void
   selectedDate: DateRange
 }
@@ -43,7 +43,7 @@ export function CalendarDay({
   // 시작일과 종료일 사이의 날짜는 연한 배경으로 연결해 range를 보여줌
   const isInRange = start && end ? day > start && day < end : false
   const isCurrent = isToday(day)
-  const isDisabled = startOfDay(day) < minDate
+  const isDisabled = minDate ? startOfDay(day) < minDate : false
   const isSunday = getDay(day) === 0
   const isHoliday = holidays.some((holiday) => isSameDay(day, holiday))
   const isRedDay = isSunday || isHoliday

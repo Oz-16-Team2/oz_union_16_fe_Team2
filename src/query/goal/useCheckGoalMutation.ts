@@ -1,11 +1,41 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import type { AxiosError } from 'axios'
 
+import type { ApiErrorResponse } from '@/apis/api.types'
+import { formatError } from '@/apis/api.utils'
 import { goalApi } from '@/apis/goal'
-import type { ApiGoalResponse } from '@/features/my-page/components/goal/goal.api.types'
+
+type GoalCheckErrorResponse = ApiErrorResponse & {
+  error_detail:
+    | ApiErrorResponse['error_detail']
+    | {
+        detail?: string[]
+      }
+}
 
 type Options = {
   onSuccess?: () => void
-  onError?: () => void
+  onError?: (message: string) => void
+}
+
+const getGoalCheckErrorMessage = (
+  error: AxiosError<GoalCheckErrorResponse>
+) => {
+  const errorDetail = error.response?.data?.error_detail
+
+  if (!errorDetail) {
+    return '오늘 날짜에만 목표를 체크할 수 있습니다.'
+  }
+
+  if (typeof errorDetail === 'string') {
+    return errorDetail
+  }
+
+  if ('detail' in errorDetail && Array.isArray(errorDetail.detail)) {
+    return errorDetail.detail[0] ?? '목표 체크에 실패했습니다.'
+  }
+
+  return formatError(errorDetail)
 }
 
 export function useCheckGoalMutation(options: Options = {}) {
@@ -13,29 +43,13 @@ export function useCheckGoalMutation(options: Options = {}) {
 
   return useMutation({
     mutationFn: (goalId: number) => goalApi.checkGoal(goalId),
-    onSuccess: async (response) => {
-      const checkedGoalId = response.data.goal_id
-      const checkedProgressRate = response.data.progress_rate
-
-      queryClient.setQueryData<ApiGoalResponse[]>(['goals'], (current = []) =>
-        current.map((goal) =>
-          goal.goal_id === checkedGoalId
-            ? {
-                ...goal,
-                progressRate: checkedProgressRate,
-                progress_rate: checkedProgressRate,
-                isCheckedToday: true,
-                is_checked_today: true,
-              }
-            : goal
-        )
-      )
-
-      await queryClient.invalidateQueries({ queryKey: ['goals'] })
+    onSuccess: async () => {
       options.onSuccess?.()
+      // 토스트는 즉시 노출하고, 목록 재조회는 그 다음에 이어서 처리합니다.
+      await queryClient.invalidateQueries({ queryKey: ['goals'] })
     },
-    onError: () => {
-      options.onError?.()
+    onError: (error: AxiosError<GoalCheckErrorResponse>) => {
+      options.onError?.(getGoalCheckErrorMessage(error))
     },
   })
 }

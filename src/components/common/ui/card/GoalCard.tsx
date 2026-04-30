@@ -29,6 +29,8 @@ export function GoalCard({
   onEdit, // 수정 버튼 클릭 이벤트
   onDelete, // 삭제 버튼 클릭 이벤트
 }: GoalCardProps) {
+  const shouldShowCheck =
+    Boolean(onCheck) && (status === 'in_progress' || isCheckedToday)
   const badgeClassName =
     status === 'completed'
       ? 'min-w-0 border border-transparent px-3 py-1 text-xs bg-[#EAFBF3] text-[#75B965] dark:bg-transparent dark:border-emerald-200/50 dark:text-emerald-200'
@@ -41,12 +43,13 @@ export function GoalCard({
       {/* 상단 */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          {status === 'in_progress' && onCheck ? (
+          {shouldShowCheck ? (
             <button
               type="button"
               aria-label="목표 체크"
               aria-pressed={isCheckedToday}
-              onClick={onCheck}
+              onClick={status === 'in_progress' ? onCheck : undefined}
+              disabled={status !== 'in_progress'}
               className={
                 isCheckedToday
                   ? 'flex size-3.5 items-center justify-center rounded-xs bg-emerald-500 text-white transition-colors hover:bg-emerald-600 dark:bg-emerald-400 dark:text-slate-900 dark:hover:bg-emerald-300'
@@ -56,9 +59,7 @@ export function GoalCard({
               <Check className="size-2.5" strokeWidth={4} />
             </button>
           ) : null}
-          {status !== 'in_progress' || !onCheck ? (
-            <div className="size-3.5 rounded-xs" />
-          ) : null}
+          {!shouldShowCheck ? <div className="size-3.5 rounded-xs" /> : null}
           <span className="text-text-primary font-bold text-lg">{label}</span>
         </div>
         <Badge

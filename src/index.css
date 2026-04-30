@@ -566,3 +566,23 @@ input:-webkit-autofill:focus {
   max-width: 100%;
   translate: -50% 0;
 }
+
+@media (max-width: 640px) {
+  [data-sonner-toaster][data-x-position='center'] {
+    left: 50% !important;
+    right: auto !important;
+    width: calc(100vw - 1rem) !important;
+    transform: translateX(-50%) !important;
+  }
+
+  [data-sonner-toaster][data-x-position='center'] [data-sonner-toast] {
+    left: auto !important;
+    right: auto !important;
+    display: flex !important;
+    justify-content: center !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-inline: auto !important;
+    translate: 0 0;
+  }
+}

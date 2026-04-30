@@ -8,7 +8,7 @@ const WEEK_DAYS = ['월', '화', '수', '목', '금', '토', '일']
 type CalendarBodyProps = {
   daysInMonth: Date[]
   holidays: Date[]
-  minDate: Date
+  minDate?: Date
   onSelectDate: (date: Date) => void
   prefixDays: number
   selectedDate: DateRange

@@ -11,7 +11,7 @@ const MONTHS = Array.from({ length: 12 }, (_, index) =>
 
 type CalendarMonthPickerProps = {
   currentDate: Date
-  minDate: Date
+  minDate?: Date
   onSelectMonth: (month: number) => void
 }
 
@@ -41,7 +41,7 @@ export function CalendarMonthPicker({
         )
         const isCurrentMonth = isSameMonth(monthDate, new Date())
         const isSelectedMonth = getMonth(currentDate) === index
-        const isDisabled = monthDate < startOfMonth(minDate)
+        const isDisabled = minDate ? monthDate < startOfMonth(minDate) : false
         // disabled > selected > current > default 순서로 월 버튼 상태를 결정
         const monthState: MonthButtonState = isDisabled
           ? 'disabled'

@@ -14,6 +14,8 @@ import { useCalendar } from './useCalendar'
 export function Calendar({
   className,
   label = '날짜를 선택해주세요',
+  ariaLabel,
+  hideLabelOnMobile = false,
   ...calendarProps
 }: CalendarProps) {
   // state/date/actions로 hook 반환값을 묶어 Calendar JSX에서 역할을 구분
@@ -29,6 +31,7 @@ export function Calendar({
       <div className={cn('flex w-50', className)}>
         <Button
           variant="ghost"
+          aria-label={ariaLabel ?? label}
           aria-expanded={state.isOpen}
           onClick={actions.toggleCalendar}
           className="group inline-flex hover:bg-transparent"
@@ -40,7 +43,13 @@ export function Calendar({
             />
           }
         >
-          <span className={cn('text-xs font-semibold', triggerTextColorClass)}>
+          <span
+            className={cn(
+              'text-xs font-semibold',
+              hideLabelOnMobile && 'hidden sm:inline',
+              triggerTextColorClass
+            )}
+          >
             {formatSelectedDate(state.selectedDate, label)}
           </span>
         </Button>
@@ -48,7 +57,7 @@ export function Calendar({
 
       {/* 패널은 날짜 선택 모드와 월 선택 모드를 전환해서 보여줌 */}
       {state.isOpen && (
-        <div className="absolute left-0 top-full z-10 mt-3 h-fit w-2xs rounded-2xl border border-border-default bg-surface/90 p-4 shadow-card-main backdrop-blur-md">
+        <div className="fixed left-1/2 top-1/2 z-10 h-fit w-[min(18rem,calc(100vw-1rem))] -translate-x-1/2 -translate-y-1/2 rounded-2xl border border-border-default bg-surface/90 p-4 shadow-card-main backdrop-blur-md sm:absolute sm:left-0 sm:right-auto sm:top-full sm:mt-3 sm:w-2xs sm:translate-x-0 sm:translate-y-0">
           <CalendarHeader
             currentDate={state.currentDate}
             onClose={actions.closeCalendar}
