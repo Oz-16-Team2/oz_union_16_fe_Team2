@@ -1,4 +1,7 @@
+import { useNavigate } from 'react-router'
+
 import type { PostDetailData } from '@/features/post/post.types'
+import { useDeletePostMutation } from '@/query/post/useDeletePostMutation'
 
 import { PostDetailActions } from './PostDetailActions'
 import { PostDetailBody } from './PostDetailBody'
@@ -11,6 +14,24 @@ type PostDetailLayoutProps = {
 }
 
 export function PostDetailLayout({ post }: PostDetailLayoutProps) {
+  const navigate = useNavigate()
+  const deleteMutation = useDeletePostMutation()
+
+  const handleDelete = () => {
+    const ok = window.confirm('게시글을 삭제하시겠습니까?')
+    if (!ok) return
+
+    deleteMutation.mutate(post.postId, {
+      onSuccess: () => {
+        navigate('/')
+      },
+    })
+  }
+
+  const handleReport = () => {
+    // 팀원 useReportPostMutation 머지 후 여기 연결
+  }
+
   return (
     <article className="rounded-2xl border border-border-default bg-white px-16 py-6 shadow-card-main">
       <PostDetailHeader
@@ -19,6 +40,9 @@ export function PostDetailLayout({ post }: PostDetailLayoutProps) {
           profileImageUrl: post.profileImageUrl,
         }}
         createdAt={post.createdAt}
+        isOwner={false}
+        onDelete={handleDelete}
+        onReport={handleReport}
       />
 
       <div className="mt-6">
@@ -52,7 +76,6 @@ export function PostDetailLayout({ post }: PostDetailLayoutProps) {
         />
       </div>
 
-      {/* 댓글 버튼 클릭 시 이 영역으로 스크롤 이동 */}
       <div id="post-detail-comment-section">
         <PostDetailCommentSection postId={post.postId} />
       </div>

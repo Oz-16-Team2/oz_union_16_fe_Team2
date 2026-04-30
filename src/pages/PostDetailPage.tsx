@@ -9,10 +9,12 @@ export function PostDetailPage() {
 
   const { data: post, isLoading, error } = usePostDetailQuery(postId)
 
-  if (isNaN(postId)) return <Navigate to="/not-found" replace />
+  if (!Number.isFinite(postId)) return <Navigate to="/not-found" replace />
   if (isLoading) return <div>로딩중</div>
   if (error) return <div>에러</div>
   if (!post) return <div>게시글 없음</div>
+
+  console.log(post)
 
   return (
     <div className="flex min-h-full justify-start">
