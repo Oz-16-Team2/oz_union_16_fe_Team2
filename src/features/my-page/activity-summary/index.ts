@@ -1,0 +1,1 @@
+export { MyPageStatsSummary } from './MyPageStatsSummary'

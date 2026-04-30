@@ -1,8 +1,8 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 import { goalApi } from '@/apis/goal'
-import type { UpdateGoalRequest } from '@/features/my-page/components/goal/goal.types'
-import { toApiUpdateGoalRequest } from '@/features/my-page/components/goal/mapper'
+import type { UpdateGoalRequest } from '@/features/my-page/goal/goal.types'
+import { toApiUpdateGoalRequest } from '@/features/my-page/goal/mapper'
 
 // 외부에서 mutation 성공/실패 시 실행할 콜백 옵션
 type Options = {
@@ -26,6 +26,7 @@ export function useUpdateGoalMutation(options: Options = {}) {
       goalApi.updateGoal(goalId, toApiUpdateGoalRequest(goalId, data)),
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ['goals'] })
+      await queryClient.invalidateQueries({ queryKey: ['activitySummary'] })
       options.onSuccess?.()
     },
     onError: () => {

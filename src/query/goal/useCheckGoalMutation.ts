@@ -47,6 +47,7 @@ export function useCheckGoalMutation(options: Options = {}) {
       options.onSuccess?.()
       // 토스트는 즉시 노출하고, 목록 재조회는 그 다음에 이어서 처리합니다.
       await queryClient.invalidateQueries({ queryKey: ['goals'] })
+      await queryClient.invalidateQueries({ queryKey: ['activitySummary'] })
     },
     onError: (error: AxiosError<GoalCheckErrorResponse>) => {
       options.onError?.(getGoalCheckErrorMessage(error))
