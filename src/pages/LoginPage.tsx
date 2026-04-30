@@ -11,39 +11,21 @@ import {
   AuthFormLayout,
   CharacterDropAnimationFrame,
 } from '@/features/auth'
-import { useAuthEntranceMotion } from '@/features/auth/hooks/useAuthEntranceMotion'
-import { useAuthEyeStatus } from '@/features/auth/hooks/useAuthEyeStatus'
+import { useCharacterEntranceMotion } from '@/features/auth/character/hooks/useCharacterEntranceMotion'
+import { useCharacterEyeStatus } from '@/features/auth/character/hooks/useCharacterEyeStatus'
 import { usePasswordVisibility } from '@/features/auth/hooks/usePasswordVisibility'
-import { mockSocialLoginPayload } from '@/mocks/data/auth'
-import { useLoginMutation, useSocialLoginMutation } from '@/query/auth'
+import {
+  buildSocialLoginUrl,
+  socialLoginButtons,
+  type SocialLoginProvider,
+} from '@/features/auth/socialLogin'
+import { useLoginMutation } from '@/query/auth'
 import {
   type LoginFormSchema,
   loginFormSchema,
 } from '@/schemas/auth/authForm.schema'
 import { cn } from '@/utils/cn'
 
-const socialLoginButtons = [
-  {
-    provider: 'kakao',
-    label: '카카오 로그인',
-    iconLabel: 'K',
-    className: 'bg-[#FEE500] text-[#191919] hover:bg-[#F6D900]',
-  },
-  {
-    provider: 'naver',
-    label: '네이버 로그인',
-    iconLabel: 'N',
-    className: 'bg-[#03C75A] text-white hover:bg-[#02B350]',
-  },
-  {
-    provider: 'google',
-    label: '구글 로그인',
-    iconLabel: 'G',
-    className: 'bg-white text-[#4285F4]',
-  },
-] as const
-
-type SocialLoginProvider = (typeof socialLoginButtons)[number]['provider']
 type LoginFocusedField = 'email' | 'password' | null
 
 export function LoginPage() {
@@ -53,7 +35,7 @@ export function LoginPage() {
     isCompactMotion,
     isEntranceEyeActive,
     prefersReducedMotion,
-  } = useAuthEntranceMotion()
+  } = useCharacterEntranceMotion()
   const [focusedField, setFocusedField] = useState<LoginFocusedField>(null)
   const [lastFocusedField, setLastFocusedField] =
     useState<LoginFocusedField>(null)
@@ -86,8 +68,7 @@ export function LoginPage() {
       }, 620)
     },
   })
-  const socialLoginMutation = useSocialLoginMutation()
-  const isSocialLoginPending = socialLoginMutation.isPending
+  const isSocialLoginPending = pendingSocialProvider !== null
   const hasLoginError =
     Boolean(errors.email) || Boolean(errors.password) || loginMutation.isError
   const errorTargetField: LoginFocusedField = errors.email
@@ -96,7 +77,7 @@ export function LoginPage() {
       ? 'password'
       : null
 
-  const eyeStatus = useAuthEyeStatus<LoginFocusedField>({
+  const eyeStatus = useCharacterEyeStatus<LoginFocusedField>({
     emailFields: ['email'],
     errorTargetField,
     focusedField,
@@ -112,45 +93,10 @@ export function LoginPage() {
   }
 
   const handleSocialLogin = (provider: SocialLoginProvider) => {
+    // redirect 직전 버튼 재클릭을 막기 위해 선택된 provider를 로컬 상태로 유지합니다.
     setPendingSocialProvider(provider)
-
-    const mutationOptions = {
-      onSettled: () => {
-        // 소셜 버튼별 loading 표시를 끝내기 위한 로컬 상태입니다.
-        // 실제 OAuth redirect 방식으로 바뀌면 이 상태는 삭제될 수 있습니다.
-        setPendingSocialProvider(null)
-      },
-    }
-
-    if (provider === 'kakao') {
-      socialLoginMutation.mutate(
-        {
-          provider,
-          payload: mockSocialLoginPayload.kakao,
-        },
-        mutationOptions
-      )
-      return
-    }
-
-    if (provider === 'naver') {
-      socialLoginMutation.mutate(
-        {
-          provider,
-          payload: mockSocialLoginPayload.naver,
-        },
-        mutationOptions
-      )
-      return
-    }
-
-    socialLoginMutation.mutate(
-      {
-        provider,
-        payload: mockSocialLoginPayload.google,
-      },
-      mutationOptions
-    )
+    // 소셜 로그인 시작은 프론트 mutation이 아니라 백엔드 OAuth 시작 URL로 직접 이동합니다.
+    window.location.assign(buildSocialLoginUrl(provider))
   }
 
   return (
@@ -228,30 +174,30 @@ export function LoginPage() {
             <span className="h-px flex-1 bg-border-default" />
           </div>
 
-          <div className="flex items-center justify-center gap-12">
-            {socialLoginButtons.map(
-              ({ provider, label, iconLabel, className }) => (
-                <Button
-                  key={provider}
-                  aria-label={label}
-                  rounded={'full'}
-                  className={cn(
-                    'flex size-14 items-center justify-center text-xl font-bold transition-colors',
-                    className
-                  )}
-                  disabled={isSocialLoginPending}
-                  onClick={() => handleSocialLogin(provider)}
-                >
-                  {pendingSocialProvider === provider ? (
-                    <LoaderCircle size={18} className="animate-spin" />
-                  ) : (
-                    <span aria-hidden="true">{iconLabel}</span>
-                  )}
-                </Button>
-              )
-            )}
+          <div className="flex items-center justify-center gap-10">
+            {socialLoginButtons.map(({ provider, label, className, Logo }) => (
+              <Button
+                key={provider}
+                aria-label={label}
+                rounded={'full'}
+                className={cn(
+                  'flex size-14 items-center justify-center border shadow-[0_8px_20px_rgba(15,23,42,0.08)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_12px_24px_rgba(15,23,42,0.12)] focus-visible:outline-none focus-visible:ring-4 active:translate-y-0 disabled:translate-y-0 disabled:opacity-70 sm:size-14',
+                  className
+                )}
+                disabled={isSocialLoginPending}
+                onClick={() => handleSocialLogin(provider)}
+              >
+                {pendingSocialProvider === provider ? (
+                  <LoaderCircle size={18} className="animate-spin" />
+                ) : (
+                  <span className="flex items-center justify-center">
+                    <Logo />
+                  </span>
+                )}
+              </Button>
+            ))}
           </div>
-          <p className="mt-4 flex items-center justify-center gap-3 text-sm text-text-muted">
+          <p className="mt-6 flex items-center justify-center gap-3 text-sm text-text-muted">
             계정이 없으신가요?
             <Link to="/signup" className="font-medium text-primary-600">
               회원가입

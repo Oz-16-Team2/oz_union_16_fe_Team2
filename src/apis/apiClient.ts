@@ -7,6 +7,24 @@ import { useAuthStore } from '@/store/authStore'
 
 import { API_BASE_URL, MSW_BASE_URL } from './apiPath'
 
+const redirectToLoginIfNeeded = () => {
+  if (window.location.pathname !== '/login') {
+    window.location.href = '/login'
+  }
+}
+
+const isAuthRecoveryBypassRequest = (url?: string) => {
+  if (!url) {
+    return false
+  }
+
+  return (
+    url.includes(AUTH_ENDPOINTS.login) ||
+    url.includes(AUTH_ENDPOINTS.refreshToken) ||
+    url.includes(AUTH_ENDPOINTS.logout)
+  )
+}
+
 // 공통 API 클라이언트 생성
 // - baseURL: 실제 서버 또는 MSW
 // - withCredentials: refresh token 쿠키 전송을 위해 필요
@@ -51,13 +69,17 @@ apiClient.interceptors.response.use(
       _retry?: boolean
     }
 
+    if (isAuthRecoveryBypassRequest(originalRequest?.url)) {
+      return Promise.reject(error)
+    }
+
     // 401 처리
     if (status === 401) {
       // 이미 한 번 재시도한 요청이면 무한루프 방지
       if (originalRequest?._retry) {
         const { clearSession } = useAuthStore.getState()
         clearSession()
-        window.location.href = '/login'
+        redirectToLoginIfNeeded()
         return Promise.reject(error)
       }
 
@@ -69,7 +91,7 @@ apiClient.interceptors.response.use(
         // (axios 기본 인스턴스를 사용하여 interceptor 영향 받지 않도록 함)
         const refreshResponse = await axios.post<RefreshTokenResponse>(
           (API_BASE_URL || MSW_BASE_URL) + AUTH_ENDPOINTS.refreshToken,
-          {},
+          undefined,
           { withCredentials: true }
         )
 
@@ -92,7 +114,7 @@ apiClient.interceptors.response.use(
         // 세션 초기화 (로그아웃 처리)
         clearSession()
         // 로그인 페이지로 이동
-        window.location.href = '/login'
+        redirectToLoginIfNeeded()
         return Promise.reject(refreshError)
       }
     }

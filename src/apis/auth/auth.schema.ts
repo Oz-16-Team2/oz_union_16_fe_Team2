@@ -5,7 +5,6 @@ const state = z.string()
 const email = z.email()
 const password = z.string()
 const nickname = z.string()
-const refreshToken = z.string()
 const profileImageUrl = z.string().optional()
 const emailToken = z.string()
 const detail = z.string()
@@ -97,9 +96,8 @@ export const logoutResponseSchema = z.object({
 
 // REQ-AUTH-009: JWT 토큰 재발급
 // POST /api/v1/accounts/token/refresh
-export const refreshTokenRequestSchema = z.object({
-  refresh_token: refreshToken,
-})
+// refresh_token은 HttpOnly 쿠키로만 전달되므로 요청 body는 비어 있습니다.
+export const refreshTokenRequestSchema = z.object({})
 
 export const refreshTokenResponseSchema = z.object({
   access_token: accessToken,
@@ -166,7 +164,6 @@ export type LoginUnauthorizedResponse = z.infer<
   typeof loginUnauthorizedResponseSchema
 >
 export type LogoutResponse = z.infer<typeof logoutResponseSchema>
-export type RefreshTokenRequest = z.infer<typeof refreshTokenRequestSchema>
 export type RefreshTokenResponse = z.infer<typeof refreshTokenResponseSchema>
 export type SessionExpiredResponse = z.infer<
   typeof sessionExpiredResponseSchema

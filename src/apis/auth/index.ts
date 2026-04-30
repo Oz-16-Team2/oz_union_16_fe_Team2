@@ -10,7 +10,6 @@ export type {
   LoginUnauthorizedResponse,
   LogoutResponse,
   NaverLoginCallbackRequest,
-  RefreshTokenRequest,
   RefreshTokenResponse,
   SendEmailVerificationRequest,
   SendEmailVerificationResponse,

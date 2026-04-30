@@ -6,4 +6,3 @@ export {
 export { useLoginMutation } from './useLoginMutation'
 export { useLogoutMutation } from './useLogoutMutation'
 export { useSignupMutation } from './useSignupMutation'
-export { useSocialLoginMutation } from './useSocialLoginMutation'
