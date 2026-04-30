@@ -59,8 +59,10 @@ export const postApi = {
     apiClient.delete<void>(POST_ENDPOINTS.postScraps(postId)),
 
   // 게시글 신고
-  reportPost: (postId: number) =>
-    apiClient.post<void>(POST_ENDPOINTS.postReports(postId)),
+  reportPost: (
+    postId: number,
+    body: { reason_type: string; reason_detail: string }
+  ) => apiClient.post<void>(POST_ENDPOINTS.postReports(postId), body),
 
   // 게시글 삭제
   deletePost: (postId: number) =>

@@ -21,14 +21,7 @@ import { Button } from '../button/Button'
 import { Card } from './Card'
 import type { PostCardProps } from './PostCard.types'
 import { usePostCardActions } from './usePostCardActions'
-
-const REPORT_REASONS = [
-  { label: '스팸/광고', value: 'spam' },
-  { label: '욕설/비방', value: 'abuse' },
-  { label: '음란/성인', value: 'adult' },
-  { label: '개인정보 노출', value: 'privacy' },
-  { label: '기타', value: 'etc' },
-]
+import { usePostCardReport } from './usePostCardReport'
 
 export function PostCard({
   postId,
@@ -50,7 +43,6 @@ export function PostCard({
   const toast = useToast()
 
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
-  const [showReportForm, setShowReportForm] = useState(false)
 
   const {
     liked,
@@ -60,6 +52,15 @@ export function PostCard({
     toggleScrap,
     handleShare,
   } = usePostCardActions({ postId, likeCount, isLiked, isScrapped, onShare })
+
+  const {
+    showReportForm,
+    isPending,
+    openReportForm,
+    closeReportForm,
+    handleReportSubmit,
+    reportReasons,
+  } = usePostCardReport(postId)
 
   const { mutate: deletePost } = useDeletePostMutation()
 
@@ -83,12 +84,9 @@ export function PostCard({
       onClick: () => setShowDeleteConfirm(true),
       variant: 'danger' as const,
     },
-    { label: '신고', onClick: () => setShowReportForm(true) },
   ]
 
-  const guestMenuItems = [
-    { label: '신고', onClick: () => setShowReportForm(true) },
-  ]
+  const guestMenuItems = [{ label: '신고', onClick: openReportForm }]
 
   const actionMenu = (
     <div onClick={(e) => e.stopPropagation()}>
@@ -156,12 +154,10 @@ export function PostCard({
       {showReportForm && (
         <ReportFormModal
           title="게시글 신고"
-          options={REPORT_REASONS}
-          onSubmit={() => {
-            toast.success('신고가 접수되었습니다.')
-            setShowReportForm(false)
-          }}
-          onClose={() => setShowReportForm(false)}
+          options={reportReasons}
+          isSubmitting={isPending}
+          onSubmit={handleReportSubmit}
+          onClose={closeReportForm}
         />
       )}
     </>

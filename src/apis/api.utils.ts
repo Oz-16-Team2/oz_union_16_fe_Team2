@@ -6,7 +6,5 @@ export function formatError(
   if (typeof errorDetail === 'string') {
     return errorDetail
   }
-  return Object.entries(errorDetail)
-    .map(([field, messages]) => `${field}: ${messages.join(', ')}`)
-    .join('\n')
+  return Object.values(errorDetail).flat().join('\n')
 }
