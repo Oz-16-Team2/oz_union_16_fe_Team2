@@ -34,8 +34,9 @@ export function usePostCardReport(postId: number) {
           toast.success('신고가 접수되었습니다.')
           setShowReportForm(false)
         },
-        onError: (error: AxiosError<ApiErrorResponse>) => {
-          const detail = error.response?.data.error_detail
+        onError: (error) => {
+          const axiosError = error as AxiosError<ApiErrorResponse>
+          const detail = axiosError.response?.data.error_detail
           toast.error(
             detail ? formatError(detail) : '신고 접수에 실패했습니다.'
           )
