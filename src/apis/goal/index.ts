@@ -1,3 +1,5 @@
+export { GOAL_ENDPOINTS } from './endpoint'
+export { goalApi } from './goal.api'
 export type {
   ApiCheckGoalResponse,
   ApiCreateGoalRequest,
@@ -8,6 +10,4 @@ export type {
   ApiGoalResponse,
   ApiUpdateGoalRequest,
   ApiUpdateGoalResponse,
-} from '../../features/my-page/components/goal/goal.api.types'
-export { GOAL_ENDPOINTS } from './endpoint'
-export { goalApi } from './goal.api'
+} from '@/features/my-page/goal/goal.api.types'

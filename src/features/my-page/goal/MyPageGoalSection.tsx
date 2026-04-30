@@ -12,14 +12,15 @@ import {
   Pagination,
   TabButton,
 } from '@/components/common/ui'
+import { toDateRange } from '@/utils/date'
+
 import {
   GOAL_FILTERS,
   useGoalActions,
   useGoalDeleteFlow,
   useGoalFormHandlers,
   useGoalListView,
-} from '@/features/my-page/components/goal/hooks'
-import { toDateRange } from '@/utils/date'
+} from './hooks'
 
 export function MyPageGoalSection() {
   const [isCreateOpen, setIsCreateOpen] = useState(false)

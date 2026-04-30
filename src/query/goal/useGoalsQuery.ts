@@ -1,9 +1,9 @@
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
 
 import { goalApi } from '@/apis/goal'
-import type { ApiGoalListParams } from '@/features/my-page/components/goal/goal.api.types'
-import type { Goal } from '@/features/my-page/components/goal/goal.types'
-import { mapGoal } from '@/features/my-page/components/goal/mapper'
+import type { ApiGoalListParams } from '@/features/my-page/goal/goal.api.types'
+import type { Goal } from '@/features/my-page/goal/goal.types'
+import { mapGoal } from '@/features/my-page/goal/mapper'
 
 export const GOALS_PAGE_SIZE = 8
 

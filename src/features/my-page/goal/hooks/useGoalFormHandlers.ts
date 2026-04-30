@@ -2,7 +2,7 @@ import type { DateRange } from '@/components/common/ui/calendar/Calendar.type'
 import type {
   CreateGoalRequest,
   UpdateGoalRequest,
-} from '@/features/my-page/components/goal/goal.types'
+} from '@/features/my-page/goal/goal.types'
 import { toLocalDateString } from '@/utils/date'
 
 type UseGoalFormHandlersParams = {
