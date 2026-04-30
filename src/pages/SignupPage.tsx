@@ -13,8 +13,8 @@ import {
   ProfileImageSelectField,
   SignupDropAnimationFrame,
 } from '@/features/auth'
-import { useAuthEntranceMotion } from '@/features/auth/hooks/useAuthEntranceMotion'
-import { useAuthEyeStatus } from '@/features/auth/hooks/useAuthEyeStatus'
+import { useCharacterEntranceMotion } from '@/features/auth/character/hooks/useCharacterEntranceMotion'
+import { useCharacterEyeStatus } from '@/features/auth/character/hooks/useCharacterEyeStatus'
 import { usePasswordVisibility } from '@/features/auth/hooks/usePasswordVisibility'
 import { useEmailVerification } from '@/features/auth/signup/hook/useEmailVerification'
 import { useNicknameCheck } from '@/features/auth/signup/hook/useNicknameCheck'
@@ -40,7 +40,7 @@ export function SignupPage() {
     isCompactMotion,
     isEntranceEyeActive,
     prefersReducedMotion,
-  } = useAuthEntranceMotion()
+  } = useCharacterEntranceMotion()
   const [focusedField, setFocusedField] = useState<SignupFocusedField>(null)
   const [lastFocusedField, setLastFocusedField] =
     useState<SignupFocusedField>(null)
@@ -101,7 +101,7 @@ export function SignupPage() {
         ? 'email'
         : null
 
-  const eyeStatus = useAuthEyeStatus<SignupFocusedField>({
+  const eyeStatus = useCharacterEyeStatus<SignupFocusedField>({
     emailFields: ['email', 'code', 'nickname'],
     errorTargetField,
     focusedField,
