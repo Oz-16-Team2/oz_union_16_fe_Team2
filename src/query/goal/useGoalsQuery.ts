@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query'
+import { keepPreviousData, useQuery } from '@tanstack/react-query'
 
 import { goalApi } from '@/apis/goal'
 import type { ApiGoalListParams } from '@/features/my-page/components/goal/goal.api.types'
@@ -42,5 +42,6 @@ export function useGoalsQuery(params: ApiGoalListParams) {
       params.end,
     ],
     queryFn: () => fetchGoals(params),
+    placeholderData: keepPreviousData,
   })
 }

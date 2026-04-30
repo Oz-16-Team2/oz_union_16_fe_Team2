@@ -8,6 +8,7 @@ import {
   EmptyState,
   GoalCard,
   GoalCardEdit,
+  GoalCardSkeleton,
   Pagination,
   TabButton,
 } from '@/components/common/ui'
@@ -32,6 +33,7 @@ export function MyPageGoalSection() {
     safePage,
     totalPages,
     isEmpty,
+    isLoading,
     emptyStateMessage,
     shouldShowPagination,
     setFilter,
@@ -56,6 +58,7 @@ export function MyPageGoalSection() {
     goalCountOnPage: goals.length,
     setCurrentPage,
   })
+  const skeletonCount = isCreateOpen ? 7 : 8
 
   return (
     <section className="flex flex-col gap-8">
@@ -125,7 +128,25 @@ export function MyPageGoalSection() {
         </div>
       </div>
 
-      {isEmpty && !isCreateOpen ? (
+      {isLoading ? (
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+          {isCreateOpen ? (
+            <GoalCardEdit
+              key="create-goal"
+              mode="create"
+              initialTitle=""
+              initialDateRange={{ start: null, end: null }}
+              initialProgressRate={0}
+              initialStatus="in_progress"
+              onClose={() => setIsCreateOpen(false)}
+              onSubmit={handleCreateSubmit}
+            />
+          ) : null}
+          {Array.from({ length: skeletonCount }).map((_, index) => (
+            <GoalCardSkeleton key={`goal-skeleton-${index}`} />
+          ))}
+        </div>
+      ) : isEmpty && !isCreateOpen ? (
         <EmptyState
           title={emptyStateMessage.title}
           description={emptyStateMessage.description}

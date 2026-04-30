@@ -12,6 +12,7 @@ export {
   Card,
   GoalCard,
   GoalCardEdit,
+  GoalCardSkeleton,
   PostCard,
   PostCardSkeleton,
 } from './card'
