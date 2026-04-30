@@ -15,6 +15,7 @@ type PostListMode =
 export function usePostListQuery(mode: PostListMode, size = POSTS_PAGE_SIZE) {
   return useQuery<ApiPostListResponse, AxiosError<ApiErrorResponse>>({
     queryKey: ['posts', mode],
+    retry: false,
     queryFn: async () => {
       if (mode.type === 'search') {
         const res = await postApi.searchPosts({

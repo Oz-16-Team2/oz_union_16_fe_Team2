@@ -11,8 +11,7 @@ type RankingItemProps = {
 }
 
 export function RankingItem({ user }: RankingItemProps) {
-  // profile_img_url 추후에 사용
-  const { rank, nickname, cert_count } = user
+  const { rank, nickname, cert_count, profile_img_url } = user
 
   const isTop3 = rank <= 3
   const {
@@ -41,7 +40,6 @@ export function RankingItem({ user }: RankingItemProps) {
         {isTop3 ? <Medal size={22} className="shrink-0" /> : `${rank}위`}
       </span>
 
-      {/* 프로필 이미지 TODO: 나중에 profile_img_url 사용 */}
       <div className="relative shrink-0">
         {rank === 1 && (
           <Crown
@@ -55,7 +53,7 @@ export function RankingItem({ user }: RankingItemProps) {
           className={cn('size-8 rounded-full border-2 overflow-hidden', border)}
         >
           <img
-            src={pinkCharacterImage}
+            src={profile_img_url || pinkCharacterImage}
             alt="기본 프로필"
             className="size-full object-cover"
           />
