@@ -4,6 +4,8 @@ import type {
   ApiCreateGoalRequest,
   ApiCreateGoalResponse,
   ApiDeleteGoalResponse,
+  ApiGoalHistoryParams,
+  ApiGoalHistoryResponse,
   ApiGoalListParams,
   ApiGoalListResponse,
   ApiUpdateGoalRequest,
@@ -16,6 +18,11 @@ export const goalApi = {
   // 목표 목록 조회 (query params: status, page, size 등)
   getGoals: (params?: ApiGoalListParams) =>
     apiClient.get<ApiGoalListResponse>(GOAL_ENDPOINTS.goals, { params }),
+
+  getGoalHistory: (params: ApiGoalHistoryParams) =>
+    apiClient.get<ApiGoalHistoryResponse>(GOAL_ENDPOINTS.goalsHistory, {
+      params,
+    }),
 
   // 목표 생성 (body: snake_case 기준으로 서버에 전달)
   createGoal: (body: ApiCreateGoalRequest) =>

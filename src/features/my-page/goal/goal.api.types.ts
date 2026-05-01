@@ -34,6 +34,30 @@ export type ApiGoalListParams = {
   end?: string
 }
 
+export type ApiGoalHistoryItem = {
+  goal_id: number
+  title: string
+  start_date: string
+  end_date: string
+  status: string
+  created_at: string
+  progress_rate: number
+  is_checked_today: boolean
+}
+
+export type ApiGoalHistoryResponse = {
+  count: number
+  next: string | null
+  previous: string | null
+  results: ApiGoalHistoryItem[]
+}
+
+export type ApiGoalHistoryParams = {
+  date: string
+  page?: number
+  size?: number
+}
+
 // POST /api/v1/goals 요청
 export type ApiCreateGoalRequest = {
   title: string

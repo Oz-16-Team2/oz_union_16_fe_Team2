@@ -1,0 +1,1 @@
+export { useHeatmapQuery } from './useHeatmapQuery'
