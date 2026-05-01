@@ -26,7 +26,7 @@ export type GoalCardProps = {
   isCheckedToday?: boolean
   onCheck?: () => void
   onEdit?: () => void
-  onDelete: () => void
+  onDelete?: () => void
 }
 
 export type GoalCardEditProps = {

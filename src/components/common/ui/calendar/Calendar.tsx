@@ -13,6 +13,7 @@ import { useCalendar } from './useCalendar'
 // 캘린더 컨테이너는 상태 hook과 하위 UI 컴포넌트를 연결한다.
 export function Calendar({
   className,
+  panelClassName,
   label = '날짜를 선택해주세요',
   ariaLabel,
   hideLabelOnMobile = false,
@@ -57,7 +58,12 @@ export function Calendar({
 
       {/* 패널은 날짜 선택 모드와 월 선택 모드를 전환해서 보여줌 */}
       {state.isOpen && (
-        <div className="fixed left-1/2 top-1/2 z-10 h-fit w-[min(18rem,calc(100vw-1rem))] -translate-x-1/2 -translate-y-1/2 rounded-2xl border border-border-default bg-surface/90 p-4 shadow-card-main backdrop-blur-md sm:absolute sm:left-0 sm:right-auto sm:top-full sm:mt-3 sm:w-2xs sm:translate-x-0 sm:translate-y-0">
+        <div
+          className={cn(
+            'absolute left-1/2 top-full z-10 mt-3 h-fit w-[min(18rem,calc(100vw-1rem))] -translate-x-1/2 rounded-2xl border border-border-default bg-surface/90 p-4 shadow-card-main backdrop-blur-md sm:left-0 sm:w-2xs sm:translate-x-0',
+            panelClassName
+          )}
+        >
           <CalendarHeader
             currentDate={state.currentDate}
             onClose={actions.closeCalendar}

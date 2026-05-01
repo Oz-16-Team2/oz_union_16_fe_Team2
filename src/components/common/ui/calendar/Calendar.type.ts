@@ -18,4 +18,5 @@ export type CalendarProps = {
   onChange?: (date: DateRange | null) => void
   value?: DateRange
   className?: string
+  panelClassName?: string
 }
