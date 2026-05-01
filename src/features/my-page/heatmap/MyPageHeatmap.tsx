@@ -1,35 +1,35 @@
-type HeatmapCount = 0 | 1 | 2 | 3
+import {
+  addMonths,
+  addWeeks,
+  differenceInCalendarWeeks,
+  eachDayOfInterval,
+  endOfYear,
+  format,
+  isBefore,
+  startOfMonth,
+  startOfWeek,
+  startOfYear,
+} from 'date-fns'
 
-const MONTH_LABELS = Array.from({ length: 12 }, (_, index) => `${index + 1}월`)
+import { useHeatmapQuery } from '@/query/heatmap'
+import { toLocalDateString } from '@/utils/date'
+
+import type { HeatmapDay } from './heatmap.api.types'
+import type {
+  HeatmapCell,
+  HeatmapCount,
+  HeatmapMonthLabel,
+} from './heatmap.types'
+
+type MyPageHeatmapProps = {
+  selectedDate?: string | null
+  onSelectDate?: (date: string, checkCount: number) => void
+}
 const WEEKDAY_LABELS = [
   { label: '월', row: 0 },
   { label: '수', row: 2 },
   { label: '금', row: 4 },
 ] as const
-
-const DAYS_IN_MONTH = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
-const TOTAL_DAYS = DAYS_IN_MONTH.reduce((sum, days) => sum + days, 0)
-const HEATMAP_DAYS = Array.from({ length: TOTAL_DAYS }, (_, index) => ({
-  id: index,
-  count: (index % 4) as HeatmapCount,
-}))
-
-const monthStartColumns = DAYS_IN_MONTH.reduce<number[]>(
-  (columns, _days, index) => {
-    if (index === 0) {
-      columns.push(0)
-      return columns
-    }
-
-    const accumulatedDays = DAYS_IN_MONTH.slice(0, index).reduce(
-      (sum, value) => sum + value,
-      0
-    )
-    columns.push(Math.floor(accumulatedDays / 7))
-    return columns
-  },
-  []
-)
 
 const HEATMAP_TONE_CLASS_NAME: Record<HeatmapCount, string> = {
   0: 'border-slate-200 bg-slate-200 dark:border-[#3a4148] dark:bg-[#31363b]',
@@ -39,31 +39,123 @@ const HEATMAP_TONE_CLASS_NAME: Record<HeatmapCount, string> = {
 }
 
 const HEATMAP_LEGEND_LEVELS: HeatmapCount[] = [0, 1, 2, 3]
+const WEEK_STARTS_ON = 1
 
-export function MyPageHeatmap() {
+function getCurrentYearRange(today = new Date()) {
+  return {
+    start: startOfYear(today),
+    end: endOfYear(today),
+  }
+}
+
+function toHeatmapCount(checkCount: number): HeatmapCount {
+  if (checkCount <= 0) return 0
+  if (checkCount === 1) return 1
+  if (checkCount === 2) return 2
+  return 3
+}
+
+function toHeatmapRow(date: Date) {
+  return ((date.getDay() + 6) % 7) + 1
+}
+
+// buildMonthLabels
+// - 월 라벨을 주 단위 grid 기준으로 계산
+// - 월 시작 위치를 주 기준 column으로 변환해서 상단에 표시
+function buildMonthLabels(start: Date, end: Date): HeatmapMonthLabel[] {
+  const firstWeekStart = startOfWeek(start, { weekStartsOn: WEEK_STARTS_ON })
+  const labels: HeatmapMonthLabel[] = []
+  let cursor = startOfMonth(start)
+
+  while (cursor <= end) {
+    let labelAnchor = startOfWeek(cursor, { weekStartsOn: WEEK_STARTS_ON })
+
+    // 월 초가 이전 달과 같은 주에 걸치면 라벨을 다음 주로 미뤄
+    // 이전 달 마지막 며칠이 다음 달 라벨 아래로 보이는 혼동을 줄입니다.
+    if (isBefore(labelAnchor, cursor)) {
+      labelAnchor = addWeeks(labelAnchor, 1)
+    }
+
+    labels.push({
+      label: format(cursor, 'M월'),
+      column:
+        differenceInCalendarWeeks(labelAnchor, firstWeekStart, {
+          weekStartsOn: WEEK_STARTS_ON,
+        }) + 2,
+    })
+    cursor = addMonths(cursor, 1)
+  }
+
+  return labels
+}
+
+// buildHeatmapCells
+// - API로 받은 날짜별 데이터를 실제 grid 위치(row, column)로 변환
+// - 날짜 → (주 index, 요일 index) 계산해서 히트맵에 배치
+function buildHeatmapCells(
+  days: HeatmapDay[],
+  start: Date,
+  end: Date
+): HeatmapCell[] {
+  const firstWeekStart = startOfWeek(start, { weekStartsOn: WEEK_STARTS_ON })
+  const dayCountMap = new Map(days.map((day) => [day.date, day.check_count]))
+
+  return eachDayOfInterval({ start, end }).map((date) => {
+    const dateKey = toLocalDateString(date)
+    const checkCount = dayCountMap.get(dateKey) ?? 0
+
+    return {
+      date: dateKey,
+      checkCount,
+      count: toHeatmapCount(checkCount),
+      column:
+        differenceInCalendarWeeks(date, firstWeekStart, {
+          weekStartsOn: WEEK_STARTS_ON,
+        }) + 2,
+      row: toHeatmapRow(date),
+    }
+  })
+}
+
+// MyPageHeatmap (잔디 컴포넌트)
+// - 1년 데이터를 주(week) 단위 grid로 렌더링
+// - 각 날짜를 셀로 변환해서 색상(활동량)에 따라 표시
+export function MyPageHeatmap({
+  selectedDate,
+  onSelectDate,
+}: MyPageHeatmapProps) {
+  const { start, end } = getCurrentYearRange()
+  const params = {
+    start: toLocalDateString(start),
+    end: toLocalDateString(end),
+  }
+  const { data } = useHeatmapQuery(params)
+  // 월 라벨 계산 (grid column 기준)
+  const monthLabels = buildMonthLabels(start, end)
+  // 날짜 데이터를 grid 셀로 변환 (핵심 로직)
+  const cells = buildHeatmapCells(data?.days ?? [], start, end)
+
   return (
-    <div className="mt-4 rounded-3xl bg-surface/5 px-5 py-4 backdrop-blur-sm border border-border-default">
+    <div className="mt-4 rounded-3xl border border-border-default bg-surface/5 px-5 py-4 backdrop-blur-sm">
       <div className="mb-6 flex items-center justify-between gap-3">
-        <p className="text-xs font-medium text-text-muted">
-          최근 1년 활동 기록
-        </p>
+        <p className="text-xs font-medium text-text-muted">올해 활동 기록</p>
       </div>
 
-      <div className="w-full overflow-x-auto">
-        <div className="mb-2.5 grid grid-cols-[28px_repeat(53,minmax(0,1fr))] gap-x-1 lg:min-w-0">
+      <div className="w-full overflow-x-auto pb-1">
+        <div className="mb-2.5 grid w-full min-w-max grid-cols-[28px_repeat(53,minmax(14px,1fr))] gap-x-1">
           <div />
-          {MONTH_LABELS.map((label, index) => (
+          {monthLabels.map(({ label, column }) => (
             <div
-              key={label}
+              key={`${label}-${column}`}
               className="text-xs font-medium leading-none text-text-muted/85"
-              style={{ gridColumn: `${monthStartColumns[index] + 2} / span 4` }}
+              style={{ gridColumn: `${column} / span 4` }}
             >
               {label}
             </div>
           ))}
         </div>
 
-        <div className="grid grid-cols-[28px_repeat(53,minmax(0,1fr))] grid-rows-7 gap-1 lg:min-w-0">
+        <div className="grid w-full min-w-max grid-cols-[28px_repeat(53,minmax(14px,1fr))] grid-rows-7 gap-1">
           {WEEKDAY_LABELS.map(({ label, row }) => (
             <div
               key={label}
@@ -74,16 +166,35 @@ export function MyPageHeatmap() {
             </div>
           ))}
 
-          {HEATMAP_DAYS.map(({ id, count }) => (
-            <div
-              key={id}
-              className={`aspect-square w-full rounded-sm border ${HEATMAP_TONE_CLASS_NAME[count]}`}
+          {/* 히트맵 셀 렌더링
+             - 1년치 날짜를 순회하면서 각 셀을 그림
+             - 현재 구조는 전체 셀이 한 번에 렌더됨 (최적화 포인트)
+          */}
+          {cells.map(({ date, checkCount, count, column, row }) => (
+            <button
+              key={date}
+              type="button"
+              className="group relative disabled:cursor-default"
               style={{
-                gridColumn: `${Math.floor(id / 7) + 2}`,
-                gridRow: `${(id % 7) + 1}`,
+                gridColumn: `${column}`,
+                gridRow: `${row}`,
               }}
-              aria-label={`${id + 1}일차 활동`}
-            />
+              aria-label={`${date} 완료 ${checkCount}회`}
+              disabled={checkCount === 0}
+              onClick={() => onSelectDate?.(date, checkCount)}
+            >
+              <div
+                className={`aspect-square w-full rounded-sm border ${HEATMAP_TONE_CLASS_NAME[count]} ${
+                  selectedDate === date
+                    ? 'ring-2 ring-offset-1 ring-offset-surface ring-white/70'
+                    : ''
+                }`}
+              />
+              <span className="pointer-events-none absolute left-full top-1/2 z-10 ml-2 hidden -translate-y-1/2 whitespace-nowrap rounded-md border border-white/15 bg-black/85 px-2 py-1 text-[11px] font-medium text-white shadow-md group-hover:block">
+                {date} 완료 {checkCount}회
+              </span>
+              <span className="pointer-events-none absolute left-full top-1/2 z-10 ml-1 hidden h-2 w-2 -translate-y-1/2 rotate-45 border-b border-r border-white/15 bg-black/85 group-hover:block" />
+            </button>
           ))}
         </div>
 

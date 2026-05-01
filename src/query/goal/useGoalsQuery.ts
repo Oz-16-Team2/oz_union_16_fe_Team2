@@ -30,7 +30,7 @@ async function fetchGoals(
 }
 
 // 페이지/필터 조합별로 별도 캐시되도록 queryKey에 params를 포함합니다.
-export function useGoalsQuery(params: ApiGoalListParams) {
+export function useGoalsQuery(params: ApiGoalListParams, enabled = true) {
   return useQuery<GoalListQueryData>({
     // 기간 필터(start/end)도 queryKey에 포함해야 날짜 변경 시 새 조회가 발생합니다.
     queryKey: [
@@ -43,5 +43,6 @@ export function useGoalsQuery(params: ApiGoalListParams) {
     ],
     queryFn: () => fetchGoals(params),
     placeholderData: keepPreviousData,
+    enabled,
   })
 }

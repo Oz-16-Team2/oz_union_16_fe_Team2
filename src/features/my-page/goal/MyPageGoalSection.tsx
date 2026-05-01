@@ -14,6 +14,7 @@ import {
 } from '@/components/common/ui'
 import { toDateRange } from '@/utils/date'
 
+import { GoalHistorySection } from './GoalHistorySection'
 import {
   GOAL_FILTERS,
   useGoalActions,
@@ -22,7 +23,13 @@ import {
   useGoalListView,
 } from './hooks'
 
-export function MyPageGoalSection() {
+type MyPageGoalSectionProps = {
+  selectedDate?: string | null
+  selectedDateCheckCount: number
+  onClearSelectedDate: () => void
+}
+
+function GoalListSection() {
   const [isCreateOpen, setIsCreateOpen] = useState(false)
   const [editingGoalId, setEditingGoalId] = useState<number | null>(null)
 
@@ -63,9 +70,9 @@ export function MyPageGoalSection() {
 
   return (
     <section className="flex flex-col gap-8">
-      <div className="flex flex-wrap items-start justify-between gap-x-3 gap-y-2">
+      <div className="flex min-h-16 flex-wrap items-start justify-between gap-x-3 gap-y-2">
         <div className="min-w-0 flex-1">
-          <div className="flex flex-wrap items-center gap-x-1 gap-y-2 sm:gap-0.5">
+          <div className="flex items-center gap-x-[clamp(0.25rem,1vw,0.5rem)] gap-y-2 sm:gap-0.5">
             {GOAL_FILTERS.map((filter) => (
               <TabButton
                 key={filter}
@@ -78,14 +85,15 @@ export function MyPageGoalSection() {
               </TabButton>
             ))}
             <span
-              className="mt-1 hidden text-text-muted/35 sm:inline"
+              className="mt-1 hidden text-text-muted/35 min-[721px]:inline"
               aria-hidden="true"
             >
               |
             </span>
             <div className="w-fit shrink-0">
               <Calendar
-                className="w-fit"
+                className="w-full sm:w-fit"
+                panelClassName="left-auto right-0 translate-x-16 sm:left-0 sm:right-auto"
                 label="기간 설정"
                 ariaLabel="기간 설정"
                 hideLabelOnMobile
@@ -98,7 +106,7 @@ export function MyPageGoalSection() {
               />
             </div>
             <span
-              className="mt-1 hidden text-text-muted/35 sm:inline"
+              className="mt-1 hidden text-text-muted/35 min-[721px]:inline"
               aria-hidden="true"
             >
               |
@@ -111,7 +119,7 @@ export function MyPageGoalSection() {
               onClick={resetFilters}
               className="h-8 shrink-0 px-2 text-sm text-text-muted hover:bg-transparent hover:text-tab-active-text sm:px-3"
             >
-              <span className="hidden sm:inline">초기화</span>
+              <span className="hidden min-[721px]:inline">초기화</span>
             </Button>
           </div>
         </div>
@@ -213,5 +221,20 @@ export function MyPageGoalSection() {
         </div>
       )}
     </section>
+  )
+}
+
+export function MyPageGoalSection({
+  selectedDate,
+  selectedDateCheckCount,
+  onClearSelectedDate,
+}: MyPageGoalSectionProps) {
+  return selectedDate && selectedDateCheckCount > 0 ? (
+    <GoalHistorySection
+      selectedDate={selectedDate}
+      onClearSelectedDate={onClearSelectedDate}
+    />
+  ) : (
+    <GoalListSection />
   )
 }

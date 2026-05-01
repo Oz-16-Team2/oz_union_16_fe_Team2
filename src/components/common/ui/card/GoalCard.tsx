@@ -29,14 +29,15 @@ export function GoalCard({
   onEdit, // 수정 버튼 클릭 이벤트
   onDelete, // 삭제 버튼 클릭 이벤트
 }: GoalCardProps) {
-  const shouldShowCheck =
-    Boolean(onCheck) && (status === 'in_progress' || isCheckedToday)
+  const shouldShowCheck = Boolean(onCheck)
+  const isCheckMarked = status === 'completed' || isCheckedToday
   const badgeClassName =
     status === 'completed'
       ? 'min-w-0 border border-transparent px-3 py-1 text-xs bg-[#EAFBF3] text-[#75B965] dark:bg-transparent dark:border-emerald-200/50 dark:text-emerald-200'
       : status === 'failed'
         ? 'min-w-0 border border-transparent px-3 py-1 text-xs bg-[#FFEEE2] text-[#FF5550] dark:bg-transparent dark:border-red-200/50 dark:text-red-200'
         : 'min-w-0 border border-transparent px-3 py-1 text-xs bg-[#F1F0FF] text-[#845FFF] dark:bg-transparent dark:border-violet-200/50 dark:text-violet-200'
+  const shouldShowActions = Boolean(onEdit) || Boolean(onDelete)
 
   return (
     <Card className="flex flex-col gap-2">
@@ -47,13 +48,13 @@ export function GoalCard({
             <button
               type="button"
               aria-label="목표 체크"
-              aria-pressed={isCheckedToday}
+              aria-pressed={isCheckMarked}
               onClick={status === 'in_progress' ? onCheck : undefined}
               disabled={status !== 'in_progress'}
               className={
-                isCheckedToday
+                isCheckMarked
                   ? 'flex size-3.5 items-center justify-center rounded-xs bg-emerald-500 text-white transition-colors hover:bg-emerald-600 dark:bg-emerald-400 dark:text-slate-900 dark:hover:bg-emerald-300'
-                  : 'flex size-3.5 items-center justify-center rounded-xs bg-gray-300 text-transparent transition-colors hover:bg-gray-400 dark:bg-white/15 dark:hover:bg-white/20'
+                  : 'flex size-3.5 items-center justify-center rounded-xs bg-gray-300 text-transparent transition-colors hover:bg-gray-400 disabled:cursor-default disabled:hover:bg-gray-300 dark:bg-white/15 dark:hover:bg-white/20 dark:disabled:hover:bg-white/15'
               }
             >
               <Check className="size-2.5" strokeWidth={4} />
@@ -93,16 +94,20 @@ export function GoalCard({
       </div>
 
       {/* 하단 */}
-      <div className="mt-auto flex justify-end gap-2">
-        {status === 'in_progress' && onEdit ? (
-          <Button variant="primary" size="sm" rounded="md" onClick={onEdit}>
-            수정
-          </Button>
-        ) : null}
-        <Button variant="danger" size="sm" rounded="md" onClick={onDelete}>
-          삭제
-        </Button>
-      </div>
+      {shouldShowActions ? (
+        <div className="mt-auto flex justify-end gap-2">
+          {status === 'in_progress' && onEdit ? (
+            <Button variant="primary" size="sm" rounded="md" onClick={onEdit}>
+              수정
+            </Button>
+          ) : null}
+          {onDelete ? (
+            <Button variant="danger" size="sm" rounded="md" onClick={onDelete}>
+              삭제
+            </Button>
+          ) : null}
+        </div>
+      ) : null}
     </Card>
   )
 }

@@ -1,17 +1,28 @@
 import type {
   ApiCreateGoalRequest,
+  ApiGoalHistoryItem,
   ApiGoalResponse,
   ApiUpdateGoalRequest,
 } from '@/apis/goal'
 
-import type { CreateGoalRequest, Goal, UpdateGoalRequest } from './goal.types'
+import type {
+  CreateGoalRequest,
+  Goal,
+  GoalHistoryItem,
+  UpdateGoalRequest,
+} from './goal.types'
 
-const normalizeGoalStatus = (status: string): Goal['status'] => {
+export const normalizeGoalStatus = (status: string): Goal['status'] => {
   switch (status) {
     case 'completed':
+    case 'COMPLETED':
       return 'completed'
     case 'failed':
+    case 'FAILED':
       return 'failed'
+    case 'in_progress':
+    case 'IN_PROGRESS':
+      return 'in_progress'
     default:
       return 'in_progress'
   }
@@ -40,6 +51,21 @@ export const mapGoal = (apiGoal: ApiGoalResponse): Goal => {
     createdAt: apiGoal.createdAt ?? apiGoal.created_at ?? '',
     progressRate: readGoalProgress(apiGoal),
     isCheckedToday: readGoalCheckedToday(apiGoal),
+  }
+}
+
+export const mapGoalHistoryItem = (
+  apiGoal: ApiGoalHistoryItem
+): GoalHistoryItem => {
+  return {
+    goalId: apiGoal.goal_id,
+    title: apiGoal.title,
+    startDate: apiGoal.start_date,
+    endDate: apiGoal.end_date,
+    status: normalizeGoalStatus(apiGoal.status),
+    createdAt: apiGoal.created_at,
+    progressRate: apiGoal.progress_rate,
+    isCheckedToday: apiGoal.is_checked_today,
   }
 }
 
