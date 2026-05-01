@@ -1,18 +1,20 @@
+import type { ActivitySummaryData } from '@/query/activity-summary/useActivitySummaryQuery'
 import { cn } from '@/utils/cn'
 
 type StatsCardTone = 'yellow' | 'blue' | 'mint'
 
-export type MyPageStatsSummaryItem = {
+type MyPageStatsSummaryItem = {
   label: string
   value: string
   tone: StatsCardTone
 }
 
 type MyPageStatsSummaryProps = {
-  items: MyPageStatsSummaryItem[]
+  data?: ActivitySummaryData
 }
 
 const STATS_ROW_CLASS_NAME = 'flex items-center gap-2 text-xs'
+const numberFormatter = new Intl.NumberFormat('ko-KR')
 
 const STATS_CARD_TONE_CLASS_NAME = {
   yellow: 'bg-blue-400',
@@ -20,9 +22,40 @@ const STATS_CARD_TONE_CLASS_NAME = {
   mint: 'bg-emerald-400',
 }
 
-export function MyPageStatsSummary({ items }: MyPageStatsSummaryProps) {
+function buildStatsItems(data?: ActivitySummaryData): MyPageStatsSummaryItem[] {
+  return [
+    {
+      label: '완료한 일정',
+      value:
+        data === undefined
+          ? '--개'
+          : `${numberFormatter.format(data.completedGoalsCount)}개`,
+      tone: 'blue',
+    },
+    {
+      label: '전체 달성률',
+      value:
+        data === undefined
+          ? '--%'
+          : `${numberFormatter.format(data.totalAchievementRate)}%`,
+      tone: 'mint',
+    },
+    {
+      label: '함께한 기간',
+      value:
+        data === undefined
+          ? '--일'
+          : `${numberFormatter.format(data.daysTogether)}일`,
+      tone: 'yellow',
+    },
+  ]
+}
+
+export function MyPageStatsSummary({ data }: MyPageStatsSummaryProps) {
+  const items = buildStatsItems(data)
+
   return (
-    <div className="flex w-full items-center gap-x-5">
+    <div className="flex w-full gap-4 [@media(max-width:482px)]:flex-col">
       {items.map(({ label, value, tone }) => (
         <div key={label} className={cn(STATS_ROW_CLASS_NAME)}>
           <span

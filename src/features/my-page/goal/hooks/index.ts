@@ -1,4 +1,5 @@
 export { useGoalActions } from './useGoalActions'
 export { useGoalDeleteFlow } from './useGoalDeleteFlow'
 export { useGoalFormHandlers } from './useGoalFormHandlers'
+export { useGoalHistoryView } from './useGoalHistoryView'
 export { GOAL_FILTERS, useGoalListView } from './useGoalListView'

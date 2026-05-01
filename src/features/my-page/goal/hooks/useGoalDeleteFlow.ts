@@ -18,7 +18,11 @@ export function useGoalDeleteFlow({
 }: UseGoalDeleteFlowParams) {
   const queryClient = useQueryClient()
   const toast = useToast()
-  const deleteGoalMutation = useDeleteGoalMutation()
+  const deleteGoalMutation = useDeleteGoalMutation({
+    onError: (message) => {
+      toast.error(message)
+    },
+  })
 
   const handleDeleteGoal = async (goalId: number) => {
     const shouldMovePreviousPage = goalCountOnPage === 1 && currentPage > 1
@@ -38,14 +42,16 @@ export function useGoalDeleteFlow({
         await queryClient.invalidateQueries({
           queryKey: ['activitySummary'],
         })
+        await queryClient.invalidateQueries({ queryKey: ['heatmap'] })
         return
       }
 
       await queryClient.invalidateQueries({ queryKey: ['goals'] })
       await queryClient.invalidateQueries({ queryKey: ['activitySummary'] })
+      await queryClient.invalidateQueries({ queryKey: ['heatmap'] })
     } catch {
-      // 삭제 실패 토스트도 동일한 흐름 안에서 처리해 책임을 분산시키지 않습니다.
-      toast.error('목표 삭제에 실패했습니다.')
+      // 삭제 실패 메시지는 mutation에서 해석하고, 토스트는 이 훅에서만 표시합니다.
+      return
     }
   }
 

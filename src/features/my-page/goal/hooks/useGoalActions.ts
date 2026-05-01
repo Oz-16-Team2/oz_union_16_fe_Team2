@@ -21,8 +21,8 @@ export function useGoalActions({
       onCreateSuccess?.()
       toast.success('목표를 생성했습니다.')
     },
-    onError: () => {
-      toast.error('목표 생성에 실패했습니다.')
+    onError: (message) => {
+      toast.error(message)
     },
   })
 
@@ -30,8 +30,8 @@ export function useGoalActions({
     onSuccess: () => {
       toast.success('오늘의 목표를 체크했습니다.')
     },
-    onError: () => {
-      toast.error('오늘 날짜에만 목표를 체크할 수 있습니다.')
+    onError: (message) => {
+      toast.error(message)
     },
   })
 
@@ -40,8 +40,8 @@ export function useGoalActions({
       onUpdateSuccess?.()
       toast.success('목표를 수정했습니다.')
     },
-    onError: () => {
-      toast.error('목표 수정에 실패했습니다.')
+    onError: (message) => {
+      toast.error(message)
     },
   })
 

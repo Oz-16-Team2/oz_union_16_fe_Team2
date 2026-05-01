@@ -1,5 +1,8 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import type { AxiosError } from 'axios'
 
+import type { ApiErrorResponse } from '@/apis/api.types'
+import { formatError } from '@/apis/api.utils'
 import { goalApi } from '@/apis/goal'
 import type { UpdateGoalRequest } from '@/features/my-page/goal/goal.types'
 import { toApiUpdateGoalRequest } from '@/features/my-page/goal/mapper'
@@ -7,7 +10,19 @@ import { toApiUpdateGoalRequest } from '@/features/my-page/goal/mapper'
 // 외부에서 mutation 성공/실패 시 실행할 콜백 옵션
 type Options = {
   onSuccess?: () => void
-  onError?: () => void
+  onError?: (message: string) => void
+}
+
+const getUpdateGoalErrorMessage = (error: AxiosError<ApiErrorResponse>) => {
+  const errorDetail = error.response?.data?.error_detail
+
+  if (!errorDetail) {
+    return '목표 수정에 실패했습니다.'
+  }
+
+  return typeof errorDetail === 'string'
+    ? errorDetail
+    : formatError(errorDetail)
 }
 
 // mutation에 전달되는 변수 타입 (수정할 목표 ID + 수정 데이터)
@@ -27,11 +42,12 @@ export function useUpdateGoalMutation(options: Options = {}) {
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ['goals'] })
       await queryClient.invalidateQueries({ queryKey: ['activitySummary'] })
+      await queryClient.invalidateQueries({ queryKey: ['heatmap'] })
       options.onSuccess?.()
     },
-    onError: () => {
+    onError: (error: AxiosError<ApiErrorResponse>) => {
       // 수정 실패 시 외부에서 전달한 에러 콜백 실행
-      options.onError?.()
+      options.onError?.(getUpdateGoalErrorMessage(error))
     },
   })
 }

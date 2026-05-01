@@ -14,6 +14,7 @@ import {
 } from '@/components/common/ui'
 import { toDateRange } from '@/utils/date'
 
+import { GoalHistorySection } from './GoalHistorySection'
 import {
   GOAL_FILTERS,
   useGoalActions,
@@ -22,7 +23,13 @@ import {
   useGoalListView,
 } from './hooks'
 
-export function MyPageGoalSection() {
+type MyPageGoalSectionProps = {
+  selectedDate?: string | null
+  selectedDateCheckCount: number
+  onClearSelectedDate: () => void
+}
+
+function GoalListSection() {
   const [isCreateOpen, setIsCreateOpen] = useState(false)
   const [editingGoalId, setEditingGoalId] = useState<number | null>(null)
 
@@ -63,7 +70,7 @@ export function MyPageGoalSection() {
 
   return (
     <section className="flex flex-col gap-8">
-      <div className="flex flex-wrap items-start justify-between gap-x-3 gap-y-2">
+      <div className="flex min-h-16 flex-wrap items-start justify-between gap-x-3 gap-y-2">
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-x-1 gap-y-2 sm:gap-0.5">
             {GOAL_FILTERS.map((filter) => (
@@ -213,5 +220,20 @@ export function MyPageGoalSection() {
         </div>
       )}
     </section>
+  )
+}
+
+export function MyPageGoalSection({
+  selectedDate,
+  selectedDateCheckCount,
+  onClearSelectedDate,
+}: MyPageGoalSectionProps) {
+  return selectedDate && selectedDateCheckCount > 0 ? (
+    <GoalHistorySection
+      selectedDate={selectedDate}
+      onClearSelectedDate={onClearSelectedDate}
+    />
+  ) : (
+    <GoalListSection />
   )
 }
