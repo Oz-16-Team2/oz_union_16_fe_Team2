@@ -42,9 +42,9 @@ export function useCreateGoalMutation(options: Options = {}) {
     // - 관련 데이터 캐시를 무효화하여 최신 데이터 재요청
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ['goals'] })
+      options.onSuccess?.()
       await queryClient.invalidateQueries({ queryKey: ['activitySummary'] })
       await queryClient.invalidateQueries({ queryKey: ['heatmap'] })
-      options.onSuccess?.()
     },
 
     // - 요청 실패 시 외부에서 전달된 에러 핸들러 실행
