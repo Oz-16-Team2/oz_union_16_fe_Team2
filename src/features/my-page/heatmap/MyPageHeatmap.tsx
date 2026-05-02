@@ -227,7 +227,7 @@ export function MyPageHeatmap({
               onMouseLeave={hideTooltip}
             >
               <div
-                className={`aspect-square w-full rounded-sm border transition-[background-color,border-color,box-shadow] duration-200 ${HEATMAP_TONE_CLASS_NAME[count]} ${
+                className={`aspect-square w-full rounded-sm border ${HEATMAP_TONE_CLASS_NAME[count]} ${
                   selectedDate === date ? 'ring-1 ring-gray-50' : ''
                 }`}
               />
@@ -236,11 +236,8 @@ export function MyPageHeatmap({
         </div>
       </div>
 
-      <div className="mt-4 flex items-center justify-between gap-4 border-t border-border-default/70 pt-3 text-xs text-text-muted/80">
-        <button
-          type="button"
-          className="shrink-0 transition-colors duration-200 hover:text-text-default"
-        >
+      <div className="mt-4 flex items-center justify-between gap-4 border-t border-border-default/70 pt-3 text-xs text-text-muted">
+        <button type="button" className="shrink-0">
           활동량 집계 방식 알아보기
         </button>
 

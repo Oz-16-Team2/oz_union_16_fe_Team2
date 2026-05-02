@@ -55,8 +55,8 @@ export function GoalCard({
               disabled={status !== 'in_progress' || !onCheck}
               className={
                 isCheckMarked
-                  ? 'flex size-3.5 items-center justify-center rounded-xs bg-emerald-500 text-white transition-colors hover:bg-emerald-600 dark:bg-emerald-400 dark:text-slate-900 dark:hover:bg-emerald-300'
-                  : 'flex size-3.5 items-center justify-center rounded-xs bg-gray-300 text-transparent transition-colors hover:bg-gray-400 disabled:cursor-default disabled:hover:bg-gray-300 dark:bg-white/15 dark:hover:bg-white/20 dark:disabled:hover:bg-white/15'
+                  ? 'flex size-3.5 items-center justify-center rounded-xs bg-emerald-500 text-white hover:bg-emerald-600 dark:bg-emerald-400 dark:text-slate-900 dark:hover:bg-emerald-300'
+                  : 'flex size-3.5 items-center justify-center rounded-xs bg-gray-300 text-transparent hover:bg-gray-400 disabled:cursor-default disabled:hover:bg-gray-300 dark:bg-white/15 dark:hover:bg-white/20 dark:disabled:hover:bg-white/15'
               }
             >
               <Check className="size-2.5" strokeWidth={4} />
