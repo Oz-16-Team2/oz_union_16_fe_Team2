@@ -8,12 +8,12 @@ import {
 } from '@/components/common/ui'
 import { cn } from '@/utils/cn'
 
-import type {
-  PostListItem,
-  PostListProps,
-  PostSortOrder,
+import {
+  type PostListItem,
+  type PostListProps,
+  POSTS_PAGE_SIZE,
+  type PostSortOrder,
 } from './PostList.types'
-import { POSTS_PAGE_SIZE } from './PostList.types'
 
 export type { PostListItem, PostSortOrder }
 

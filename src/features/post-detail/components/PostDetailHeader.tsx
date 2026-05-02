@@ -1,6 +1,13 @@
 import { MoreVertical } from 'lucide-react'
 
 import { ActionMenu } from '@/components/common/overlay'
+import { formatRelativeTime } from '@/utils/formatRelativeTime'
+
+type MenuItem = {
+  label: string
+  onClick: () => void
+  variant?: 'default' | 'danger'
+}
 
 type PostDetailHeaderProps = {
   author: {
@@ -8,17 +15,13 @@ type PostDetailHeaderProps = {
     profileImageUrl?: string | null
   }
   createdAt: string
-  isOwner: boolean
-  onDelete: () => void
-  onReport: () => void
+  menuItems: MenuItem[]
 }
 
 export function PostDetailHeader({
   author,
   createdAt,
-  isOwner,
-  onDelete,
-  onReport,
+  menuItems,
 }: PostDetailHeaderProps) {
   return (
     <div className="mt-9 flex items-center justify-between">
@@ -38,7 +41,9 @@ export function PostDetailHeader({
           <span className="text-sm font-medium text-text-primary">
             {author.nickname}
           </span>
-          <span className="text-xs text-text-muted">{createdAt}</span>
+          <span className="text-xs text-text-muted">
+            {formatRelativeTime(createdAt)}
+          </span>
         </div>
       </div>
 
@@ -49,14 +54,9 @@ export function PostDetailHeader({
             <MoreVertical size={20} />
           </button>
         }
-        items={
-          isOwner
-            ? [
-                { label: '수정', onClick: () => {} },
-                { label: '삭제', onClick: onDelete },
-              ]
-            : [{ label: '신고', onClick: onReport }]
-        }
+        items={menuItems}
+        align="right"
+        size="sm"
       />
     </div>
   )
