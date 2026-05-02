@@ -56,7 +56,7 @@ export function PostTagSection({
             rounded="full"
             disabled={isDisabled}
             className={cn(
-              'font-medium transition-colors',
+              'font-medium',
               isSelected
                 ? 'bg-primary-500 text-white'
                 : isDisabled

@@ -53,7 +53,7 @@ export function SearchBar({
         type="button"
         aria-label="검색"
         onClick={handleSearch}
-        className="absolute right-2 top-1/2 -translate-y-1/2 p-2 text-text-muted hover:text-text-primary transition-colors cursor-pointer"
+        className="absolute right-2 top-1/2 -translate-y-1/2 p-2 text-text-muted hover:text-text-primary cursor-pointer"
       >
         <Search size={20} />
       </button>

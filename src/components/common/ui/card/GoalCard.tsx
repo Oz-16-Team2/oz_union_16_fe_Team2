@@ -29,8 +29,8 @@ export function GoalCard({
   onEdit, // 수정 버튼 클릭 이벤트
   onDelete, // 삭제 버튼 클릭 이벤트
 }: GoalCardProps) {
-  const shouldShowCheck = Boolean(onCheck)
   const isCheckMarked = status === 'completed' || isCheckedToday
+  const shouldShowCheck = Boolean(onCheck) || isCheckMarked
   const badgeClassName =
     status === 'completed'
       ? 'min-w-0 border border-transparent px-3 py-1 text-xs bg-[#EAFBF3] text-[#75B965] dark:bg-transparent dark:border-emerald-200/50 dark:text-emerald-200'
@@ -49,12 +49,14 @@ export function GoalCard({
               type="button"
               aria-label="목표 체크"
               aria-pressed={isCheckMarked}
-              onClick={status === 'in_progress' ? onCheck : undefined}
-              disabled={status !== 'in_progress'}
+              onClick={
+                status === 'in_progress' && onCheck ? onCheck : undefined
+              }
+              disabled={status !== 'in_progress' || !onCheck}
               className={
                 isCheckMarked
-                  ? 'flex size-3.5 items-center justify-center rounded-xs bg-emerald-500 text-white transition-colors hover:bg-emerald-600 dark:bg-emerald-400 dark:text-slate-900 dark:hover:bg-emerald-300'
-                  : 'flex size-3.5 items-center justify-center rounded-xs bg-gray-300 text-transparent transition-colors hover:bg-gray-400 disabled:cursor-default disabled:hover:bg-gray-300 dark:bg-white/15 dark:hover:bg-white/20 dark:disabled:hover:bg-white/15'
+                  ? 'flex size-3.5 items-center justify-center rounded-xs bg-emerald-500 text-white hover:bg-emerald-600 dark:bg-emerald-400 dark:text-slate-900 dark:hover:bg-emerald-300'
+                  : 'flex size-3.5 items-center justify-center rounded-xs bg-gray-300 text-transparent hover:bg-gray-400 disabled:cursor-default disabled:hover:bg-gray-300 dark:bg-white/15 dark:hover:bg-white/20 dark:disabled:hover:bg-white/15'
               }
             >
               <Check className="size-2.5" strokeWidth={4} />

@@ -27,7 +27,7 @@ export function Textarea({
         ref={ref}
         {...props}
         className={cn(
-          'max-h-58 w-full resize-none overflow-y-auto rounded-xl border border-border-default bg-input-bg px-4.5 text-text-primary outline-none placeholder:text-text-muted transition-colors disabled:cursor-not-allowed disabled:opacity-50',
+          'max-h-58 w-full resize-none overflow-y-auto rounded-xl border border-border-default bg-input-bg px-4.5 text-text-primary outline-none placeholder:text-text-muted disabled:cursor-not-allowed disabled:opacity-50',
           textareaSizeClass[size],
           error
             ? 'border-status-error-border focus:border-status-error-border'
