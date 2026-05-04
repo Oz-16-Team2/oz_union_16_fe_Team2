@@ -3,6 +3,7 @@ export const POST_ENDPOINTS = {
   tags: '/posts/tags',
   post: (postId: number) => `/posts/${postId}/`,
   posts: '/posts/',
+  myPosts: '/posts/me',
   postLikes: (postId: number | string) => `/posts/${postId}/likes/`,
   postScraps: (postId: number | string) => `/posts/${postId}/scraps`,
   postScrapsList: '/posts/scraps',

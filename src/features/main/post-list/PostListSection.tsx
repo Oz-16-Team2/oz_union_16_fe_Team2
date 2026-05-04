@@ -1,16 +1,16 @@
 import { useEffect, useMemo } from 'react'
 import { Link } from 'react-router'
 
-import { PenLine, Sparkles } from 'lucide-react'
+import { PenLine } from 'lucide-react'
 
 import { formatError } from '@/apis/api.utils'
-import { TabButton } from '@/components/common/ui'
+import { EmptyState, TabButton } from '@/components/common/ui'
 import { buttonVariants } from '@/components/common/ui/button/Button.style'
 import { usePostListQuery } from '@/query/main/usePostListQuery'
 import { useAuthStore } from '@/store/authStore'
 import { cn } from '@/utils/cn'
 
-import { PostList, PostStatusView } from './PostList'
+import { PostList } from './PostList'
 import type { ApiPostListItem } from './PostList.api.types'
 import {
   type PostListItem,
@@ -66,6 +66,7 @@ export function PostListSection() {
     mode,
     POSTS_PAGE_SIZE
   )
+  const shouldShowSkeleton = isLoading && mode.type !== 'search'
 
   const posts = useMemo(
     () =>
@@ -116,24 +117,45 @@ export function PostListSection() {
           to="/post/create"
           className={cn(
             buttonVariants({ variant: 'primary', size: 'sm', rounded: 'full' }),
-            'px-5 py-2 text-sm'
+            'px-3 py-2 text-sm sm:px-5'
           )}
         >
           <PenLine size={16} />
-          글쓰기
+          <span className="hidden sm:inline">글쓰기</span>
         </Link>
       )}
     </div>
   )
 
-  // 추천순 필터링 시 빈화면 따로 처리 해줌
-  const suggestedEmptyState = (
-    <PostStatusView
-      icon={<Sparkles size={48} />}
-      message="아직 추천할 게시글이 없어요."
-      subMessage="게시글을 작성하거나 좋아요를 눌러보세요. 활동 기반으로 추천이 시작됩니다."
-    />
-  )
+  let emptyView: React.ReactNode
+
+  if (filters.keyword.trim()) {
+    emptyView = isFetching ? (
+      <div className="flex-1" />
+    ) : (
+      <EmptyState
+        title="검색 결과가 없습니다."
+        description="다른 검색어로 다시 찾아보세요."
+        className="flex-1"
+      />
+    )
+  } else if (sort === 'suggested') {
+    emptyView = (
+      <EmptyState
+        title="아직 추천할 게시글이 없어요."
+        description="게시글을 작성하거나 좋아요를 눌러보세요. 활동 기반으로 추천이 시작됩니다."
+        className="flex-1"
+      />
+    )
+  } else {
+    emptyView = (
+      <EmptyState
+        title="존재하는 게시물이 없습니다."
+        description="아직 등록된 게시글이 없습니다."
+        className="flex-1"
+      />
+    )
+  }
 
   return (
     <PostList
@@ -141,11 +163,12 @@ export function PostListSection() {
       totalPages={totalPages}
       currentPage={page}
       searchValue={inputValue}
-      isLoading={isLoading}
+      isLoading={shouldShowSkeleton}
       isError={isError}
       errorMessage={errorMessage}
       filterArea={filterArea}
-      emptyView={sort === 'suggested' ? suggestedEmptyState : undefined}
+      emptyView={emptyView}
+      stickPaginationToBottom
       onSearch={handleSearch}
       onSearchChange={setInputValue}
       onPageChange={handlePageChange}

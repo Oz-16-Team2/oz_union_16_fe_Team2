@@ -4,10 +4,16 @@ import { cn } from '@/utils/cn'
 type EmptyStateProps = {
   title: string
   description?: string
+  action?: React.ReactNode
   className?: string
 }
 
-export function EmptyState({ title, description, className }: EmptyStateProps) {
+export function EmptyState({
+  title,
+  description,
+  action,
+  className,
+}: EmptyStateProps) {
   return (
     <div
       className={cn(
@@ -27,6 +33,8 @@ export function EmptyState({ title, description, className }: EmptyStateProps) {
           <p className="text-sm text-text-muted">{description}</p>
         ) : null}
       </div>
+
+      {action}
     </div>
   )
 }

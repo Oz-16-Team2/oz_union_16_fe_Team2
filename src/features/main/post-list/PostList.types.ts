@@ -26,6 +26,7 @@ export type PostListProps = {
   errorMessage?: string
   filterArea?: React.ReactNode
   emptyView?: React.ReactNode
+  stickPaginationToBottom?: boolean
   onSearch: (keyword: string) => void
   onSearchChange?: (value: string) => void
   onPageChange: (page: number) => void

@@ -22,6 +22,10 @@ export type ApiPostListResponse = {
   total_count: number
 }
 
+export type ApiPostListWrappedResponse = {
+  detail: ApiPostListResponse
+}
+
 // GET /api/v1/posts — 요청 쿼리 파라미터
 export type ApiPostListParams = {
   scope?: string
@@ -46,6 +50,10 @@ export type ApiPostSearchResponse = {
   sort_by: string
   page: number
   size: number
+}
+
+export type ApiPostSearchWrappedResponse = {
+  detail: ApiPostSearchResponse
 }
 
 // GET /api/v1/posts/trending — 요청 쿼리 파라미터

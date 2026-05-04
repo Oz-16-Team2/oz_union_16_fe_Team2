@@ -70,9 +70,11 @@ export function Header() {
             rounded={'full'}
             onClick={handleClickTheme}
             aria-label={`${label} 사용 중. 클릭하면 다음 테마로 변경됩니다.`}
-            className="relative h-9 justify-start border border-border-default bg-transparent py-0 pl-4 pr-12 text-text-primary transition-shadow duration-300 hover:bg-transparent shadow-card-main"
+            className="relative h-9 w-9 justify-center border border-border-default bg-transparent p-0 text-text-primary transition-shadow duration-300 hover:bg-transparent shadow-card-main sm:w-auto sm:justify-start sm:pl-4 sm:pr-12"
           >
-            <span className="text-sm font-medium leading-none">{display}</span>
+            <span className="hidden text-sm font-medium leading-none sm:inline">
+              {display}
+            </span>
             <span className="absolute right-0 top-1/2 flex size-9 -translate-y-1/2 items-center justify-center rounded-full border border-white/30 bg-white/30 text-text-primary backdrop-blur-md shadow-[0_3px_10px_rgba(151,151,151,0.18),inset_0_1px_2px_rgba(255,255,255,0.8)] transition-transform duration-300 hover:scale-110 dark:border-white/15 dark:bg-white/5 dark:shadow-[0_10px_30px_rgba(0,0,0,0.18),inset_0_1px_1px_rgba(255,255,255,0.55),inset_0_-1px_2px_rgba(255,255,255,0.12)]">
               <Icon className="size-4.5" aria-hidden="true" />
             </span>
@@ -100,8 +102,9 @@ export function Header() {
                   <img
                     src={user.profileImageUrl}
                     alt={`${user.nickname} 프로필`}
-                    className="size-8 rounded-full object-contain"
+                    className="size-8 rounded-full object-cover"
                   />
+
                   <span className="max-w-24 truncate text-sm font-medium leading-none">
                     {user.nickname}
                   </span>

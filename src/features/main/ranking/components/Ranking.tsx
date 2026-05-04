@@ -46,7 +46,7 @@ export function Ranking({
   return (
     <section
       className={cn(
-        'w-full min-w-sm rounded-2xl bg-surface border border-border-default p-4',
+        'w-full min-w-0 rounded-2xl bg-surface border border-border-default p-4',
         className
       )}
     >

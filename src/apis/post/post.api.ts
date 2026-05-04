@@ -1,12 +1,16 @@
 import { apiClient } from '@/apis/apiClient'
 import type {
   ApiPostListParams,
-  ApiPostListResponse,
+  ApiPostListWrappedResponse,
   ApiPostSearchParams,
-  ApiPostSearchResponse,
+  ApiPostSearchWrappedResponse,
   ApiTrendingParams,
   ApiTrendingResponse,
 } from '@/features/main/post-list/PostList.api.types'
+import type {
+  ApiMyPostListParams,
+  ApiMyPostListWrappedResponse,
+} from '@/features/my-posts/myPosts.api.types'
 import type {
   ApiGoalListResponse,
   ApiPostCreateRequest,
@@ -40,12 +44,20 @@ export const postApi = {
 
   // 게시글 목록 조회
   getPosts: (params?: ApiPostListParams) =>
-    apiClient.get<ApiPostListResponse>(POST_ENDPOINTS.posts, { params }),
+    apiClient.get<ApiPostListWrappedResponse>(POST_ENDPOINTS.posts, {
+      params,
+    }),
 
   // 북마크(스크랩) 게시글 목록 조회
   // TODO: API 수정 완료 시 아래 주석을 해제하고 북마크 조회에서 getPosts 호출 제거
   // getScrappedPosts: (params?: ApiPostListParams) =>
   //   apiClient.get<ApiPostListResponse>(POST_ENDPOINTS.postScrapsList, { params }),
+
+  // 내가 쓴 게시글 목록 조회
+  getMyPosts: (params?: ApiMyPostListParams) =>
+    apiClient.get<ApiMyPostListWrappedResponse>(POST_ENDPOINTS.myPosts, {
+      params,
+    }),
 
   // 게시글 수정
   updatePost: (postId: number, body: ApiPostUpdateRequest) =>
@@ -79,7 +91,9 @@ export const postApi = {
 
   // 게시글 검색
   searchPosts: (params: ApiPostSearchParams) =>
-    apiClient.get<ApiPostSearchResponse>(POST_ENDPOINTS.postSearch, { params }),
+    apiClient.get<ApiPostSearchWrappedResponse>(POST_ENDPOINTS.postSearch, {
+      params,
+    }),
 
   // 인기 게시글 조회
   getTrendingPosts: (params: ApiTrendingParams) =>
