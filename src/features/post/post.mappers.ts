@@ -61,6 +61,7 @@ export function toPostDetailData(api: ApiPostResponse): PostDetailData {
     commentCount: api.comment_count,
     isLiked: api.is_liked ?? false,
     isScrapped: api.is_scrapped,
+    isOwner: api.is_owner,
     hasGoal: api.has_goal,
     goalInfo: api.goal_info
       ? {

@@ -67,6 +67,7 @@ export type ApiPostResponse = {
   comment_count: number
   is_liked: boolean
   is_scrapped: boolean
+  is_owner: boolean
   has_goal: boolean
   goal_info: {
     goal_id: number

@@ -51,9 +51,7 @@ export function PostDetailLayout({ post }: PostDetailLayoutProps) {
 
   const voteDetail = voteData?.data.detail
 
-  // TODO: is_owner 반영 후 작성자 판별 교체 예정
-  const currentUserNickname = '테스트유저1'
-  const isOwner = post.nickname === currentUserNickname
+  const isOwner = post.isOwner
 
   const handleDelete = () => {
     setIsDeleteModalOpen(true)

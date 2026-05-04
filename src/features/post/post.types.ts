@@ -66,6 +66,7 @@ export type PostDetailData = {
   isLiked: boolean
   commentCount: number
   isScrapped: boolean
+  isOwner: boolean
   hasGoal: boolean
   goalInfo: {
     goalId: number
