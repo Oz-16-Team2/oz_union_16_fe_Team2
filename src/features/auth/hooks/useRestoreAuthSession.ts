@@ -12,22 +12,25 @@ import { useAuthStore } from '@/store/authStore'
 export function useRestoreAuthSession() {
   // 컴포넌트 마운트 시 1회 실행 (의존성 배열 [])
   useEffect(() => {
-    const path = window.location.pathname
-    // 인증 페이지에서는 불필요한 복구 요청 방지
-    if (path.startsWith('/login') || path.startsWith('/signup')) {
-      return
-    }
-
     const abortController = new AbortController()
 
     // 실제 세션 복구 로직
     const restoreSession = async () => {
-      const { accessToken, user, setAccessToken, setSession, clearSession } =
-        useAuthStore.getState()
+      const {
+        accessToken,
+        user,
+        setAccessToken,
+        setAuthStatus,
+        setSession,
+        clearSession,
+      } = useAuthStore.getState()
 
       if (accessToken && user) {
+        setAuthStatus('restored')
         return
       }
+
+      setAuthStatus('checking')
 
       try {
         if (!accessToken) {
