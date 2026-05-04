@@ -24,7 +24,12 @@ export function usePostListQuery(mode: PostListMode, size = POSTS_PAGE_SIZE) {
           page: mode.page,
           size,
         })
-        const { search_results, total_count, page, size: resSize } = res.data
+        const {
+          search_results,
+          total_count,
+          page,
+          size: resSize,
+        } = res.data.detail
         return { posts: search_results, total_count, page, size: resSize }
       }
 
@@ -46,7 +51,7 @@ export function usePostListQuery(mode: PostListMode, size = POSTS_PAGE_SIZE) {
 
       // latest
       const res = await postApi.getPosts({ page: mode.page, size })
-      return res.data
+      return res.data.detail
     },
     // 탭 전환 시 이전 캐시를 남기지 않고 항상 새로 fetch
     // gcTime: 0 → 쿼리가 비활성화되는 즉시 캐시에서 제거됨

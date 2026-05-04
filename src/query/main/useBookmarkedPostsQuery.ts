@@ -15,7 +15,7 @@ export function useBookmarkedPostsQuery(params: {
     retry: false,
     queryFn: async () => {
       const res = await postApi.getPosts(params)
-      return res.data
+      return res.data.detail
     },
     gcTime: 0,
   })
