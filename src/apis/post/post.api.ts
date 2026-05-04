@@ -42,6 +42,11 @@ export const postApi = {
   getPosts: (params?: ApiPostListParams) =>
     apiClient.get<ApiPostListResponse>(POST_ENDPOINTS.posts, { params }),
 
+  // 북마크(스크랩) 게시글 목록 조회
+  // TODO: API 수정 완료 시 아래 주석을 해제하고 북마크 조회에서 getPosts 호출 제거
+  // getScrappedPosts: (params?: ApiPostListParams) =>
+  //   apiClient.get<ApiPostListResponse>(POST_ENDPOINTS.postScrapsList, { params }),
+
   // 게시글 수정
   updatePost: (postId: number, body: ApiPostUpdateRequest) =>
     apiClient.patch<void>(POST_ENDPOINTS.post(postId), body),
