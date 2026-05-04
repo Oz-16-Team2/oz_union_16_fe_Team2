@@ -1,5 +1,7 @@
 import { lazy, Suspense, useEffect } from 'react'
 
+import { X } from 'lucide-react'
+
 import { Dropdown } from '@/components/common/overlay'
 import { useToast } from '@/components/common/ui'
 import { useGoalsQuery } from '@/query/post'
@@ -49,7 +51,6 @@ export function PostGoalSection({
           selectedGoalId !== undefined ? String(selectedGoalId) : undefined
         }
         onChange={(val) => {
-          if (val === undefined) return onChange(undefined)
           const id = Number(val)
           onChange(Number.isNaN(id) ? undefined : id)
         }}
@@ -59,7 +60,19 @@ export function PostGoalSection({
 
       {selectedGoal && (
         <div className="flex flex-col gap-3 rounded-xl border border-border-default bg-surface p-4">
-          <span className="text-sm font-bold text-text-primary">개별 목표</span>
+          <div className="flex items-center justify-between">
+            <span className="text-sm font-bold text-text-primary">
+              개별 목표
+            </span>
+            <button
+              type="button"
+              onClick={() => onChange(undefined)}
+              aria-label="목표 선택 취소"
+              className="text-text-muted hover:text-text-primary cursor-pointer"
+            >
+              <X size={20} />
+            </button>
+          </div>
 
           <div className="flex flex-col gap-1">
             <p className="font-bold text-text-primary">{selectedGoal.title}</p>
