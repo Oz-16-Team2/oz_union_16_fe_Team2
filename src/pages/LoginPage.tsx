@@ -147,7 +147,7 @@ export function LoginPage() {
             type="submit"
             rounded={'lg'}
             className={cn(
-              'w-full py-3 text-xl text-white',
+              'min-h-13 w-full py-3 text-xl text-white',
               isSuccessMotion
                 ? 'bg-black text-white disabled:bg-black disabled:text-white'
                 : loginMutation.isPending
@@ -170,7 +170,7 @@ export function LoginPage() {
 
           <div className="flex items-center gap-3 py-1">
             <span className="h-px flex-1 bg-border-default" />
-            <span className="text-xs text-text-muted">또는</span>
+            <span className="text-xs text-text-muted">간편 로그인</span>
             <span className="h-px flex-1 bg-border-default" />
           </div>
 

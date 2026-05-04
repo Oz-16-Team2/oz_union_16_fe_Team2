@@ -28,7 +28,7 @@ export function useLogoutMutation() {
 
   // 공통 로그아웃 처리
   // - store 초기화
-  // - 메인 페이지로 이동
+  // - 로그인 페이지로 이동
   const finishLogout = () => {
     clearSession()
     navigate('/')

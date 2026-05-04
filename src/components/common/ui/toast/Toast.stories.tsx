@@ -34,3 +34,23 @@ export const Playground: Story = {
     </div>
   ),
 }
+
+export const ThemePreview: Story = {
+  render: () => (
+    <div className="grid gap-8 md:grid-cols-2">
+      <section className="flex flex-col gap-4 rounded-xl bg-gray-100 p-6">
+        <h3 className="text-sm font-semibold text-gray-950">Light</h3>
+        {toastCases.map(({ type, message }) => (
+          <Toast key={`light-${type}`} type={type} message={message} />
+        ))}
+      </section>
+
+      <section className="dark flex flex-col gap-4 rounded-xl bg-gray-950 p-6">
+        <h3 className="text-sm font-semibold text-gray-100">Dark</h3>
+        {toastCases.map(({ type, message }) => (
+          <Toast key={`dark-${type}`} type={type} message={message} />
+        ))}
+      </section>
+    </div>
+  ),
+}

@@ -190,7 +190,7 @@ export function SignupPage() {
             <Button
               className={cn(
                 'py-1 min-w-17 px-0 bg-transparent hover:text-text-primary disabled:bg-transparent disabled:text-text-muted',
-                emailVerification.isVerified && 'text-white'
+                emailVerification.isVerified && 'text-text-primary'
               )}
               size={'sm'}
               variant="outline"
@@ -225,7 +225,7 @@ export function SignupPage() {
                 </span>
                 <Button
                   type="button"
-                  className="py-1 min-w-17 px-0 bg-transparent hover:text-white disabled:bg-transparent disabled:text-white"
+                  className="py-1 min-w-17 px-0 bg-transparent hover:text-text-primary disabled:bg-transparent disabled:text-text-muted"
                   size={'sm'}
                   variant="outline"
                   disabled={emailVerification.isVerifying}

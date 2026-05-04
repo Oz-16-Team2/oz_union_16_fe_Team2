@@ -1,5 +1,7 @@
 import { lazy, Suspense, useState } from 'react'
 
+import { LoaderCircle } from 'lucide-react'
+
 import { Button, Calendar, Input } from '@/components/common/ui'
 import type { DateRange } from '@/components/common/ui/calendar/Calendar.type'
 import { formatSelectedDate } from '@/components/common/ui/calendar/Calendar.util'
@@ -20,13 +22,21 @@ export function GoalCardEdit({
   initialDateRange,
   initialProgressRate,
   initialStatus,
+  isSubmitting = false,
   onClose,
   onSubmit,
 }: GoalCardEditProps) {
   const [title, setTitle] = useState(initialTitle)
   const [dateRange, setDateRange] = useState<DateRange>(initialDateRange)
+  const trimmedTitle = title.trim()
+  const canSubmit =
+    mode === 'create'
+      ? Boolean(trimmedTitle && dateRange.start)
+      : Boolean(trimmedTitle)
 
   const handleSubmit = () => {
+    if (!canSubmit || isSubmitting) return
+
     if (mode === 'create') {
       onSubmit({ title, dateRange })
       return
@@ -88,8 +98,19 @@ export function GoalCardEdit({
         <Button variant="modal" size="sm" onClick={onClose}>
           닫기
         </Button>
-        <Button variant="primary" size="sm" onClick={handleSubmit}>
-          {mode === 'edit' ? '수정' : '등록'}
+        <Button
+          variant="primary"
+          size="sm"
+          disabled={!canSubmit || isSubmitting}
+          onClick={handleSubmit}
+        >
+          {isSubmitting ? (
+            <LoaderCircle size={14} className="animate-spin" />
+          ) : mode === 'edit' ? (
+            '수정'
+          ) : (
+            '등록'
+          )}
         </Button>
       </div>
     </Card>

@@ -13,6 +13,7 @@ import {
   PostEditPage,
 } from '@/pages'
 import { PostDetailPage } from '@/pages/PostDetailPage'
+import { ProtectedRoute } from '@/router/ProtectedRoute'
 import { LoginPage, SignupPage } from '@/router/route.lazy'
 
 /*
@@ -40,16 +41,21 @@ export const router = createBrowserRouter([
         element: <PostEditPage />,
       },
       {
-        path: 'mypage',
-        element: <MyPage />,
-      },
-      {
-        path: 'mypage/bookmarks',
-        element: <BookmarkedPostsPage />,
-      },
-      {
-        path: 'mypage/posts',
-        element: <MyPostsPage />,
+        element: <ProtectedRoute />,
+        children: [
+          {
+            path: 'mypage',
+            element: <MyPage />,
+          },
+          {
+            path: 'mypage/bookmarks',
+            element: <BookmarkedPostsPage />,
+          },
+          {
+            path: 'mypage/posts',
+            element: <MyPostsPage />,
+          },
+        ],
       },
 
       {

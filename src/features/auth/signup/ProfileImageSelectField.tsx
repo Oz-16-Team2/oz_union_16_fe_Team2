@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 
-import { pinkCharacterImage } from '@/assets/images'
+import { orangeCharacterImage } from '@/assets/images'
 import { CharacterSelectModal } from '@/components/common/overlay'
 import { useProfileImagesQuery } from '@/query/auth/useProfileImagesQuery'
 import { getProfileAvatarImageUrl } from '@/shared/profileAvatar'
@@ -36,7 +36,7 @@ export function ProfileImageSelectField({
     value ?? selectedCharacter?.imageUrl,
     profileAvatarOptions
   )
-  const previewImageUrl = selectedImageUrl || pinkCharacterImage
+  const previewImageUrl = selectedImageUrl || orangeCharacterImage
   const isSelectDisabled = isFetching
 
   const handleSelectCharacter = (code: string) => {

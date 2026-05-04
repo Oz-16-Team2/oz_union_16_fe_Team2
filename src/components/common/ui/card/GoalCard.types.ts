@@ -36,6 +36,7 @@ export type GoalCardEditProps = {
   initialDateRange: DateRange
   initialProgressRate: number
   initialStatus: GoalStatus
+  isSubmitting?: boolean
   onClose: () => void
 } & (
   | {
