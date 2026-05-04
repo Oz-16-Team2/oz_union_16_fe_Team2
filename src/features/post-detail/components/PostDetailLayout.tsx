@@ -27,7 +27,13 @@ export function PostDetailLayout({ post }: PostDetailLayoutProps) {
   const navigate = useNavigate()
   const toast = useToast()
 
-  const deleteMutation = useDeletePostMutation()
+  const deleteMutation = useDeletePostMutation({
+    onSuccess: () => {
+      setIsDeleteModalOpen(false)
+      navigate('/')
+    },
+    onError: (message) => toast.error(message),
+  })
   const reportMutation = useReportPostMutation()
 
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
@@ -42,20 +48,7 @@ export function PostDetailLayout({ post }: PostDetailLayoutProps) {
   }
 
   const handleConfirmDelete = () => {
-    deleteMutation.mutate(post.postId, {
-      onSuccess: () => {
-        setIsDeleteModalOpen(false)
-        navigate('/')
-      },
-      onError: (error) => {
-        const axiosError = error as AxiosError<ApiErrorResponse>
-        const detail = axiosError.response?.data.error_detail
-
-        toast.error(
-          detail ? formatError(detail) : '게시글 삭제에 실패했습니다.'
-        )
-      },
-    })
+    deleteMutation.mutate(post.postId)
   }
 
   const handleReport = () => {

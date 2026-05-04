@@ -62,20 +62,18 @@ export function PostCard({
     reportReasons,
   } = usePostCardReport(postId)
 
-  const { mutate: deletePost } = useDeletePostMutation()
+  const { mutate: deletePost } = useDeletePostMutation({
+    onSuccess: () => {
+      toast.success('게시글이 삭제되었습니다.')
+      setShowDeleteConfirm(false)
+    },
+    onError: (message) => {
+      toast.error(message)
+      setShowDeleteConfirm(false)
+    },
+  })
 
-  const handleDelete = () => {
-    deletePost(postId, {
-      onSuccess: () => {
-        toast.success('게시글이 삭제되었습니다.')
-        setShowDeleteConfirm(false)
-      },
-      onError: () => {
-        toast.error('게시글 삭제에 실패했습니다.')
-        setShowDeleteConfirm(false)
-      },
-    })
-  }
+  const handleDelete = () => deletePost(postId)
 
   const ownerMenuItems = [
     { label: '수정', onClick: () => navigate(`/post/${postId}/edit`) },

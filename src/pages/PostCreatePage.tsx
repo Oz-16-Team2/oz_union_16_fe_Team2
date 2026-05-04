@@ -13,7 +13,7 @@ export function PostCreatePage() {
       toast.success('게시글이 등록되었습니다.')
       navigate('/')
     },
-    onError: () => toast.error('게시글 생성에 실패했습니다.'),
+    onError: (message) => toast.error(message),
   })
 
   return (
