@@ -88,28 +88,41 @@ export function CommentItem({
           </div>
 
           {/* 액션 메뉴: 본인 댓글은 수정/삭제, 타인 댓글은 신고 */}
-          <ActionMenu
-            trigger={<MoreHorizontal className="h-4 w-4" />}
-            items={
-              isOwner
-                ? [
-                    {
-                      label: '수정',
-                      onClick: () => setIsEditing(true),
-                    },
-                    {
-                      label: '삭제',
-                      onClick: () => onDelete?.(id),
-                    },
-                  ]
-                : [
-                    {
-                      label: '신고',
-                      onClick: () => onReport?.(id),
-                    },
-                  ]
-            }
-          />
+          <div onClick={(e) => e.stopPropagation()}>
+            <ActionMenu
+              trigger={
+                <button
+                  type="button"
+                  className="text-text-primary"
+                  aria-label="댓글 더보기"
+                >
+                  <MoreHorizontal size={16} />
+                </button>
+              }
+              items={
+                isOwner
+                  ? [
+                      {
+                        label: '수정',
+                        onClick: () => setIsEditing(true),
+                      },
+                      {
+                        label: '삭제',
+                        onClick: () => onDelete?.(id),
+                        variant: 'danger' as const,
+                      },
+                    ]
+                  : [
+                      {
+                        label: '신고',
+                        onClick: () => onReport?.(id),
+                      },
+                    ]
+              }
+              align="right"
+              size="sm"
+            />
+          </div>
         </div>
 
         {/* 본문 / 수정 모드 */}

@@ -1,22 +1,21 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router'
 
+import type { AxiosError } from 'axios'
+
+import type { ApiErrorResponse } from '@/apis/api.types'
+import { formatError } from '@/apis/api.utils'
 import { ReportFormModal } from '@/components/common/overlay/modal/form/ReportFormModal'
 import { CommentInput, CommentList, useToast } from '@/components/common/ui'
+import { POST_REPORT_REASONS } from '@/components/common/ui/card/usePostCardReport'
 import { useCommentsQuery } from '@/query/post/useCommentsQuery'
 import { useCreateCommentMutation } from '@/query/post/useCreateCommentMutation'
 import { useDeleteCommentMutation } from '@/query/post/useDeleteCommentMutation'
+import { usePostDetailQuery } from '@/query/post/usePostDetailQuery'
 import { useReportCommentMutation } from '@/query/post/useReportCommentMutation'
 import { useToggleCommentLikeMutation } from '@/query/post/useToggleCommentLikeMutation'
 import { useUpdateCommentMutation } from '@/query/post/useUpdateCommentMutation'
 import { useAuthStore } from '@/store/authStore'
-
-const reportOptions = [
-  { label: '욕설/비방', value: 'abuse' },
-  { label: '스팸/광고', value: 'spam' },
-  { label: '부적절한 내용', value: 'inappropriate' },
-  { label: '기타', value: 'etc' },
-]
 
 type PostDetailCommentSectionProps = {
   postId: number
@@ -30,10 +29,13 @@ export function PostDetailCommentSection({
   const toast = useToast()
 
   const { data: comments = [], isLoading, isError } = useCommentsQuery(postId)
-  const { mutate: createComment, isPending } = useCreateCommentMutation()
+  const { refetch: refetchPostDetail } = usePostDetailQuery(postId)
+
+  const { mutateAsync: createComment, isPending } = useCreateCommentMutation()
   const { mutate: toggleCommentLike } = useToggleCommentLikeMutation(postId)
   const { mutate: deleteComment } = useDeleteCommentMutation(postId)
-  const { mutate: reportComment } = useReportCommentMutation()
+  const { mutate: reportComment, isPending: isReportPending } =
+    useReportCommentMutation()
   const { mutate: updateComment } = useUpdateCommentMutation(postId)
 
   const [reportCommentId, setReportCommentId] = useState<number | null>(null)
@@ -49,10 +51,15 @@ export function PostDetailCommentSection({
   }
 
   // 댓글 작성
-  const handleSubmitComment = (content: string) => {
+  const handleSubmitComment = async (content: string) => {
     if (requireLogin()) return
 
-    createComment({ postId, content })
+    try {
+      await createComment({ postId, content })
+      refetchPostDetail()
+    } catch {
+      toast.error('댓글 작성에 실패했습니다.')
+    }
   }
 
   // 댓글 좋아요
@@ -72,7 +79,11 @@ export function PostDetailCommentSection({
   const handleDeleteComment = (commentId: number) => {
     if (requireLogin()) return
 
-    deleteComment(commentId)
+    deleteComment(commentId, {
+      onSuccess: () => {
+        refetchPostDetail()
+      },
+    })
   }
 
   // 댓글 수정
@@ -111,15 +122,13 @@ export function PostDetailCommentSection({
           toast.success('신고가 접수되었습니다.')
           setReportCommentId(null)
         },
-        onError: (error: any) => {
-          const status = error?.response?.status
+        onError: (error) => {
+          const axiosError = error as AxiosError<ApiErrorResponse>
+          const detail = axiosError.response?.data.error_detail
 
-          if (status === 409) {
-            toast.error('이미 신고된 댓글입니다.')
-            return
-          }
-
-          toast.error('신고에 실패했습니다.')
+          toast.error(
+            detail ? formatError(detail) : '신고 접수에 실패했습니다.'
+          )
         },
       }
     )
@@ -161,7 +170,8 @@ export function PostDetailCommentSection({
       {reportCommentId ? (
         <ReportFormModal
           title="신고 선택 및 작성"
-          options={reportOptions}
+          options={POST_REPORT_REASONS}
+          isSubmitting={isReportPending}
           onClose={() => setReportCommentId(null)}
           onSubmit={handleSubmitReport}
         />

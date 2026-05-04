@@ -33,11 +33,9 @@ export function useTogglePostScrapMutation({
   })
 }
 
-// TODO: 포스트 디테일 페이지에서 신고가 필요할 때는 src/query/post에서 useReportPostMutation을 import해서 사용하면 됩니다.
-
-// export function useReportPostMutation(postId: number) {
-//   return useMutation({
-//     mutationFn: (body: { reason_type: string; reason_detail: string }) =>
-//       postApi.reportPost(postId, body),
-//   })
-// }
+export function useReportPostMutation(postId: number) {
+  return useMutation({
+    mutationFn: (body: { reason_type: string; reason_detail: string }) =>
+      postApi.reportPost(postId, body),
+  })
+}

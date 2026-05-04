@@ -586,3 +586,9 @@ input:-webkit-autofill:focus {
     translate: 0 0;
   }
 }
+
+/* 스크롤바가 생길 때 레이아웃이 왼쪽으로 밀리는 현상 방지
+   → 스크롤바 공간을 항상 미리 확보해서 UI 흔들림 제거 */
+html {
+  scrollbar-gutter: stable;
+}

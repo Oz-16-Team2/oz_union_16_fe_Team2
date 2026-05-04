@@ -10,6 +10,6 @@ export function usePostDetailQuery(postId: number) {
       const res = await postApi.getPost(postId)
       return toPostDetailData(res.data)
     },
-    enabled: !Number.isNaN(postId),
+    enabled: Number.isFinite(postId),
   })
 }
