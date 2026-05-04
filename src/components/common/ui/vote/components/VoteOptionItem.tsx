@@ -76,7 +76,8 @@ export function VoteOptionItem({
       <div className="h-14 overflow-hidden rounded-full bg-gray-100 shadow-sm">
         <div
           className={cn(
-            'flex h-full items-center rounded-full px-6 text-xs',
+            'flex h-full items-center overflow-hidden rounded-full text-xs',
+            percentage > 0 && 'px-6',
             index === 0
               ? optionVariants.gauge.first
               : optionVariants.gauge.second

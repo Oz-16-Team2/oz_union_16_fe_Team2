@@ -15,4 +15,7 @@ export const POST_ENDPOINTS = {
     `/posts/${postId}/comments/${commentId}`,
   commentLikes: (commentId: number) => `/posts/comments/${commentId}/likes`,
   commentReport: (commentId: number) => `/posts/comments/${commentId}/report`,
+  voteParticipations: (voteId: number | string) =>
+    `/votes/${voteId}/participations/`,
+  vote: (voteId: number | string) => `/votes/${voteId}/`,
 } as const
