@@ -90,4 +90,11 @@ export const postApi = {
     apiClient.get<ApiTrendingResponse>(POST_ENDPOINTS.postSuggestions, {
       params,
     }),
+
+  // 투표 참여
+  vote: (voteId: number, body: { vote_option_id: number }) =>
+    apiClient.post<void>(POST_ENDPOINTS.voteParticipations(voteId), body),
+
+  // 투표 조회
+  getVote: (voteId: number) => apiClient.get(POST_ENDPOINTS.vote(voteId)),
 } as const
