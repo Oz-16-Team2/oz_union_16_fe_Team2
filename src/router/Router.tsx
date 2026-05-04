@@ -4,7 +4,7 @@ import { createBrowserRouter } from 'react-router'
 import { RootLayout } from '@/components/common/layout'
 import { LoginPageSkeleton, SignupPageSkeleton } from '@/features/auth'
 import {
-  BookmarkedGoalsPage,
+  BookmarkedPostsPage,
   MainPage,
   MyPage,
   MyPostsPage,
@@ -45,7 +45,7 @@ export const router = createBrowserRouter([
       },
       {
         path: 'mypage/bookmarks',
-        element: <BookmarkedGoalsPage />,
+        element: <BookmarkedPostsPage />,
       },
       {
         path: 'mypage/posts',

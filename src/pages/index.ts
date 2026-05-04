@@ -1,4 +1,4 @@
-export { BookmarkedGoalsPage } from './BookmarkedGoalsPage'
+export { BookmarkedPostsPage } from './BookmarkedPostsPage'
 export { LoginPage } from './LoginPage'
 export { MainPage } from './MainPage'
 export { MyPage } from './MyPage'

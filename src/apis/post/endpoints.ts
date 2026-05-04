@@ -5,6 +5,7 @@ export const POST_ENDPOINTS = {
   posts: '/posts/',
   postLikes: (postId: number | string) => `/posts/${postId}/likes/`,
   postScraps: (postId: number | string) => `/posts/${postId}/scraps`,
+  postScrapsList: '/posts/scraps',
   postReports: (postId: number | string) => `/posts/${postId}/reports/`,
   presignedUrl: '/posts/presigned-url/',
   postSearch: '/posts/search',

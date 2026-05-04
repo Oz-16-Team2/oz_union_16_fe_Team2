@@ -1,16 +1,12 @@
-import { useRef, useState } from 'react'
-
-import { ImagePlus, Loader2, X } from 'lucide-react'
-
-import { Button, Input, Textarea, useToast } from '@/components/common/ui'
+import { Button, Input, Textarea } from '@/components/common/ui'
 import { cn } from '@/utils/cn'
-import { uploadFilesToS3 } from '@/utils/uploadToS3'
 
 import { usePostForm } from '../hooks/usePostForm'
-import { MAX_CONTENT, MAX_IMAGES, MAX_TITLE } from '../post.constants'
+import { MAX_CONTENT, MAX_TITLE } from '../post.constants'
 import type { PostFormData, PostFormMode } from '../post.types'
 import {
   PostGoalSection,
+  PostImageSection,
   PostTagSection,
   PostVoteSection,
   SectionLabel,
@@ -32,49 +28,6 @@ export function PostFormLayout({
   isPending = false,
 }: PostFormLayoutProps) {
   const form = usePostForm(mode, defaultValues)
-  const toast = useToast()
-
-  const [isDragging, setIsDragging] = useState(false)
-  const imageInputRef = useRef<HTMLInputElement>(null)
-
-  const ALLOWED_IMAGE_TYPES = [
-    'image/jpeg',
-    'image/png',
-    'image/gif',
-    'image/webp',
-  ]
-
-  async function uploadImages(files: File[]) {
-    const imageFiles = files.filter((f) => ALLOWED_IMAGE_TYPES.includes(f.type))
-    if (imageFiles.length === 0 || !form.canAddImage) return
-
-    if (imageFiles.length < files.length) {
-      toast.error('JPEG, PNG, GIF, WEBP 형식의 이미지만 업로드할 수 있습니다.')
-    }
-
-    const blobUrls = form.addImages(imageFiles)
-    const filesToUpload = imageFiles.slice(0, blobUrls.length)
-
-    try {
-      const imageUrls = await uploadFilesToS3(filesToUpload)
-      form.resolveImages(blobUrls, imageUrls)
-    } catch {
-      form.removeImages(blobUrls)
-      toast.error('이미지 업로드에 실패했습니다.')
-    }
-  }
-
-  function handleImageSelect(e: React.ChangeEvent<HTMLInputElement>) {
-    const files = Array.from(e.target.files ?? [])
-    e.target.value = ''
-    uploadImages(files)
-  }
-
-  function handleDrop(e: React.DragEvent) {
-    e.preventDefault()
-    setIsDragging(false)
-    uploadImages(Array.from(e.dataTransfer.files))
-  }
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -86,86 +39,15 @@ export function PostFormLayout({
       {/* 이미지 업로드 */}
       <div className="flex flex-col gap-2">
         <SectionLabel label="이미지 선택" />
-        <div
-          role="button"
-          aria-label={`이미지 업로드 (최대 ${MAX_IMAGES}장)`}
-          onClick={() => form.canAddImage && imageInputRef.current?.click()}
-          onDrop={handleDrop}
-          onDragOver={(e) => {
-            e.preventDefault()
-            if (form.canAddImage) setIsDragging(true)
-          }}
-          onDragLeave={() => setIsDragging(false)}
-          className={cn(
-            'flex min-h-40 w-full flex-col rounded-2xl border-2 border-dashed p-4 transition-colors',
-            isDragging
-              ? 'border-focus-border bg-primary-100/30 dark:bg-primary-100/10'
-              : 'border-border-default bg-gray-50 dark:bg-gray-800',
-            form.canAddImage &&
-              'cursor-pointer hover:border-focus-border hover:bg-gray-100 dark:hover:bg-gray-750'
-          )}
-        >
-          {form.imageItems.length === 0 ? (
-            <div className="flex flex-1 flex-col items-center justify-center gap-2 text-text-muted">
-              <ImagePlus className="size-8" />
-              <span className="text-sm">
-                클릭 또는 드래그하여 이미지를 추가하세요
-              </span>
-              <span className="text-xs text-text-disabled">
-                최대 {MAX_IMAGES}장
-              </span>
-            </div>
-          ) : (
-            <div className="flex flex-col gap-3">
-              <div className="flex flex-wrap gap-3">
-                {form.imageItems.map((item, i) => (
-                  <div
-                    key={item.previewUrl}
-                    className="relative size-32 shrink-0"
-                  >
-                    <img
-                      src={item.previewUrl}
-                      alt={`첨부한 이미지 ${i + 1} 번째`}
-                      className="size-full rounded-xl object-cover"
-                    />
-                    {item.imageUrl === null ? (
-                      <div className="absolute inset-0 flex items-center justify-center rounded-xl bg-black/40">
-                        <Loader2 className="size-6 animate-spin text-white" />
-                      </div>
-                    ) : (
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          form.removeImage(i)
-                        }}
-                        className="absolute -right-1.5 -top-1.5 flex size-6 cursor-pointer items-center justify-center rounded-full bg-gray-700 text-white shadow dark:bg-gray-600"
-                      >
-                        <X className="size-3.5" />
-                      </button>
-                    )}
-                  </div>
-                ))}
-              </div>
-              {form.canAddImage && (
-                <p className="text-text-muted">
-                  {form.imageItems.length}/{MAX_IMAGES}장
-                </p>
-              )}
-            </div>
-          )}
-        </div>
+        <PostImageSection
+          imageItems={form.imageItems}
+          canAddImage={form.canAddImage}
+          onAddImages={form.addImages}
+          onResolveImages={form.resolveImages}
+          onRemoveImages={form.removeImages}
+          onRemoveImage={form.removeImage}
+        />
       </div>
-
-      {/* 이미지 업로드 실제 input (hidden) */}
-      <input
-        ref={imageInputRef}
-        type="file"
-        accept="image/jpeg,image/png,image/gif,image/webp"
-        multiple
-        className="hidden"
-        onChange={handleImageSelect}
-      />
 
       {/* 제목 */}
       <div className="flex flex-col gap-2">
