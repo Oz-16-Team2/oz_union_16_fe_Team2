@@ -127,6 +127,17 @@ export const meResponseSchema = z.object({
   profile_image_url: z.string(),
 })
 
+// REQ-AUTH-012: 프로필 이미지 목록
+// GET /api/v1/accounts/profile-images
+export const profileImageSchema = z.object({
+  code: z.string(),
+  image_url: z.string(),
+})
+
+export const profileImagesResponseSchema = z.object({
+  detail: z.array(profileImageSchema),
+})
+
 // Zod 스키마 기반 타입 추론
 // z.infer<typeof schema>를 사용하면,
 // Zod로 정의한 스키마를 기준으로 TypeScript 타입을 자동 생성
@@ -171,3 +182,5 @@ export type SessionExpiredResponse = z.infer<
 export type CheckNicknameRequest = z.infer<typeof checkNicknameRequestSchema>
 export type CheckNicknameResponse = z.infer<typeof checkNicknameResponseSchema>
 export type MeResponse = z.infer<typeof meResponseSchema>
+export type ProfileImage = z.infer<typeof profileImageSchema>
+export type ProfileImagesResponse = z.infer<typeof profileImagesResponseSchema>
