@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query'
+import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import type { AxiosError } from 'axios'
 
 import type { ApiErrorResponse } from '@/apis/api.types'
@@ -56,5 +56,6 @@ export function usePostListQuery(mode: PostListMode, size = POSTS_PAGE_SIZE) {
     // 탭 전환 시 이전 캐시를 남기지 않고 항상 새로 fetch
     // gcTime: 0 → 쿼리가 비활성화되는 즉시 캐시에서 제거됨
     gcTime: 0,
+    placeholderData: keepPreviousData,
   })
 }

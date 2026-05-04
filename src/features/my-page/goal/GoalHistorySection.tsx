@@ -36,7 +36,7 @@ export function GoalHistorySection({
   } = useGoalHistoryView(selectedDate)
 
   const shouldShowSkeleton = isLoading || isEmpty
-  const skeletonCount = 4
+  const skeletonCount = 8
 
   return (
     <section className="flex flex-col gap-6 sm:gap-8">
@@ -45,6 +45,9 @@ export function GoalHistorySection({
           <h3 className="text-[clamp(1rem,1.6vw,1.375rem)] font-semibold leading-tight text-text-primary">
             {selectedDate} 인증 목표
           </h3>
+          <p className="mt-1 text-xs text-text-muted">
+            완료한 목표: {goals.length}개
+          </p>
         </div>
         <Button
           variant="ghost"

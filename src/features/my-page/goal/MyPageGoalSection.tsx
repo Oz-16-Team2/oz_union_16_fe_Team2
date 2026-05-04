@@ -49,14 +49,15 @@ function GoalListSection() {
     resetFilters,
     setCurrentPage,
   } = useGoalListView()
-  const { createGoal, checkGoal, updateGoal } = useGoalActions({
-    onCreateSuccess: () => {
-      setIsCreateOpen(false)
-    },
-    onUpdateSuccess: () => {
-      setEditingGoalId(null)
-    },
-  })
+  const { createGoal, checkGoal, isCreatingGoal, isUpdatingGoal, updateGoal } =
+    useGoalActions({
+      onCreateSuccess: () => {
+        setIsCreateOpen(false)
+      },
+      onUpdateSuccess: () => {
+        setEditingGoalId(null)
+      },
+    })
   const { handleCreateSubmit, handleEditSubmit } = useGoalFormHandlers({
     createGoal,
     updateGoal,
@@ -147,6 +148,7 @@ function GoalListSection() {
               initialDateRange={{ start: null, end: null }}
               initialProgressRate={0}
               initialStatus="in_progress"
+              isSubmitting={isCreatingGoal}
               onClose={() => setIsCreateOpen(false)}
               onSubmit={handleCreateSubmit}
             />
@@ -170,6 +172,7 @@ function GoalListSection() {
               initialDateRange={{ start: null, end: null }}
               initialProgressRate={0}
               initialStatus="in_progress"
+              isSubmitting={isCreatingGoal}
               onClose={() => setIsCreateOpen(false)}
               onSubmit={handleCreateSubmit}
             />
@@ -186,6 +189,7 @@ function GoalListSection() {
                 initialDateRange={toDateRange(goal)}
                 initialProgressRate={goal.progressRate}
                 initialStatus={goal.status}
+                isSubmitting={isUpdatingGoal}
                 onClose={() => setEditingGoalId(null)}
                 onSubmit={({ title }) =>
                   handleEditSubmit({

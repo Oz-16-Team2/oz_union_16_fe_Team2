@@ -47,6 +47,8 @@ export function useGoalActions({
 
   return {
     createGoal: createGoalMutation.mutate,
+    isCreatingGoal: createGoalMutation.isPending,
+    isUpdatingGoal: updateGoalMutation.isPending,
     checkGoal: checkGoalMutation.mutate,
     updateGoal: updateGoalMutation.mutate,
   }
