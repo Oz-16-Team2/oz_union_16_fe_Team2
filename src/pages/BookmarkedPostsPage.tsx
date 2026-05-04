@@ -86,17 +86,20 @@ export function BookmarkedPostsPage() {
   }, [error])
 
   return (
-    <PostList
-      posts={posts}
-      totalPages={totalPages}
-      currentPage={page}
-      searchValue={inputValue}
-      isLoading={isLoading}
-      isError={isError}
-      errorMessage={errorMessage}
-      onSearch={setInputValue}
-      onSearchChange={setInputValue}
-      onPageChange={handlePageChange}
-    />
+    <main className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-6">
+      <PostList
+        posts={posts}
+        totalPages={totalPages}
+        currentPage={page}
+        searchValue={inputValue}
+        isLoading={isLoading}
+        isError={isError}
+        errorMessage={errorMessage}
+        onSearch={setInputValue}
+        onSearchChange={setInputValue}
+        onPageChange={handlePageChange}
+        stickPaginationToBottom
+      />
+    </main>
   )
 }

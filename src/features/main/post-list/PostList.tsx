@@ -38,6 +38,7 @@ export function PostList({
   errorMessage,
   filterArea,
   emptyView,
+  stickPaginationToBottom = false,
   onSearch,
   onSearchChange,
   onPageChange,
@@ -61,7 +62,12 @@ export function PostList({
   }
 
   return (
-    <section className="flex min-w-sm w-full flex-col gap-4 px-4">
+    <section
+      className={cn(
+        'flex w-full min-w-0 flex-col gap-4 px-4',
+        stickPaginationToBottom && 'flex-1'
+      )}
+    >
       {/* 1. 검색 + 필터 영역 여기서 필터링 추가 시 filterArea로 검색만 하고 싶으면 빈값 filterArea에 props 안받기 */}
       <div className="flex flex-col gap-3">
         <SearchBar
@@ -74,10 +80,23 @@ export function PostList({
       </div>
 
       {/* 2. 카드 목록 */}
-      {renderContent()}
+      <div
+        className={cn(
+          stickPaginationToBottom &&
+            'flex min-h-112 flex-1 flex-col justify-start'
+        )}
+      >
+        {renderContent()}
+      </div>
 
       {/* 3. 페이지네이션 */}
-      <div className={cn('pt-4 flex justify-center', isLoading && 'invisible')}>
+      <div
+        className={cn(
+          'pt-4 flex justify-center',
+          stickPaginationToBottom && 'mt-auto',
+          isLoading && 'invisible'
+        )}
+      >
         <Pagination
           currentPage={currentPage}
           totalPages={totalPages}
@@ -105,7 +124,7 @@ export const PostStatusView = ({
 }) => (
   <div
     className={cn(
-      'flex min-h-[43rem] flex-col items-center justify-center gap-3',
+      'flex min-h-112 flex-col items-center justify-center gap-3',
       isError ? 'text-error-500' : 'text-text-muted'
     )}
   >
