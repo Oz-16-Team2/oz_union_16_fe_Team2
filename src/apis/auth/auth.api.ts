@@ -104,6 +104,13 @@ export const authApi = {
     return authSchema.meResponseSchema.parse(data)
   },
 
+  getProfileImages: async (): Promise<authSchema.ProfileImagesResponse> => {
+    const { data } = await apiClient.get<authSchema.ProfileImagesResponse>(
+      AUTH_ENDPOINTS.profileImages
+    )
+    return authSchema.profileImagesResponseSchema.parse(data)
+  },
+
   login: async (
     payload: authSchema.LoginRequest
   ): Promise<authSchema.LoginResponse> => {

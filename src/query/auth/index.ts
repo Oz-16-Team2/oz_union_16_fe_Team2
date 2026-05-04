@@ -5,4 +5,5 @@ export {
 } from './useEmailVerificationMutations'
 export { useLoginMutation } from './useLoginMutation'
 export { useLogoutMutation } from './useLogoutMutation'
+export { useProfileImagesQuery } from './useProfileImagesQuery'
 export { useSignupMutation } from './useSignupMutation'

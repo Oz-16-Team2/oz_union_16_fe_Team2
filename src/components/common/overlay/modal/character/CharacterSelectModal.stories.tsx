@@ -1,9 +1,36 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 
+import blueCharacterImage from '@/assets/images/blue_character.png'
+import orangeCharacterImage from '@/assets/images/orange_character.png'
+import pinkCharacterImage from '@/assets/images/pink_character.png'
+import yellowCharacterImage from '@/assets/images/yellow_character.png'
 import { useModal } from '@/hooks/useModal'
-import { PROFILE_AVATAR_OPTIONS } from '@/shared/profileAvatar'
+import type { ProfileAvatarOption } from '@/shared/profileAvatar'
 
 import { CharacterSelectModal } from './CharacterSelectModal'
+
+const profileAvatarOptions: ProfileAvatarOption[] = [
+  {
+    code: 'avatar_01',
+    imageUrl: pinkCharacterImage,
+    label: '캐릭터 1',
+  },
+  {
+    code: 'avatar_02',
+    imageUrl: yellowCharacterImage,
+    label: '캐릭터 2',
+  },
+  {
+    code: 'avatar_03',
+    imageUrl: blueCharacterImage,
+    label: '캐릭터 3',
+  },
+  {
+    code: 'avatar_04',
+    imageUrl: orangeCharacterImage,
+    label: '캐릭터 4',
+  },
+]
 
 const meta: Meta<typeof CharacterSelectModal> = {
   component: CharacterSelectModal,
@@ -40,7 +67,7 @@ export const Default: Story = {
     )
   },
   args: {
-    characters: PROFILE_AVATAR_OPTIONS,
+    characters: profileAvatarOptions,
     onSelect: () => {},
     onClose: () => {},
   },
@@ -56,7 +83,7 @@ export const Dark: Story = {
   ],
   render: (args) => <CharacterSelectModal {...args} />,
   args: {
-    characters: PROFILE_AVATAR_OPTIONS,
+    characters: profileAvatarOptions,
     onSelect: () => {},
     onClose: () => {},
   },

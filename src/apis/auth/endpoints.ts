@@ -4,6 +4,7 @@ export const AUTH_ENDPOINTS = {
   login: '/accounts/login',
   logout: '/accounts/logout',
   me: '/accounts/me',
+  profileImages: '/accounts/profile-images',
   sendEmailVerification: '/accounts/verification/send-email',
   verifyEmail: '/accounts/verification/verify-email',
   checkNickname: '/accounts/check-nickname',
