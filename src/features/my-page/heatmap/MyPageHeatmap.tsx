@@ -236,7 +236,7 @@ export function MyPageHeatmap({
         </div>
       </div>
 
-      <div className="mt-4 flex items-center justify-between gap-4 border-t border-border-default/70 pt-3 text-xs text-text-muted">
+      <div className="mt-4 flex flex-wrap items-center justify-between gap-4 border-t border-border-default/70 pt-3 text-xs text-text-muted">
         <button type="button" className="shrink-0">
           활동량 집계 방식 알아보기
         </button>
