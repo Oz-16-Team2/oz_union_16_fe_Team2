@@ -24,6 +24,7 @@ export type PostFormData = {
   goalId?: number
   hasVote: boolean
   vote?: VoteFormData
+  canEditVote?: boolean
   tagNames?: string[]
   tagIds: number[]
 }

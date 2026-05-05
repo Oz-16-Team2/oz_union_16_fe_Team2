@@ -111,7 +111,7 @@ export type ApiPostUpdateRequest = {
   images?: string[]
   has_goal: boolean
   goal_id?: number
-  has_vote: boolean
+  has_vote?: boolean
   vote?: VoteContent
   tag_ids?: number[]
 }

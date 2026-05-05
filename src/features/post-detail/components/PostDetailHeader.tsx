@@ -1,4 +1,4 @@
-import { MoreVertical } from 'lucide-react'
+import { MoreHorizontal } from 'lucide-react'
 
 import { ActionMenu } from '@/components/common/overlay'
 import { formatRelativeTime } from '@/utils/formatRelativeTime'
@@ -51,7 +51,7 @@ export function PostDetailHeader({
       <ActionMenu
         trigger={
           <button type="button" className="text-text-primary">
-            <MoreVertical size={20} />
+            <MoreHorizontal size={20} />
           </button>
         }
         items={menuItems}

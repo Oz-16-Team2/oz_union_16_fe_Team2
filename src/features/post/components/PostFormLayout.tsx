@@ -110,6 +110,7 @@ export function PostFormLayout({
           period={form.votePeriod}
           onChangeOption={form.changeVoteOption}
           onChangePeriod={form.changeVotePeriod}
+          isExistingVoteLocked={form.isExistingVoteLocked}
         />
       </div>
 

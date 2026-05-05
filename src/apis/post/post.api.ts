@@ -24,6 +24,12 @@ import type {
 
 import { POST_ENDPOINTS } from './endpoints'
 
+type UpdateVoteBody = {
+  options: string[]
+  start_at?: string
+  end_at?: string
+}
+
 export const postApi = {
   // 진행 중인 목표 조회
   getGoals: () =>
@@ -111,4 +117,12 @@ export const postApi = {
 
   // 투표 조회
   getVote: (voteId: number) => apiClient.get(POST_ENDPOINTS.vote(voteId)),
+
+  // 투표 수정
+  updateVote: (voteId: number, body: UpdateVoteBody) =>
+    apiClient.patch(POST_ENDPOINTS.vote(voteId), body),
+
+  // 투표 삭제
+  deleteVote: (voteId: number) =>
+    apiClient.delete<void>(POST_ENDPOINTS.vote(voteId)),
 } as const

@@ -1,5 +1,4 @@
 import { VoteViewerMode } from '@/components/common/ui/vote/Vote.type'
-
 type VoteResultOption = {
   vote_option_id: number
   content: string
@@ -15,6 +14,7 @@ type VoteDetail = {
   options: VoteResultOption[]
 }
 
+// 투표 상태 - ui 모드 변환
 export function getVoteMode(
   voteInfo: { status: string } | null,
   isVoted?: boolean
@@ -26,6 +26,7 @@ export function getVoteMode(
   return VoteViewerMode.MEMBER
 }
 
+// api 응답 -> VoteDisplay 옵션 반환
 export function toVoteDisplayOptions(
   voteDetail: VoteDetail | undefined,
   selectedOptionId: string | null
@@ -34,7 +35,7 @@ export function toVoteDisplayOptions(
     voteDetail?.options.map((opt) => ({
       id: String(opt.vote_option_id),
       optionLabel: opt.content,
-      valueLabel: `${opt.rate}%`,
+      valueLabel: opt.content,
       percentage: opt.rate,
       checked: voteDetail.is_voted
         ? voteDetail.voted_option_id === opt.vote_option_id

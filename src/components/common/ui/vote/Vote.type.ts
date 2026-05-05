@@ -54,6 +54,8 @@ export type VoteEditorProps = {
   mode: VoteEditorMode
   options: string[]
   disabled?: boolean
+  hideOptionLength?: boolean
+  hideParticipantCount?: boolean
   onChangeOption?: (index: number, value: string) => void
   onSubmit?: () => void
   onChangePeriod?: (date: DateRange | null) => void
