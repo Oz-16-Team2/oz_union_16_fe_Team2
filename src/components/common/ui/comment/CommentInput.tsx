@@ -32,9 +32,9 @@ export function CommentInput({
   }
 
   return (
-    <div className="flex items-start gap-4 pl-4">
+    <div className="flex items-start gap-3 sm:gap-4 sm:pl-4">
       {/* 프로필 (나중에 사용자 정보로 교체 가능) */}
-      <div className="h-12 w-12 shrink-0 overflow-hidden rounded-full bg-gray-200">
+      <div className="h-10 w-10 shrink-0 overflow-hidden rounded-full bg-surface sm:h-12 sm:w-12">
         {profileImageUrl ? (
           <img
             src={profileImageUrl}

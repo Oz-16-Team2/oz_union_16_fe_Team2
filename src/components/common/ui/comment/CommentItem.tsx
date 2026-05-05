@@ -58,13 +58,13 @@ export function CommentItem({
   return (
     <div
       className={cn(
-        'flex gap-3 rounded-xl px-4 py-3',
+        'flex gap-3 rounded-xl px-3 py-3 sm:px-4',
         isSelected && 'bg-primary-100/30'
       )}
       onClick={() => onSelect?.()}
     >
       {/* 프로필 */}
-      <div className="h-12 w-12 shrink-0 overflow-hidden rounded-full bg-gray-200">
+      <div className="h-10 w-10 shrink-0 overflow-hidden rounded-full bg-gray-200 sm:h-12 sm:w-12">
         {profileImageUrl ? (
           <img
             src={profileImageUrl}
@@ -159,33 +159,31 @@ export function CommentItem({
             </div>
           </div>
         ) : (
-          <p className="max-w-full break-all whitespace-pre-wrap text-sm text-text-primary">
+          <p className="max-w-full wrap-break-word whitespace-pre-wrap text-sm text-text-primary">
             {content}
           </p>
         )}
 
         {/* 좋아요 */}
-        <div className="flex items-center gap-2">
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation()
-              onLike?.(id)
-            }}
-            className="flex items-center gap-1"
-            aria-label="댓글 좋아요"
-          >
-            <Heart
-              className={cn(
-                'h-4 w-4',
-                isLiked
-                  ? 'fill-primary-500 text-primary-500'
-                  : 'text-text-muted'
-              )}
-            />
-            <span className="text-xs text-text-muted">{likeCount}</span>
-          </button>
-        </div>
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation()
+            onLike?.(id)
+          }}
+          className="group flex items-center gap-1"
+          aria-label="댓글 좋아요"
+        >
+          <Heart
+            className={cn(
+              'h-4 w-4 transition-transform duration-200 group-hover:scale-110',
+              isLiked ? 'fill-current text-error-500' : 'text-text-primary'
+            )}
+          />
+          <span className="text-xs text-text-primary tabular-nums">
+            {likeCount}
+          </span>
+        </button>
       </div>
     </div>
   )
