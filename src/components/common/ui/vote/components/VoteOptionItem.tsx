@@ -14,10 +14,10 @@ type VoteOptionItemProps = {
 }
 
 const optionVariants = {
-  base: 'grid w-full grid-cols-[24px_64px_minmax(0,1fr)_56px] items-center gap-2 text-left',
+  base: 'grid w-full grid-cols-[20px_minmax(0,1fr)_44px] items-center gap-2 text-left sm:grid-cols-[24px_minmax(0,1fr)_56px]',
 
   text: {
-    selected: 'text-primary-400',
+    selected: 'text-primary-500',
     result: 'text-text-primary',
     default: 'text-text-muted',
   },
@@ -29,7 +29,7 @@ const optionVariants = {
 
   indicator: {
     selected:
-      'flex size-4 items-center justify-center rounded-sm bg-primary-400 text-white',
+      'flex size-4 items-center justify-center rounded-sm bg-primary-500 text-white',
     default: 'flex size-4 items-center justify-center rounded-sm bg-gray-300',
   },
 }
@@ -43,7 +43,9 @@ export function VoteOptionItem({
 }: VoteOptionItemProps) {
   const isSelected = Boolean(option.checked)
   const percentage = Math.min(100, Math.max(0, option.percentage ?? 0))
+  const displayPercentage = Math.round(percentage)
 
+  // 선택 → 파란색 / 나머지 상태 유지
   const textColor = isSelected
     ? optionVariants.text.selected
     : showResult
@@ -57,6 +59,7 @@ export function VoteOptionItem({
       onClick={() => onSelectOption?.(option.id)}
       className={optionVariants.base}
     >
+      {/* 체크박스 */}
       <span className="flex items-center justify-center">
         <span
           className={cn(
@@ -69,29 +72,35 @@ export function VoteOptionItem({
         </span>
       </span>
 
-      <span className={cn('text-sm font-medium', textColor)}>
-        {option.optionLabel}
-      </span>
+      {/* 게이지 */}
+      <div className="relative h-12 min-w-0 overflow-hidden rounded-full bg-gray-100 shadow-sm sm:h-14">
+        {showResult && percentage > 0 && (
+          <div
+            className={cn(
+              'absolute inset-y-0 left-0 rounded-full',
+              index === 0
+                ? optionVariants.gauge.first
+                : optionVariants.gauge.second
+            )}
+            style={{ width: `${percentage}%` }}
+          />
+        )}
 
-      <div className="h-14 overflow-hidden rounded-full bg-gray-100 shadow-sm">
-        <div
+        {/* 게이지 내부 텍스트 */}
+        <span
           className={cn(
-            'flex h-full items-center overflow-hidden rounded-full text-xs',
-            percentage > 0 && 'px-6',
-            index === 0
-              ? optionVariants.gauge.first
-              : optionVariants.gauge.second
+            'relative z-10 flex h-full min-w-0 items-center truncate px-3 text-sm font-medium sm:px-6',
+            textColor
           )}
-          style={{
-            width: showResult ? `${percentage}%` : '100%',
-          }}
+          title={option.valueLabel}
         >
-          <span className="truncate">{option.valueLabel}</span>
-        </div>
+          {option.valueLabel}
+        </span>
       </div>
 
-      <span className={cn('text-right text-xs', textColor)}>
-        {showResult ? `${percentage}%` : ''}
+      {/* 퍼센트 (색상 동일 + 스타일 통일) */}
+      <span className={cn('text-right text-sm font-medium', textColor)}>
+        {showResult ? `${displayPercentage}%` : ''}
       </span>
     </button>
   )

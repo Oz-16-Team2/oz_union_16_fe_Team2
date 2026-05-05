@@ -24,6 +24,7 @@ export type PostFormData = {
   goalId?: number
   hasVote: boolean
   vote?: VoteFormData
+  canEditVote?: boolean
   tagNames?: string[]
   tagIds: number[]
 }
@@ -66,6 +67,7 @@ export type PostDetailData = {
   isLiked: boolean
   commentCount: number
   isScrapped: boolean
+  isOwner: boolean
   hasGoal: boolean
   goalInfo: {
     goalId: number

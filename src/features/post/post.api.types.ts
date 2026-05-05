@@ -67,6 +67,7 @@ export type ApiPostResponse = {
   comment_count: number
   is_liked: boolean
   is_scrapped: boolean
+  is_owner: boolean
   has_goal: boolean
   goal_info: {
     goal_id: number
@@ -110,7 +111,7 @@ export type ApiPostUpdateRequest = {
   images?: string[]
   has_goal: boolean
   goal_id?: number
-  has_vote: boolean
+  has_vote?: boolean
   vote?: VoteContent
   tag_ids?: number[]
 }

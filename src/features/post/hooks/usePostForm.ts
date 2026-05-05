@@ -23,6 +23,11 @@ export function usePostForm(
   const [title, setTitle] = useState(defaultValues?.title ?? '')
   const [content, setContent] = useState(defaultValues?.content ?? '')
 
+  // edit 모드에서 기존 투표가 있으면 수정 페이지에서는 투표 수정 불가
+  // 기존 투표 수정은 게시글 상세페이지의 투표 더보기 메뉴에서 처리
+  const initialHasVote = mode === 'edit' && Boolean(defaultValues?.hasVote)
+  const isExistingVoteLocked = mode === 'edit' && initialHasVote
+
   // 이미지: edit 모드의 기존 이미지는 imageUrl이 이미 확정된 상태
   const [imageItems, setImageItems] = useState<PostImageItem[]>(
     (defaultValues?.images ?? []).map((url) => ({
@@ -30,6 +35,7 @@ export function usePostForm(
       imageUrl: url,
     }))
   )
+
   // 언마운트 시 revoke할 blob URL 추적
   const blobUrlsRef = useRef<string[]>([])
 
@@ -94,7 +100,9 @@ export function usePostForm(
       blobUrlsRef.current.push(previewUrl)
       return { previewUrl, imageUrl: null }
     })
+
     setImageItems((prev) => [...prev, ...newItems])
+
     return newItems.map((item) => item.previewUrl)
   }
 
@@ -115,6 +123,7 @@ export function usePostForm(
       URL.revokeObjectURL(url)
       blobUrlsRef.current = blobUrlsRef.current.filter((u) => u !== url)
     })
+
     setImageItems((prev) =>
       prev.filter((item) => !blobUrls.includes(item.previewUrl))
     )
@@ -123,12 +132,14 @@ export function usePostForm(
   // X 버튼으로 단일 이미지 제거
   function removeImage(index: number) {
     const item = imageItems[index]
+
     if (item?.previewUrl.startsWith('blob:')) {
       URL.revokeObjectURL(item.previewUrl)
       blobUrlsRef.current = blobUrlsRef.current.filter(
         (u) => u !== item.previewUrl
       )
     }
+
     setImageItems((prev) => prev.filter((_, i) => i !== index))
   }
 
@@ -143,12 +154,16 @@ export function usePostForm(
 
   // 투표
   function changeVoteOption(index: number, value: string) {
+    if (isExistingVoteLocked) return
+
     if (charLen(value) <= MAX_VOTE_OPTION) {
       setVoteOptions((prev) => prev.map((o, i) => (i === index ? value : o)))
     }
   }
 
   function changeVotePeriod(date: DateRange | null) {
+    if (isExistingVoteLocked) return
+
     setVotePeriod(date ?? undefined)
   }
 
@@ -158,15 +173,20 @@ export function usePostForm(
       .filter((item) => item.imageUrl !== null)
       .map((item) => item.imageUrl!)
 
+    const validVoteOptions = voteOptions
+      .filter((option) => option.trim() !== '')
+      .map((option) => option.trim())
+
     const hasActiveVote =
       Boolean(votePeriod?.start && votePeriod?.end) &&
-      voteOptions.filter((opt) => opt.trim() !== '').length >= 2
+      validVoteOptions.length >= 2
 
-    const vote: PostFormData['vote'] = hasActiveVote
+    // 기존 투표가 없고, 새 투표 입력값이 유효할 때만 vote payload 전송
+    const shouldSendVote = hasActiveVote && !initialHasVote
+
+    const vote: PostFormData['vote'] = shouldSendVote
       ? {
-          options: voteOptions
-            .filter((c) => c.trim() !== '')
-            .map((c) => c.trim()),
+          options: validVoteOptions,
           startDate: votePeriod?.start?.toISOString().split('T')[0],
           endDate: votePeriod?.end?.toISOString().split('T')[0],
         }
@@ -180,6 +200,7 @@ export function usePostForm(
       goalId: selectedGoalId,
       hasVote: hasActiveVote,
       vote,
+      canEditVote: shouldSendVote,
       tagIds: selectedTagIds,
     }
 
@@ -187,6 +208,7 @@ export function usePostForm(
       if (postId === undefined) {
         throw new Error('[usePostForm] edit 모드에서 postId는 필수입니다.')
       }
+
       return { postId, ...base }
     }
 
@@ -202,12 +224,15 @@ export function usePostForm(
     voteOptions,
     votePeriod,
     selectedGoalId,
+
     // 파생
     titleLen,
     contentLen,
     isSubmitDisabled,
     isUploading,
     canAddImage,
+    isExistingVoteLocked,
+
     // 액션
     changeTitle,
     changeContent,

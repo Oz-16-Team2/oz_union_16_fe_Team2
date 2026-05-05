@@ -12,21 +12,24 @@ export function VoteDisplay({
   options,
   participantCount = 0,
   period,
-  actionLabel,
-  showMoreButton = false,
   actionSlot,
   onSelectOption,
   onActionClick,
 }: VoteDisplayProps) {
   const isClosed = mode === VoteViewerMode.CLOSED
   const isVoted = mode === VoteViewerMode.VOTED
-  const showResult = isVoted || isClosed
+  const showResult = true // 투표 결과 항상 보여주기
 
   const hasCheckedOption = options.some((option) => option.checked)
   const isActionDisabled =
-    isClosed || (mode === VoteViewerMode.MEMBER && !hasCheckedOption)
+    isClosed || isVoted || (mode === VoteViewerMode.MEMBER && !hasCheckedOption)
 
-  const buttonLabel = isClosed ? '투표 마감' : (actionLabel ?? '투표하기')
+  const buttonLabel = isClosed
+    ? '투표 마감'
+    : isVoted
+      ? '투표 완료'
+      : '투표하기'
+
   const statusLabel = isClosed ? '투표 마감' : '투표 진행중'
   const hasPeriod = Boolean(period?.start && period?.end)
 
@@ -44,21 +47,21 @@ export function VoteDisplay({
 
       <section
         className={cn(
-          'w-full rounded-2xl border border-border-default bg-gray-100 px-6 py-6 shadow-card-main',
+          'relative mx-auto min-h-62 w-full max-w-267.5 rounded-2xl border border-border-default bg-gray-100 px-6 py-6 shadow-card-main',
           isClosed && 'opacity-50'
         )}
       >
-        {(showMoreButton || actionSlot) && actionSlot && (
-          <div className="mb-4 flex justify-end">{actionSlot}</div>
+        {actionSlot && (
+          <div className="absolute top-4 right-4">{actionSlot}</div>
         )}
 
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4 pt-8">
           {options.map((option, index) => (
             <VoteOptionItem
               key={option.id}
               option={option}
               index={index}
-              isClosed={isClosed}
+              isClosed={isClosed || isVoted}
               showResult={showResult}
               onSelectOption={onSelectOption}
             />
@@ -77,6 +80,7 @@ export function VoteDisplay({
           </Button>
         </div>
       </section>
+
       <div className="mt-4 flex items-center gap-2 text-sm text-text-muted">
         <Users className="h-4 w-4" />
         <span>{participantCount}명 참여중</span>

@@ -26,6 +26,8 @@ export function VoteEditor({
   options,
   participantCount = 0,
   disabled = false,
+  hideOptionLength = false,
+  hideParticipantCount = false,
   onChangeOption,
   onSubmit,
   onChangePeriod,
@@ -68,16 +70,26 @@ export function VoteEditor({
                   옵션 입력
                 </span>
 
-                <input
-                  value={option}
-                  onChange={(e) => onChangeOption?.(index, e.target.value)}
-                  placeholder="옵션을 입력하세요"
-                  className={cn(
-                    inputVariants.base,
-                    inputStyle,
-                    'focus:border-focus-border'
+                <div className="min-w-0">
+                  <input
+                    value={option}
+                    maxLength={12}
+                    disabled={disabled}
+                    onChange={(e) => onChangeOption?.(index, e.target.value)}
+                    placeholder="옵션을 입력하세요"
+                    className={cn(
+                      inputVariants.base,
+                      inputStyle,
+                      'focus:border-focus-border'
+                    )}
+                  />
+
+                  {!hideOptionLength && (
+                    <span className="mt-1 block text-right text-xs text-text-muted">
+                      {option.length}/12
+                    </span>
                   )}
-                />
+                </div>
               </div>
             )
           })}
@@ -98,10 +110,12 @@ export function VoteEditor({
         )}
       </section>
 
-      <div className="mt-4 flex items-center gap-2 text-sm text-text-muted">
-        <Users className="h-4 w-4" />
-        <span>{participantCount}명 참여중</span>
-      </div>
+      {!hideParticipantCount && (
+        <div className="mt-4 flex items-center gap-2 text-sm text-text-muted">
+          <Users className="h-4 w-4" />
+          <span>{participantCount}명 참여중</span>
+        </div>
+      )}
     </>
   )
 }

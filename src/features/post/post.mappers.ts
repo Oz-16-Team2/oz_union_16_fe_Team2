@@ -34,6 +34,7 @@ export function toPostFormData(api: ApiPostResponse): PostFormData {
     hasGoal: api.has_goal,
     goalId: api.goal_info?.goal_id,
     hasVote: api.has_vote,
+    canEditVote: false,
     vote: api.vote_info
       ? {
           options: api.vote_info.options.map((o) => o.content),
@@ -61,6 +62,7 @@ export function toPostDetailData(api: ApiPostResponse): PostDetailData {
     commentCount: api.comment_count,
     isLiked: api.is_liked ?? false,
     isScrapped: api.is_scrapped,
+    isOwner: api.is_owner,
     hasGoal: api.has_goal,
     goalInfo: api.goal_info
       ? {
@@ -116,6 +118,8 @@ export function toApiUpdateRequest(data: PostFormData): ApiPostUpdateRequest {
     throw new Error('postId는 필수')
   }
 
+  const shouldSendVote = data.canEditVote && data.vote
+
   return {
     post_id: data.postId,
     title: data.title,
@@ -123,8 +127,12 @@ export function toApiUpdateRequest(data: PostFormData): ApiPostUpdateRequest {
     images: data.images,
     has_goal: data.hasGoal,
     ...(data.goalId !== undefined && { goal_id: data.goalId }),
-    has_vote: data.hasVote,
-    vote: toApiVoteContent(data.vote),
+    ...(shouldSendVote
+      ? {
+          has_vote: true,
+          vote: toApiVoteContent(data.vote),
+        }
+      : {}),
     tag_ids: data.tagIds,
   }
 }

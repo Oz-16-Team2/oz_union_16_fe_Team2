@@ -137,6 +137,7 @@ export const mockPost: ApiPostResponse = {
   comment_count: 3,
   is_liked: false,
   is_scrapped: false,
+  is_owner: true,
   has_goal: true,
   goal_info: {
     goal_id: 101,

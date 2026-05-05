@@ -9,21 +9,15 @@ import { ConfirmModal } from '@/components/common/overlay/modal/confirm/ConfirmM
 import { ReportFormModal } from '@/components/common/overlay/modal/form/ReportFormModal'
 import { POST_REPORT_REASONS } from '@/components/common/ui/card/usePostCardReport'
 import { useToast } from '@/components/common/ui/toast/useToast'
-import { VoteDisplay } from '@/components/common/ui/vote/VoteDisplay'
 import type { PostDetailData } from '@/features/post/post.types'
-import {
-  getVoteMode,
-  toVoteDisplayOptions,
-} from '@/features/post-detail/utils/voteDisplayMapper'
 import { useDeletePostMutation } from '@/query/post/useDeletePostMutation'
 import { useReportPostMutation } from '@/query/post/useReportPostMutation'
-import { useVoteMutation } from '@/query/post/useVoteMutaion'
-import { useVoteQuery } from '@/query/post/useVoteQuery'
 
 import { PostDetailActions } from './PostDetailActions'
 import { PostDetailBody } from './PostDetailBody'
 import { PostDetailCommentSection } from './PostDetailCommentSection'
 import { PostDetailHeader } from './PostDetailHeader'
+import { PostDetailVoteSection } from './PostDetailVoteSection'
 import { PostGoalSection } from './PostGoalSection'
 
 type PostDetailLayoutProps = {
@@ -34,6 +28,9 @@ export function PostDetailLayout({ post }: PostDetailLayoutProps) {
   const navigate = useNavigate()
   const toast = useToast()
 
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
+  const [isReportModalOpen, setIsReportModalOpen] = useState(false)
+
   const deleteMutation = useDeletePostMutation({
     onSuccess: () => {
       setIsDeleteModalOpen(false)
@@ -41,19 +38,8 @@ export function PostDetailLayout({ post }: PostDetailLayoutProps) {
     },
     onError: (message) => toast.error(message),
   })
+
   const reportMutation = useReportPostMutation()
-  const voteMutation = useVoteMutation()
-  const { data: voteData } = useVoteQuery(post.voteInfo?.voteId ?? 0)
-
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
-  const [isReportModalOpen, setIsReportModalOpen] = useState(false)
-  const [selectedOptionId, setSelectedOptionId] = useState<string | null>(null)
-
-  const voteDetail = voteData?.data.detail
-
-  // TODO: is_owner 반영 후 작성자 판별 교체 예정
-  const currentUserNickname = '테스트유저1'
-  const isOwner = post.nickname === currentUserNickname
 
   const handleDelete = () => {
     setIsDeleteModalOpen(true)
@@ -91,43 +77,6 @@ export function PostDetailLayout({ post }: PostDetailLayoutProps) {
     )
   }
 
-  const handleVoteSubmit = () => {
-    // 이미 투표한 사용자는 재투표 불가
-    if (voteDetail?.is_voted) return
-    if (!selectedOptionId || !post.voteInfo) return
-
-    voteMutation.mutate(
-      {
-        postId: post.postId,
-        voteId: post.voteInfo.voteId,
-        voteOptionId: Number(selectedOptionId),
-      },
-      {
-        onSuccess: () => {
-          toast.success('투표가 완료되었습니다.')
-        },
-        onError: (error) => {
-          const axiosError = error as AxiosError<ApiErrorResponse>
-          const detail = axiosError.response?.data.error_detail
-
-          if (axiosError.response?.status === 409) {
-            toast.error('이미 참여한 투표입니다.')
-            return
-          }
-
-          toast.error(detail ? formatError(detail) : '투표에 실패했습니다.')
-        },
-      }
-    )
-  }
-
-  const handleVoteOptionSelect = (optionId: string) => {
-    // 이미 투표한 사용자는 선택 변경 불가
-    if (voteDetail?.is_voted) return
-
-    setSelectedOptionId(optionId)
-  }
-
   const ownerMenuItems = [
     { label: '수정', onClick: () => navigate(`/post/${post.postId}/edit`) },
     {
@@ -139,11 +88,11 @@ export function PostDetailLayout({ post }: PostDetailLayoutProps) {
 
   const guestMenuItems = [{ label: '신고', onClick: handleReport }]
 
-  const menuItems = isOwner ? ownerMenuItems : guestMenuItems
+  const menuItems = post.isOwner ? ownerMenuItems : guestMenuItems
 
   return (
     <>
-      <article className="w-full max-w-4xl rounded-2xl border border-border-default bg-white px-8 py-6 shadow-card-main">
+      <article className="w-full max-w-300 rounded-2xl border border-border-default bg-white px-8 py-6 shadow-card-main">
         <PostDetailHeader
           author={{
             nickname: post.nickname,
@@ -174,21 +123,7 @@ export function PostDetailLayout({ post }: PostDetailLayoutProps) {
           </div>
         )}
 
-        {post.hasVote && post.voteInfo && (
-          <div className="mt-6">
-            <VoteDisplay
-              mode={getVoteMode(post.voteInfo, voteDetail?.is_voted)}
-              options={toVoteDisplayOptions(voteDetail, selectedOptionId)}
-              participantCount={voteDetail?.total_count ?? 0}
-              period={{
-                start: new Date(post.voteInfo.startAt),
-                end: new Date(post.voteInfo.endAt),
-              }}
-              onSelectOption={handleVoteOptionSelect}
-              onActionClick={handleVoteSubmit}
-            />
-          </div>
-        )}
+        <PostDetailVoteSection post={post} />
 
         <div className="mt-8">
           <PostDetailActions
