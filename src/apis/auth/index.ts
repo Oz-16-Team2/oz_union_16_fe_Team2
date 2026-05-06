@@ -1,5 +1,11 @@
 export { authApi } from './auth.api'
 export type {
+  ChangeNicknameRequest,
+  ChangeNicknameResponse,
+  ChangePasswordRequest,
+  ChangePasswordResponse,
+  CheckCurrentPasswordRequest,
+  CheckCurrentPasswordResponse,
   CheckNicknameRequest,
   CheckNicknameResponse,
   FieldErrorResponse,

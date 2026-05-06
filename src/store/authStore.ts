@@ -1,10 +1,12 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
-type AuthUser = {
+export type AuthUser = {
   id?: number // 로그인 유저 식별용 (댓글 내/타 구분)
   nickname: string
   profileImageUrl: string
+  authProvider?: string
+  isSocial?: boolean
 }
 
 // 라우터 가드가 세션 복구 여부를 판단하기 위한 상태입니다.
@@ -20,6 +22,7 @@ type AuthState = {
   setAccessToken: (accessToken: string) => void
   // 세션 복구 훅에서 checking/restored 상태를 업데이트할 때 사용합니다.
   setAuthStatus: (status: AuthStatus) => void
+  updateUser: (user: Partial<AuthUser>) => void
   clearSession: () => void
 }
 
@@ -40,6 +43,11 @@ export const useAuthStore = create<AuthState>()(
           accessToken,
         })),
       setAuthStatus: (authStatus) => set({ authStatus }),
+      updateUser: (user) =>
+        set((state) => ({
+          user: state.user ? { ...state.user, ...user } : null,
+        })),
+
       //로그아웃시
       clearSession: () =>
         set({ accessToken: null, user: null, authStatus: 'restored' }),

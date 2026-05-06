@@ -6,3 +6,7 @@ export { ModalHeader } from './base/ModalHeader'
 export { CharacterSelectModal } from './character/CharacterSelectModal'
 export { ConfirmModal } from './confirm/ConfirmModal'
 export { ReportFormModal } from './form/ReportFormModal'
+export {
+  type ProfileEditFormValues,
+  ProfileEditModal,
+} from './profile/ProfileEditModal'

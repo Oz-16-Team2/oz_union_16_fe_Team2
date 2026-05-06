@@ -10,6 +10,13 @@ const emailToken = z.string()
 const detail = z.string()
 const accessToken = z.string()
 const fieldError = z.record(z.string(), z.array(z.string()))
+const signupPassword = z
+  .string()
+  .min(8, '비밀번호는 8자 이상이어야 합니다.')
+  .regex(
+    /^(?=.*[A-Za-z])(?=.*\d).+$/,
+    '비밀번호는 영문과 숫자를 모두 포함해야 합니다.'
+  )
 
 // REQ-AUTH-001: 이메일 회원가입
 // POST /api/v1/accounts/signup
@@ -125,6 +132,56 @@ export const meResponseSchema = z.object({
   id: z.number(),
   nickname: z.string(),
   profile_image_url: z.string(),
+  provider: z.string().optional(),
+  login_type: z.string().optional(),
+  auth_provider: z.string().optional(),
+  is_social: z.boolean().optional(),
+})
+
+// PATCH /api/v1/accounts/me/change-nickname
+export const changeNicknameRequestSchema = z.object({
+  nickname: z.string().trim().min(1, '닉네임을 입력해주세요'),
+})
+
+export const changeNicknameResponseSchema = z.object({
+  detail: z.object({
+    message: z.string(),
+    nickname: z.string(),
+  }),
+})
+
+// 비밀번호 변경 요청은 백엔드 스펙의 snake_case 필드명을 그대로 검증합니다.
+// 새 비밀번호 규칙은 회원가입과 동일하게 8자 이상 + 영문/숫자 포함입니다.
+export const changePasswordRequestSchema = z
+  .object({
+    password,
+    new_password: signupPassword,
+    new_password_confirm: z.string(),
+  })
+  .superRefine((data, ctx) => {
+    if (data.new_password !== data.new_password_confirm) {
+      ctx.addIssue({
+        code: 'custom',
+        path: ['new_password_confirm'],
+        message: '비밀번호가 일치하지 않습니다',
+      })
+    }
+  })
+
+export const changePasswordResponseSchema = z.object({
+  detail,
+})
+
+// REQ-AUTH-012: 현재 비밀번호 확인
+// POST /api/v1/accounts/change-password/check
+export const checkCurrentPasswordRequestSchema = z.object({
+  password,
+})
+
+export const checkCurrentPasswordResponseSchema = z.object({
+  detail: z.object({
+    current_password_match: z.boolean(),
+  }),
 })
 
 // REQ-AUTH-012: 프로필 이미지 목록
@@ -182,5 +239,19 @@ export type SessionExpiredResponse = z.infer<
 export type CheckNicknameRequest = z.infer<typeof checkNicknameRequestSchema>
 export type CheckNicknameResponse = z.infer<typeof checkNicknameResponseSchema>
 export type MeResponse = z.infer<typeof meResponseSchema>
+export type ChangeNicknameRequest = z.infer<typeof changeNicknameRequestSchema>
+export type ChangeNicknameResponse = z.infer<
+  typeof changeNicknameResponseSchema
+>
+export type ChangePasswordRequest = z.infer<typeof changePasswordRequestSchema>
+export type ChangePasswordResponse = z.infer<
+  typeof changePasswordResponseSchema
+>
+export type CheckCurrentPasswordRequest = z.infer<
+  typeof checkCurrentPasswordRequestSchema
+>
+export type CheckCurrentPasswordResponse = z.infer<
+  typeof checkCurrentPasswordResponseSchema
+>
 export type ProfileImage = z.infer<typeof profileImageSchema>
 export type ProfileImagesResponse = z.infer<typeof profileImagesResponseSchema>

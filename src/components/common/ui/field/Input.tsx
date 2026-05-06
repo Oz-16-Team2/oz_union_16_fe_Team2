@@ -3,6 +3,7 @@ import { cn } from '@/utils/cn'
 export type InputProps = {
   error?: boolean
   errorMessage?: string
+  wrapperClassName?: string
 } & React.ComponentProps<'input'>
 
 export function Input({
@@ -10,10 +11,11 @@ export function Input({
   error,
   errorMessage,
   ref,
+  wrapperClassName,
   ...props
 }: InputProps) {
   return (
-    <div className="flex flex-col gap-4">
+    <div className={cn('flex flex-col gap-4', wrapperClassName)}>
       <input
         ref={ref}
         {...props}

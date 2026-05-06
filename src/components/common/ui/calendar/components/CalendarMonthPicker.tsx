@@ -23,7 +23,7 @@ const MONTH_BUTTON_STATE_CLASS: Record<MonthButtonState, string> = {
   current: 'text-primary-500',
   default: 'text-text-primary',
   disabled:
-    'cursor-not-allowed text-text-muted disabled:bg-transparent disabled:text-text-muted',
+    'cursor-not-allowed text-text-muted disabled:!bg-transparent disabled:!text-text-muted dark:disabled:!bg-transparent',
   selected: 'bg-primary-500 text-white hover:bg-primary-500 hover:text-white',
 }
 

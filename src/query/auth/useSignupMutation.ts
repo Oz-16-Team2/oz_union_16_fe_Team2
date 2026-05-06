@@ -45,7 +45,7 @@ export function useSignupMutation(
 
       const { setAccessToken } = useAuthStore.getState()
       setAccessToken(loginResponse.access_token)
-      return buildAuthSession()
+      return buildAuthSession({ authProvider: 'email', isSocial: false })
     },
     onSuccess: (data) => {
       setSession(data.accessToken, data.user)

@@ -13,16 +13,43 @@ const redirectToLoginIfNeeded = () => {
   }
 }
 
+const isEndpointRequest = (url: string | undefined, endpoint: string) =>
+  url === endpoint || url?.endsWith(endpoint)
+
 const isAuthRecoveryBypassRequest = (url?: string) => {
   if (!url) {
     return false
   }
 
   return (
-    url.includes(AUTH_ENDPOINTS.login) ||
-    url.includes(AUTH_ENDPOINTS.refreshToken) ||
-    url.includes(AUTH_ENDPOINTS.logout)
+    isEndpointRequest(url, AUTH_ENDPOINTS.login) ||
+    isEndpointRequest(url, AUTH_ENDPOINTS.refreshToken) ||
+    isEndpointRequest(url, AUTH_ENDPOINTS.logout)
   )
+}
+
+const shouldBypassAuthRecovery = (error: AxiosError) => {
+  const url = error.config?.url
+  if (isAuthRecoveryBypassRequest(url)) {
+    return true
+  }
+
+  if (!isEndpointRequest(url, AUTH_ENDPOINTS.changePassword)) {
+    return false
+  }
+
+  const errorDetail = (error.response?.data as { error_detail?: unknown })
+    ?.error_detail
+
+  // 비밀번호 변경의 401은 토큰 만료가 아니라 현재 비밀번호 불일치일 수 있습니다.
+  // 명확한 세션 만료 응답만 refresh 로직으로 넘기고, 나머지는 폼 에러로 처리합니다.
+  const isSessionExpired =
+    errorDetail !== null &&
+    typeof errorDetail === 'object' &&
+    'detail' in errorDetail &&
+    errorDetail.detail === '로그인 세션이 만료되었습니다.'
+
+  return !isSessionExpired
 }
 
 // 공통 API 클라이언트 생성
@@ -69,7 +96,7 @@ apiClient.interceptors.response.use(
       _retry?: boolean
     }
 
-    if (isAuthRecoveryBypassRequest(originalRequest?.url)) {
+    if (shouldBypassAuthRecovery(error)) {
       return Promise.reject(error)
     }
 
