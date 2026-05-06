@@ -7,6 +7,7 @@ import type {
   ApiTrendingParams,
   ApiTrendingResponse,
 } from '@/features/main/post-list/PostList.api.types'
+import type { ApiPostListResponse } from '@/features/main/post-list/PostList.api.types'
 import type {
   ApiMyPostListParams,
   ApiMyPostListWrappedResponse,
@@ -55,9 +56,10 @@ export const postApi = {
     }),
 
   // 북마크(스크랩) 게시글 목록 조회
-  // TODO: API 수정 완료 시 아래 주석을 해제하고 북마크 조회에서 getPosts 호출 제거
-  // getScrappedPosts: (params?: ApiPostListParams) =>
-  //   apiClient.get<ApiPostListResponse>(POST_ENDPOINTS.postScrapsList, { params }),
+  getScrappedPosts: (params?: { page?: number; size?: number }) =>
+    apiClient.get<ApiPostListResponse>(POST_ENDPOINTS.postScrapsList, {
+      params,
+    }),
 
   // 내가 쓴 게시글 목록 조회
   getMyPosts: (params?: ApiMyPostListParams) =>

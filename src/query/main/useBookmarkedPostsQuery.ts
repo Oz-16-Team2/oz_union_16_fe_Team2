@@ -5,7 +5,6 @@ import type { ApiErrorResponse } from '@/apis/api.types'
 import { postApi } from '@/apis/post'
 import type { ApiPostListResponse } from '@/features/main/post-list/PostList.api.types'
 
-// TODO: API 수정 완료 시 postApi.getScrappedPosts(params)로 교체
 export function useBookmarkedPostsQuery(params: {
   page: number
   size: number
@@ -14,8 +13,8 @@ export function useBookmarkedPostsQuery(params: {
     queryKey: ['bookmarkedPosts', params],
     retry: false,
     queryFn: async () => {
-      const res = await postApi.getPosts(params)
-      return res.data.detail
+      const res = await postApi.getScrappedPosts(params)
+      return res.data
     },
     gcTime: 0,
   })
