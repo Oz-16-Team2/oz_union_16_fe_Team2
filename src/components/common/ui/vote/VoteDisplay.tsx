@@ -47,7 +47,7 @@ export function VoteDisplay({
 
       <section
         className={cn(
-          'relative mx-auto min-h-62 w-full max-w-267.5 rounded-2xl border border-border-default bg-gray-100 px-6 py-6 shadow-card-main',
+          'relative mx-auto min-h-62 w-full max-w-267.5 rounded-2xl border border-border-default bg-gray-100 px-6 py-6 shadow-card-main dark:bg-white/10',
           isClosed && 'opacity-50'
         )}
       >

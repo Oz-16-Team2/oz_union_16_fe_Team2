@@ -40,8 +40,7 @@ export function PostVoteSection({
             {formatDate(period?.start)} ~ {formatDate(period?.end)}
           </span>
         </div>
-
-        <section className="relative mx-auto min-h-62 w-full max-w-267.5 rounded-2xl border border-border-default bg-gray-100 px-6 py-6 shadow-card-main">
+        <section className="relative mx-auto min-h-62 w-full max-w-267.5 rounded-2xl border border-border-default bg-gray-100 px-6 py-6 shadow-card-main dark:bg-white/10">
           <div className="flex flex-col gap-4 pt-8">
             {options.map((option, index) => {
               const isFirst = index === 0
@@ -52,10 +51,10 @@ export function PostVoteSection({
                   className="grid w-full grid-cols-[20px_minmax(0,1fr)_44px] items-center gap-2 text-left sm:grid-cols-[24px_minmax(0,1fr)_56px]"
                 >
                   <span className="flex items-center justify-center">
-                    <span className="flex size-4 items-center justify-center rounded-sm bg-gray-300" />
+                    <span className="flex size-4 items-center justify-center rounded-sm bg-gray-300 dark:bg-white/20" />
                   </span>
 
-                  <div className="relative h-12 min-w-0 overflow-hidden rounded-full bg-gray-100 shadow-sm sm:h-14">
+                  <div className="relative h-12 min-w-0 overflow-hidden rounded-full bg-gray-100 shadow-sm dark:bg-white/10 sm:h-14">
                     <div
                       className={cn(
                         'absolute inset-y-0 left-0 rounded-full',

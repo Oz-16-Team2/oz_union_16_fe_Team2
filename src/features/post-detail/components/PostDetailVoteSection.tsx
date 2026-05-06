@@ -62,7 +62,7 @@ export function PostDetailVoteSection({ post }: PostDetailVoteSectionProps) {
   }
   return (
     <div className="mt-6 overflow-x-auto">
-      <div className="min-w-80">
+      <div className="min-w-80 rounded-2xl border border-border-default bg-surface p-4">
         <VoteDisplay
           mode={getVoteMode(post.voteInfo, voteDetail?.is_voted)}
           options={toVoteDisplayOptions(voteDetail, selectedOptionId)}
@@ -80,7 +80,7 @@ export function PostDetailVoteSection({ post }: PostDetailVoteSectionProps) {
                   <button
                     type="button"
                     aria-label="투표 더보기"
-                    className="flex size-8 items-center justify-center rounded-full text-text-primary hover:bg-gray-100"
+                    className="flex size-8 items-center justify-center rounded-full text-text-primary hover:bg-gray-100 dark:hover:bg-white/10"
                   >
                     <MoreHorizontal size={20} />
                   </button>

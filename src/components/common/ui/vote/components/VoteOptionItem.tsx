@@ -17,20 +17,21 @@ const optionVariants = {
   base: 'grid w-full grid-cols-[20px_minmax(0,1fr)_44px] items-center gap-2 text-left sm:grid-cols-[24px_minmax(0,1fr)_56px]',
 
   text: {
-    selected: 'text-primary-500',
+    selected: 'text-white',
     result: 'text-text-primary',
     default: 'text-text-muted',
   },
 
   gauge: {
-    first: 'bg-gray-300',
-    second: 'bg-primary-100',
+    first: 'bg-gray-400 dark:bg-white/15',
+    second: 'bg-primary-500 dark:bg-primary-400',
   },
 
   indicator: {
     selected:
       'flex size-4 items-center justify-center rounded-sm bg-primary-500 text-white',
-    default: 'flex size-4 items-center justify-center rounded-sm bg-gray-300',
+    default:
+      'flex size-4 items-center justify-center rounded-sm bg-gray-300 dark:bg-white/20',
   },
 }
 
@@ -45,7 +46,6 @@ export function VoteOptionItem({
   const percentage = Math.min(100, Math.max(0, option.percentage ?? 0))
   const displayPercentage = Math.round(percentage)
 
-  // 선택 → 파란색 / 나머지 상태 유지
   const textColor = isSelected
     ? optionVariants.text.selected
     : showResult
@@ -73,7 +73,7 @@ export function VoteOptionItem({
       </span>
 
       {/* 게이지 */}
-      <div className="relative h-12 min-w-0 overflow-hidden rounded-full bg-gray-100 shadow-sm sm:h-14">
+      <div className="relative h-12 min-w-0 overflow-hidden rounded-full bg-gray-100 shadow-sm dark:bg-white/5 sm:h-14">
         {showResult && percentage > 0 && (
           <div
             className={cn(
