@@ -60,8 +60,8 @@ export function PostTagSection({
               isSelected
                 ? 'bg-primary-500 text-white'
                 : isDisabled
-                  ? 'cursor-not-allowed bg-gray-100 text-text-disabled'
-                  : 'bg-gray-100 text-text-muted hover:bg-gray-200'
+                  ? 'cursor-not-allowed bg-gray-100 text-gray-400 dark:bg-gray-800 dark:text-gray-600'
+                  : 'bg-gray-100 text-text-muted hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600'
             )}
           >
             #{tag.name}
