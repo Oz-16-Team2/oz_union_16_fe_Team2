@@ -125,7 +125,7 @@ export function PostDetailBody({
           {tags.map((tag, index) => (
             <span
               key={`${tag}-${index}`}
-              className="max-w-fit break-all rounded-md bg-gray-100 px-2 py-1 text-xs text-text-muted"
+              className="max-w-fit break-all rounded-md bg-gray-100 dark:bg-white/10 px-2 py-1 text-xs text-text-muted"
             >
               #{tag}
             </span>

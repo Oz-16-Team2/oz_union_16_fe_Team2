@@ -13,11 +13,14 @@ const inputVariants = {
   base: 'h-14 w-full rounded-full px-5 text-sm outline-none placeholder:text-text-muted',
 
   enabled: {
-    first: 'border border-gray-300 bg-gray-300 text-text-primary',
-    second: 'border border-primary-100 bg-primary-100 text-text-primary',
+    first:
+      'border border-gray-300 bg-gray-300 text-text-primary dark:border-white/15 dark:bg-white/10',
+    second:
+      'border border-primary-100 bg-primary-100 text-text-primary dark:border-primary-400/30 dark:bg-primary-600/20',
   },
 
-  disabled: 'border border-border-default bg-gray-100 text-text-muted',
+  disabled:
+    'border border-border-default bg-gray-100 text-text-muted dark:bg-white/10',
 }
 
 export function VoteEditor({
@@ -47,7 +50,7 @@ export function VoteEditor({
         />
       </div>
 
-      <section className="w-full rounded-2xl border border-border-default bg-gray-100 px-6 py-6">
+      <section className="w-full rounded-2xl border border-border-default bg-gray-100 px-6 py-6 dark:bg-white/10">
         <div className="flex flex-col gap-4">
           {options.map((option, index) => {
             const inputStyle = hasPeriod

@@ -48,7 +48,7 @@ export function CommentInput({
       <div className="flex flex-1 flex-col gap-2">
         <div className="relative">
           <Textarea
-            className="h-14 min-h-14 max-h-30 overflow-hidden bg-gray-100 pr-20 pb-6 focus:bg-white"
+            className="h-14 min-h-14 max-h-30 overflow-hidden bg-gray-100 pr-20 pb-6 focus:bg-white dark:border-white/15 dark:bg-white/5 dark:focus:bg-white/10"
             value={value}
             onChange={(e) => setValue(e.target.value)}
             placeholder={placeholder}

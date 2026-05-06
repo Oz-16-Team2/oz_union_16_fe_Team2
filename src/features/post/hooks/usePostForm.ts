@@ -184,11 +184,22 @@ export function usePostForm(
     // 기존 투표가 없고, 새 투표 입력값이 유효할 때만 vote payload 전송
     const shouldSendVote = hasActiveVote && !initialHasVote
 
+    const toLocalDateString = (date: Date) => {
+      const year = date.getFullYear()
+      const month = String(date.getMonth() + 1).padStart(2, '0')
+      const day = String(date.getDate()).padStart(2, '0')
+      return `${year}-${month}-${day}`
+    }
+
     const vote: PostFormData['vote'] = shouldSendVote
       ? {
           options: validVoteOptions,
-          startDate: votePeriod?.start?.toISOString().split('T')[0],
-          endDate: votePeriod?.end?.toISOString().split('T')[0],
+          startDate: votePeriod?.start
+            ? toLocalDateString(votePeriod.start)
+            : undefined,
+          endDate: votePeriod?.end
+            ? toLocalDateString(votePeriod.end)
+            : undefined,
         }
       : undefined
 
