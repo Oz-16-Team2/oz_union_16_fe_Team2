@@ -216,7 +216,7 @@ const PostCardProfile = ({
           className="size-7 rounded-full object-cover shrink-0"
         />
       ) : (
-        <div className="size-7 rounded-full bg-border-default shrink-0 flex items-center justify-center text-[10px] font-bold text-text-muted">
+        <div className="size-7 rounded-full bg-border-default shrink-0 flex items-center justify-center text-2xs font-bold text-text-muted">
           {nickname[0]}
         </div>
       )}

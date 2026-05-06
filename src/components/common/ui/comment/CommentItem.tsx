@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { Heart, MoreHorizontal } from 'lucide-react'
 
 import { ActionMenu } from '@/components/common/overlay'
+import { Button } from '@/components/common/ui'
 import { cn } from '@/utils/cn'
 import { formatRelativeTime } from '@/utils/formatRelativeTime'
 
@@ -59,7 +60,7 @@ export function CommentItem({
     <div
       className={cn(
         'flex gap-3 rounded-xl px-3 py-3 sm:px-4',
-        isSelected && 'bg-primary-100/30'
+        isSelected && 'bg-primary-100/5'
       )}
       onClick={() => onSelect?.()}
     >
@@ -91,13 +92,7 @@ export function CommentItem({
           <div onClick={(e) => e.stopPropagation()}>
             <ActionMenu
               trigger={
-                <button
-                  type="button"
-                  className="text-text-primary"
-                  aria-label="댓글 더보기"
-                >
-                  <MoreHorizontal size={16} />
-                </button>
+                <MoreHorizontal size={16} className="text-text-primary" />
               }
               items={
                 isOwner
@@ -132,30 +127,35 @@ export function CommentItem({
               value={editContent}
               onChange={(e) => setEditContent(e.target.value)}
               onClick={(e) => e.stopPropagation()}
-              className="min-h-20 w-full resize-none rounded-md border border-border-subtle bg-white px-3 py-2 text-sm text-text-primary outline-none focus:border-focus-border"
+              className="min-h-20 w-full resize-none rounded-md border border-border-subtle bg-white px-3 py-2 text-sm text-text-primary outline-none focus:border-focus-border dark:border-white/15 dark:bg-white/5 dark:text-text-primary"
             />
 
             <div className="flex justify-end gap-2">
-              <button
+              <Button
                 type="button"
+                variant="modal"
+                size="sm"
+                rounded="md"
                 onClick={(e) => {
                   e.stopPropagation()
                   handleCancelEdit()
                 }}
-                className="rounded-md px-3 py-1 text-xs text-text-muted hover:bg-gray-100"
               >
                 취소
-              </button>
-              <button
+              </Button>
+
+              <Button
                 type="button"
+                variant="primary"
+                size="sm"
+                rounded="md"
                 onClick={(e) => {
                   e.stopPropagation()
                   handleSaveEdit()
                 }}
-                className="rounded-md bg-primary-500 px-3 py-1 text-xs text-white hover:bg-primary-600"
               >
                 저장
-              </button>
+              </Button>
             </div>
           </div>
         ) : (
@@ -163,7 +163,6 @@ export function CommentItem({
             {content}
           </p>
         )}
-
         {/* 좋아요 */}
         <button
           type="button"

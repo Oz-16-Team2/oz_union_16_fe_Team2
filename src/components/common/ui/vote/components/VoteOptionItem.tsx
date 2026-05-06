@@ -17,14 +17,14 @@ const optionVariants = {
   base: 'grid w-full grid-cols-[20px_minmax(0,1fr)_44px] items-center gap-2 text-left sm:grid-cols-[24px_minmax(0,1fr)_56px]',
 
   text: {
-    selected: 'text-white',
+    selected: 'text-primary-500 dark:text-white',
     result: 'text-text-primary',
     default: 'text-text-muted',
   },
 
   gauge: {
-    first: 'bg-gray-400 dark:bg-white/15',
-    second: 'bg-primary-500 dark:bg-primary-400',
+    first: 'bg-gray-300 dark:bg-white/20',
+    second: 'bg-primary-100 dark:bg-primary-600/20',
   },
 
   indicator: {
