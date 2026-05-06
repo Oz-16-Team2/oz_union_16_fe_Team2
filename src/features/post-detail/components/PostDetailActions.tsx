@@ -57,7 +57,7 @@ export function PostDetailActions({
   }
 
   return (
-    <div className="mb-6 flex items-center border-b border-border-subtle pb-4">
+    <div className="mb-6 flex items-center border-b border-border-default pb-4">
       <div className="flex items-center gap-3">
         {/* 좋아요 */}
         <div className="flex items-center gap-1">
