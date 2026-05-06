@@ -14,10 +14,9 @@ const inputVariants = {
 
   enabled: {
     first:
-      'border border-gray-300 bg-gray-300 text-text-primary dark:border-white/15 dark:bg-white/20',
-
+      'border border-gray-300 bg-gray-300 text-text-primary dark:border-white/15 dark:bg-white/10',
     second:
-      'border border-primary-100 bg-primary-100 text-text-primary dark:border-primary-400 dark:bg-primary-400',
+      'border border-primary-100 bg-primary-100 text-text-primary dark:border-primary-400/30 dark:bg-primary-600/20',
   },
 
   disabled:
