@@ -84,6 +84,7 @@ export function PostVoteSection({
         period={period}
         onChangeOption={onChangeOption}
         onChangePeriod={onChangePeriod}
+        hideParticipantCount
       />
     </div>
   )

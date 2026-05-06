@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useSearchParams } from 'react-router'
 
+import { useAuthStore } from '@/store/authStore'
+
 import type { PostSortOrder } from './PostList.types'
 
 /**
@@ -17,17 +19,27 @@ import type { PostSortOrder } from './PostList.types'
  * - 로컬 state는 같은 이벤트 핸들러 내에서 항상 배칭되므로 이 문제가 없음
  */
 export function usePostListFilters() {
+  const { user, authStatus } = useAuthStore()
   const [searchParams, setSearchParams] = useSearchParams()
 
   // URL에서 현재 상태 추출
   const keyword = searchParams.get('keyword') ?? ''
   const rawSort = searchParams.get('sort')
-  const sort: PostSortOrder =
-    rawSort === 'trending'
-      ? 'trending'
-      : rawSort === 'suggested'
-        ? 'suggested'
-        : 'latest'
+
+  /**
+   * 정렬 상태 결정
+   * - 비로그인 유저가 'suggested'에 접근하면 'latest'로 취급 (세션 확인 완료 후)
+   */
+  const sort: PostSortOrder = useMemo(() => {
+    if (rawSort === 'trending') return 'trending'
+    if (rawSort === 'suggested') {
+      // 세션 확인 중에는 일단 요청을 허용 (로그인 유저일 가능성)
+      // 확인 결과 비로그인이면 latest로 강제 전환
+      return authStatus === 'restored' && !user ? 'latest' : 'suggested'
+    }
+    return 'latest'
+  }, [rawSort, authStatus, user])
+
   const page = Number(searchParams.get('page')) || 1
 
   // SearchBar 표시용 (즉시 반응)
@@ -65,6 +77,19 @@ export function usePostListFilters() {
     setInputValue(keyword)
     setDebouncedKeyword(keyword)
   }, [keyword])
+
+  /**
+   * 비로그인 유저가 'suggested' URL로 진입한 경우 URL 동기화
+   */
+  useEffect(() => {
+    if (
+      authStatus === 'restored' &&
+      !user &&
+      searchParams.get('sort') === 'suggested'
+    ) {
+      updateParams({ sort: 'latest' })
+    }
+  }, [authStatus, user, searchParams, updateParams])
 
   /**
    * 타이핑 디바운스: inputValue → debouncedKeyword + URL을 500ms 후 동시 업데이트

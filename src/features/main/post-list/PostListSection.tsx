@@ -19,7 +19,8 @@ import {
 } from './PostList.types'
 import { usePostListFilters } from './usePostListFilters'
 
-const SORT_ORDERS: PostSortOrder[] = ['latest', 'trending', 'suggested']
+const ALL_SORT_ORDERS: PostSortOrder[] = ['latest', 'trending', 'suggested']
+const GUEST_SORT_ORDERS: PostSortOrder[] = ['latest', 'trending']
 
 const SORT_LABELS: Record<PostSortOrder, string> = {
   latest: '최신순',
@@ -61,6 +62,7 @@ export function PostListSection() {
   } = usePostListFilters()
 
   const { sort, page } = filters
+  const sortOrders = user ? ALL_SORT_ORDERS : GUEST_SORT_ORDERS
 
   const { data, isLoading, isFetching, isError, error } = usePostListQuery(
     mode,
@@ -100,7 +102,7 @@ export function PostListSection() {
   const filterArea = (
     <div className="flex items-center justify-between">
       <div className="flex gap-2">
-        {SORT_ORDERS.map((order) => (
+        {sortOrders.map((order) => (
           <TabButton
             key={order}
             isActive={sort === order}
