@@ -1,5 +1,7 @@
 import { useState } from 'react'
 
+import { PostImageViewerModal } from './PostImageViewerModal'
+
 type PostDetailBodyProps = {
   title: string
   content: string
@@ -35,9 +37,28 @@ export function PostDetailBody({
 }: PostDetailBodyProps) {
   const visibleImages = images.slice(0, 3)
   const [failedImages, setFailedImages] = useState<Set<number>>(new Set())
+  const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(
+    null
+  )
 
   const handleImageError = (index: number) => {
     setFailedImages((prev) => new Set(prev).add(index))
+  }
+
+  const handleCloseImageViewer = () => {
+    setSelectedImageIndex(null)
+  }
+
+  const handlePrevImage = () => {
+    setSelectedImageIndex((prev) =>
+      prev === null ? prev : (prev - 1 + images.length) % images.length
+    )
+  }
+
+  const handleNextImage = () => {
+    setSelectedImageIndex((prev) =>
+      prev === null ? prev : (prev + 1) % images.length
+    )
   }
 
   return (
@@ -46,7 +67,11 @@ export function PostDetailBody({
       {visibleImages.length === 3 ? (
         <div className="flex h-72 gap-2">
           {/* 왼쪽 큰 이미지 */}
-          <div className="flex-1 overflow-hidden rounded-xl bg-gray-100">
+          <button
+            type="button"
+            className="flex-1 overflow-hidden rounded-xl bg-gray-100"
+            onClick={() => setSelectedImageIndex(0)}
+          >
             {!failedImages.has(0) ? (
               <img
                 src={visibleImages[0]}
@@ -58,14 +83,16 @@ export function PostDetailBody({
             ) : (
               <ImageFallback />
             )}
-          </div>
+          </button>
 
           {/* 오른쪽 작은 이미지 2개 */}
           <div className="flex w-1/3 flex-col gap-2">
             {[1, 2].map((index) => (
-              <div
+              <button
+                type="button"
                 key={`img-${index}`}
                 className="flex-1 overflow-hidden rounded-xl bg-gray-100"
+                onClick={() => setSelectedImageIndex(index)}
               >
                 {!failedImages.has(index) ? (
                   <img
@@ -78,7 +105,7 @@ export function PostDetailBody({
                 ) : (
                   <ImageFallback />
                 )}
-              </div>
+              </button>
             ))}
           </div>
         </div>
@@ -88,9 +115,11 @@ export function PostDetailBody({
             className={`grid gap-3 ${getImageGridClass(visibleImages.length)}`}
           >
             {visibleImages.map((image, index) => (
-              <div
+              <button
+                type="button"
                 key={`img-${index}`}
                 className="h-72 w-full overflow-hidden rounded-xl bg-gray-100"
+                onClick={() => setSelectedImageIndex(index)}
               >
                 {!failedImages.has(index) ? (
                   <img
@@ -103,7 +132,7 @@ export function PostDetailBody({
                 ) : (
                   <ImageFallback />
                 )}
-              </div>
+              </button>
             ))}
           </div>
         )
@@ -123,11 +152,24 @@ export function PostDetailBody({
       {tags.length > 0 && (
         <div className="mt-4 flex flex-wrap gap-1 text-xs text-text-muted">
           {tags.map((tag, index) => (
-            <span key={`${tag}-${index}`} className="break-all">
+            <span
+              key={`${tag}-${index}`}
+              className="max-w-fit break-all rounded-md bg-gray-100 px-2 py-1 text-xs text-text-muted dark:bg-white/10"
+            >
               #{tag}
             </span>
           ))}
         </div>
+      )}
+
+      {selectedImageIndex !== null && (
+        <PostImageViewerModal
+          images={images}
+          currentIndex={selectedImageIndex}
+          onClose={handleCloseImageViewer}
+          onPrev={handlePrevImage}
+          onNext={handleNextImage}
+        />
       )}
     </div>
   )
