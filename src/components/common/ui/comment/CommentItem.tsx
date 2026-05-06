@@ -91,13 +91,7 @@ export function CommentItem({
           <div onClick={(e) => e.stopPropagation()}>
             <ActionMenu
               trigger={
-                <button
-                  type="button"
-                  className="text-text-primary"
-                  aria-label="댓글 더보기"
-                >
-                  <MoreHorizontal size={16} />
-                </button>
+                <MoreHorizontal size={16} className="text-text-primary" />
               }
               items={
                 isOwner

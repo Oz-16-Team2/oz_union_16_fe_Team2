@@ -49,11 +49,7 @@ export function PostDetailHeader({
 
       {/* 오른쪽 (더보기 메뉴) */}
       <ActionMenu
-        trigger={
-          <button type="button" className="text-text-primary">
-            <MoreHorizontal size={20} />
-          </button>
-        }
+        trigger={<MoreHorizontal size={20} className="text-text-primary" />}
         items={menuItems}
         align="right"
         size="sm"

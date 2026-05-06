@@ -1,13 +1,13 @@
 import { apiClient } from '@/apis/apiClient'
 import type {
   ApiPostListParams,
+  ApiPostListResponse,
   ApiPostListWrappedResponse,
   ApiPostSearchParams,
   ApiPostSearchWrappedResponse,
   ApiTrendingParams,
   ApiTrendingResponse,
 } from '@/features/main/post-list/PostList.api.types'
-import type { ApiPostListResponse } from '@/features/main/post-list/PostList.api.types'
 import type {
   ApiMyPostListParams,
   ApiMyPostListWrappedResponse,

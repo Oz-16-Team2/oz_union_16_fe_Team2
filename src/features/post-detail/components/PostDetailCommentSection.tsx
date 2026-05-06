@@ -149,9 +149,15 @@ export function PostDetailCommentSection({
       <section>
         <CommentInput
           isLoading={isPending}
+          disabled={!user}
           onSubmit={handleSubmitComment}
           profileImageUrl={user?.profileImageUrl}
           nickname={user?.nickname}
+          placeholder={
+            user
+              ? '댓글을 입력해주세요'
+              : '로그인 후 댓글을 작성할 수 있습니다.'
+          }
         />
 
         <div className="mt-8">

@@ -77,13 +77,7 @@ export function PostDetailVoteSection({ post }: PostDetailVoteSectionProps) {
             post.isOwner ? (
               <ActionMenu
                 trigger={
-                  <button
-                    type="button"
-                    aria-label="투표 더보기"
-                    className="flex size-8 items-center justify-center rounded-full text-text-primary hover:bg-gray-100 dark:hover:bg-white/10"
-                  >
-                    <MoreHorizontal size={20} />
-                  </button>
+                  <MoreHorizontal size={20} className="text-text-primary" />
                 }
                 items={[
                   { label: '수정', onClick: handleEdit },
