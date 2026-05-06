@@ -36,8 +36,8 @@ export function PostDetailVoteSection({ post }: PostDetailVoteSectionProps) {
 
   if (isEditMode) {
     return (
-      <div className="mt-6 overflow-x-auto">
-        <div className="min-w-80 rounded-2xl border border-border-default bg-surface p-4">
+      <div className="mt-6 w-full min-w-0">
+        <div className="w-full min-w-0 rounded-2xl border border-border-default bg-surface p-4">
           <VoteEditor
             mode="edit"
             options={editOptions}
@@ -45,24 +45,23 @@ export function PostDetailVoteSection({ post }: PostDetailVoteSectionProps) {
             onChangeOption={handleChangeEditOption}
             onChangePeriod={handleChangeEditPeriod}
             onSubmit={handleUpdateVote}
+            actionSlot={
+              <button
+                type="button"
+                className="text-sm text-text-muted"
+                onClick={handleCancelEdit}
+              >
+                취소
+              </button>
+            }
           />
-
-          <div className="mt-3 flex justify-end gap-2">
-            <button
-              type="button"
-              className="text-sm text-text-muted"
-              onClick={handleCancelEdit}
-            >
-              취소
-            </button>
-          </div>
         </div>
       </div>
     )
   }
   return (
-    <div className="mt-6 overflow-x-auto">
-      <div className="min-w-80 rounded-2xl border border-border-default bg-surface p-4">
+    <div className="mt-6 w-full min-w-0">
+      <div className="w-full min-w-0 rounded-2xl border border-border-default bg-surface p-4">
         <VoteDisplay
           mode={getVoteMode(post.voteInfo, voteDetail?.is_voted)}
           options={toVoteDisplayOptions(voteDetail, selectedOptionId)}

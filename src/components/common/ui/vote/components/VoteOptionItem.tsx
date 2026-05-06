@@ -14,7 +14,7 @@ type VoteOptionItemProps = {
 }
 
 const optionVariants = {
-  base: 'grid w-full grid-cols-[20px_minmax(0,1fr)_44px] items-center gap-2 text-left sm:grid-cols-[24px_minmax(0,1fr)_56px]',
+  base: 'grid w-full min-w-0 grid-cols-[16px_minmax(0,1fr)_40px] items-center gap-2 text-left sm:grid-cols-[24px_minmax(0,1fr)_56px]',
 
   text: {
     selected: 'text-primary-500 dark:text-white',
@@ -98,7 +98,7 @@ export function VoteOptionItem({
         </span>
       </div>
 
-      {/* 퍼센트 (색상 동일 + 스타일 통일) */}
+      {/* 퍼센트 */}
       <span className={cn('text-right text-sm font-medium', textColor)}>
         {showResult ? `${displayPercentage}%` : ''}
       </span>

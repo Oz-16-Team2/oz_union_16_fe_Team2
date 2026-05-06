@@ -31,6 +31,8 @@ export function VoteEditor({
   disabled = false,
   hideOptionLength = false,
   hideParticipantCount = false,
+  periodError,
+  actionSlot,
   onChangeOption,
   onSubmit,
   onChangePeriod,
@@ -48,9 +50,13 @@ export function VoteEditor({
           onChange={onChangePeriod}
           label="투표 기간을 선택하세요"
         />
+
+        {periodError && (
+          <p className="mt-2 text-xs text-status-danger-text">{periodError}</p>
+        )}
       </div>
 
-      <section className="w-full rounded-2xl border border-border-default bg-gray-100 px-6 py-6 dark:bg-white/10">
+      <section className="w-full rounded-2xl border border-border-default bg-gray-100 px-4 py-4 dark:bg-white/10 sm:px-6 sm:py-6">
         <div className="flex flex-col gap-4">
           {options.map((option, index) => {
             const inputStyle = hasPeriod
@@ -62,7 +68,7 @@ export function VoteEditor({
             return (
               <div
                 key={`vote-editor-option-${index}`}
-                className="grid grid-cols-[72px_minmax(0,1fr)] items-center gap-4"
+                className="grid grid-cols-[72px_minmax(0,1fr)] items-center gap-3 sm:gap-4"
               >
                 <span
                   className={cn(
@@ -73,7 +79,7 @@ export function VoteEditor({
                   옵션 입력
                 </span>
 
-                <div className="min-w-0">
+                <div className="relative w-full min-w-0">
                   <input
                     value={option}
                     maxLength={12}
@@ -83,12 +89,12 @@ export function VoteEditor({
                     className={cn(
                       inputVariants.base,
                       inputStyle,
-                      'focus:border-focus-border'
+                      'pr-14 focus:border-focus-border'
                     )}
                   />
 
                   {!hideOptionLength && (
-                    <span className="mt-1 block text-right text-xs text-text-muted">
+                    <span className="absolute right-5 bottom-2 text-2xs text-text-muted">
                       {option.length}/12
                     </span>
                   )}
@@ -99,13 +105,13 @@ export function VoteEditor({
         </div>
 
         {onSubmit && (
-          <div className="mt-8 flex justify-center">
+          <div className="mt-6 flex justify-center sm:mt-8">
             <Button
               type="button"
               variant="primary"
               onClick={onSubmit}
               disabled={isSubmitDisabled}
-              className="h-10 w-full max-w-md"
+              className="h-10 w-full sm:max-w-md"
             >
               {submitLabel}
             </Button>
@@ -114,9 +120,13 @@ export function VoteEditor({
       </section>
 
       {!hideParticipantCount && (
-        <div className="mt-4 flex items-center gap-2 text-sm text-text-muted">
-          <Users className="h-4 w-4" />
-          <span>{participantCount}명 참여중</span>
+        <div className="mt-4 flex items-center justify-between gap-2 text-sm text-text-muted">
+          <div className="flex items-center gap-2">
+            <Users className="h-4 w-4" />
+            <span>{participantCount}명 참여중</span>
+          </div>
+
+          {actionSlot}
         </div>
       )}
     </>

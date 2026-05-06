@@ -37,7 +37,7 @@ export function Toast({ message, type = 'success' }: ToastProps) {
   return (
     <div
       className={cn(
-        'inline-flex w-auto max-w-[min(420px,calc(100vw-32px))] items-start justify-start gap-2 rounded-xl border-2 px-4 py-3 shadow-card-main',
+        'pointer-events-auto inline-flex w-auto max-w-[min(420px,calc(100vw-32px))] items-start justify-start gap-2 rounded-xl border-2 px-4 py-3 shadow-card-main',
         className
       )}
     >

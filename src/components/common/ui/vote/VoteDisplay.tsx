@@ -35,7 +35,7 @@ export function VoteDisplay({
 
   return (
     <>
-      <div className="mb-2 flex items-center gap-2 text-sm">
+      <div className="mb-2 flex flex-wrap items-center gap-2 text-sm">
         <span className="text-text-primary">{statusLabel}</span>
 
         {hasPeriod && (
@@ -47,7 +47,7 @@ export function VoteDisplay({
 
       <section
         className={cn(
-          'relative mx-auto min-h-62 w-full max-w-267.5 rounded-2xl border border-border-default bg-gray-100 px-6 py-6 shadow-card-main dark:bg-white/10',
+          'relative mx-auto min-h-62 w-full max-w-full rounded-2xl border border-border-default bg-gray-100 px-4 py-5 shadow-card-main dark:bg-white/10 sm:max-w-267.5 sm:px-6 sm:py-6',
           isClosed && 'opacity-50'
         )}
       >
@@ -74,7 +74,7 @@ export function VoteDisplay({
             variant="primary"
             onClick={onActionClick}
             disabled={isActionDisabled}
-            className="h-10 w-full max-w-md text-md"
+            className="h-10 w-full text-md sm:max-w-md"
           >
             {buttonLabel}
           </Button>

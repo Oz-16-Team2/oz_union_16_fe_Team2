@@ -8,6 +8,7 @@ type PostVoteSectionProps = {
   mode: PostFormMode
   options: string[]
   period?: DateRange
+  periodError?: string
   onChangeOption: (index: number, value: string) => void
   onChangePeriod: (date: DateRange | null) => void
   isExistingVoteLocked?: boolean
@@ -22,6 +23,7 @@ export function PostVoteSection({
   mode,
   options,
   period,
+  periodError,
   onChangeOption,
   onChangePeriod,
   isExistingVoteLocked = false,
@@ -30,8 +32,9 @@ export function PostVoteSection({
     return (
       <>
         <p className="text-sm text-text-muted">
-          기존 투표는 수정 페이지에서 변경할 수 없습니다. 투표 수정은
-          상세페이지에서 진행해주세요.
+          기존 투표는 수정 페이지에서 변경할 수 없습니다.
+          <br />
+          투표 수정은 상세페이지에서 진행해주세요.
         </p>
 
         <div className="mb-2 flex items-center gap-2 text-sm">
@@ -82,6 +85,7 @@ export function PostVoteSection({
         mode={mode}
         options={options}
         period={period}
+        periodError={periodError}
         onChangeOption={onChangeOption}
         onChangePeriod={onChangePeriod}
         hideParticipantCount
