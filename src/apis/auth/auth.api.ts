@@ -104,6 +104,49 @@ export const authApi = {
     return authSchema.meResponseSchema.parse(data)
   },
 
+  changeNickname: async (
+    payload: authSchema.ChangeNicknameRequest
+  ): Promise<authSchema.ChangeNicknameResponse> => {
+    // 닉네임 변경 요청도 zod로 한 번 검증해서 API 경계의 데이터 형태를 고정합니다.
+    const requestPayload = authSchema.changeNicknameRequestSchema.parse(payload)
+
+    const { data } = await apiClient.patch<authSchema.ChangeNicknameResponse>(
+      AUTH_ENDPOINTS.changeNickname,
+      requestPayload
+    )
+
+    return authSchema.changeNicknameResponseSchema.parse(data)
+  },
+
+  changePassword: async (
+    payload: authSchema.ChangePasswordRequest
+  ): Promise<authSchema.ChangePasswordResponse> => {
+    // 비밀번호 변경은 서버 필드명(password/new_password/confirm)을 그대로 보냅니다.
+    const requestPayload = authSchema.changePasswordRequestSchema.parse(payload)
+
+    const { data } = await apiClient.patch<authSchema.ChangePasswordResponse>(
+      AUTH_ENDPOINTS.changePassword,
+      requestPayload
+    )
+
+    return authSchema.changePasswordResponseSchema.parse(data)
+  },
+
+  checkCurrentPassword: async (
+    payload: authSchema.CheckCurrentPasswordRequest
+  ): Promise<authSchema.CheckCurrentPasswordResponse> => {
+    const requestPayload =
+      authSchema.checkCurrentPasswordRequestSchema.parse(payload)
+
+    const { data } =
+      await apiClient.post<authSchema.CheckCurrentPasswordResponse>(
+        AUTH_ENDPOINTS.changePasswordCheck,
+        requestPayload
+      )
+
+    return authSchema.checkCurrentPasswordResponseSchema.parse(data)
+  },
+
   getProfileImages: async (): Promise<authSchema.ProfileImagesResponse> => {
     const { data } = await apiClient.get<authSchema.ProfileImagesResponse>(
       AUTH_ENDPOINTS.profileImages

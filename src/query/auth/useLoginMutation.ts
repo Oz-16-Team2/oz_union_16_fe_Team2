@@ -40,7 +40,7 @@ export function useLoginMutation(
       const { setAccessToken } = useAuthStore.getState()
       setAccessToken(loginResponse.access_token)
       // 그 다음 /me 호출 포함된 세션 생성
-      return buildAuthSession()
+      return buildAuthSession({ authProvider: 'email', isSocial: false })
     },
     onSuccess: (data) => {
       setSession(data.accessToken, data.user)
