@@ -1,15 +1,58 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 import { postApi } from '@/apis/post/post.api'
+import type { PostDetailData } from '@/features/post/post.types'
 
-export function useTogglePostLikeMutation(postId: number) {
+type UseTogglePostLikeMutationParams = {
+  postId: number
+  isLiked: boolean
+  likeCount: number
+}
+
+export function useTogglePostLikeMutation({
+  postId,
+  isLiked,
+  likeCount,
+}: UseTogglePostLikeMutationParams) {
   const queryClient = useQueryClient()
+  const nextIsLiked = !isLiked
+  const nextLikeCount = Math.max(0, likeCount + (isLiked ? -1 : 1))
 
   return useMutation({
     mutationFn: () => postApi.toggleLike(postId),
-    onSuccess: () => {
-      // 좋아요 변경 후 게시글 상세 데이터를 다시 조회
+    onMutate: async () => {
+      await queryClient.cancelQueries({ queryKey: ['postDetail', postId] })
+
+      const previousPostDetail = queryClient.getQueryData<PostDetailData>([
+        'postDetail',
+        postId,
+      ])
+
+      queryClient.setQueryData<PostDetailData>(
+        ['postDetail', postId],
+        (post) =>
+          post
+            ? {
+                ...post,
+                isLiked: nextIsLiked,
+                likeCount: nextLikeCount,
+              }
+            : post
+      )
+
+      return { previousPostDetail }
+    },
+    onError: (_error, _variables, context) => {
+      if (!context) return
+
+      queryClient.setQueryData(
+        ['postDetail', postId],
+        context.previousPostDetail
+      )
+    },
+    onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['postDetail', postId] })
+      queryClient.invalidateQueries({ queryKey: ['posts'] })
     },
   })
 }

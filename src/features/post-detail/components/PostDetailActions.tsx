@@ -23,7 +23,11 @@ export function PostDetailActions({
   isLiked,
   isScrapped,
 }: PostDetailActionsProps) {
-  const likeMutation = useTogglePostLikeMutation(postId)
+  const likeMutation = useTogglePostLikeMutation({
+    postId,
+    isLiked,
+    likeCount,
+  })
   const scrapMutation = useTogglePostScrapMutation({ postId, isScrapped })
   const toast = useToast()
 

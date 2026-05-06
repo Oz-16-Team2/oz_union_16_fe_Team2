@@ -2,7 +2,6 @@ import { Suspense } from 'react'
 import { createBrowserRouter } from 'react-router'
 
 import { RootLayout } from '@/components/common/layout'
-import { LoginPageSkeleton, SignupPageSkeleton } from '@/features/auth'
 import {
   BookmarkedPostsPage,
   MainPage,
@@ -66,10 +65,8 @@ export const router = createBrowserRouter([
   },
   {
     path: '/login',
-    // 로그인 페이지는 lazy 로딩으로 분리하고
-    // 로딩 중에는 auth 전용 스켈레톤을 보여줍니다.
     element: (
-      <Suspense fallback={<LoginPageSkeleton />}>
+      <Suspense>
         <LoginPage />
       </Suspense>
     ),
@@ -77,7 +74,7 @@ export const router = createBrowserRouter([
   {
     path: '/signup',
     element: (
-      <Suspense fallback={<SignupPageSkeleton />}>
+      <Suspense>
         <SignupPage />
       </Suspense>
     ),

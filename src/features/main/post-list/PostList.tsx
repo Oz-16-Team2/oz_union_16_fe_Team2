@@ -150,7 +150,7 @@ const PostGrid = ({
           </li>
         ))
       : posts.map((post) => (
-          <li key={post.postId}>
+          <li key={`${post.postId}-${post.isLiked}-${post.likeCount}`}>
             <PostCard {...post} />
           </li>
         ))}
