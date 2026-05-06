@@ -104,7 +104,7 @@ function GoalListSection() {
         <div className="flex w-full items-center gap-4 rounded-lg border border-border-default p-1 md:h-8 md:w-fit md:border-0 md:p-0">
           <Calendar
             className="w-full max-w-none md:w-fit md:max-w-54"
-            panelClassName="left-0 right-auto translate-x-0 px-0"
+            panelClassName="left-0 right-auto translate-x-0"
             label="기간 설정"
             ariaLabel="기간 설정"
             // 마이페이지 목표 필터는 과거 기간 조회가 가능해야 하므로 제한을 해제합니다.
@@ -125,7 +125,7 @@ function GoalListSection() {
               aria-label="필터 초기화"
               leftIcon={<RotateCcw className="size-4" aria-hidden="true" />}
               onClick={resetFilters}
-              className="h-8 shrink-0 pr-2 text-sm text-text-muted hover:bg-transparent hover:text-tab-active-text"
+              className="h-8 shrink-0 px-3 text-sm text-text-muted hover:bg-transparent hover:text-tab-active-text"
             >
               <span className="inline">초기화</span>
             </Button>

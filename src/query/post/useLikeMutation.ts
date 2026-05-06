@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 import { postApi } from '@/apis/post'
 
@@ -15,6 +15,7 @@ export function useLikeMutation({
   initialLiked,
   initialLikeCount,
 }: UseLikeMutationProps) {
+  const queryClient = useQueryClient()
   const [liked, setLiked] = useState(initialLiked)
   const [likeCount, setLikeCount] = useState(initialLikeCount)
 
@@ -31,6 +32,10 @@ export function useLikeMutation({
       if (!context) return
       setLiked(context.prevLiked)
       setLikeCount(context.prevCount)
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ['posts'] })
+      queryClient.invalidateQueries({ queryKey: ['postDetail', postId] })
     },
   })
 
