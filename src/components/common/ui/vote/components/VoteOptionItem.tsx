@@ -16,15 +16,9 @@ type VoteOptionItemProps = {
 const optionVariants = {
   base: 'grid w-full grid-cols-[20px_minmax(0,1fr)_44px] items-center gap-2 text-left sm:grid-cols-[24px_minmax(0,1fr)_56px]',
 
-  text: {
-    selected: 'text-white',
-    result: 'text-text-primary',
-    default: 'text-text-muted',
-  },
-
   gauge: {
-    first: 'bg-gray-400 dark:bg-white/15',
-    second: 'bg-primary-500 dark:bg-primary-400',
+    first: 'bg-gray-300',
+    second: 'bg-primary-100 dark:bg-primary-400',
   },
 
   indicator: {
@@ -46,11 +40,15 @@ export function VoteOptionItem({
   const percentage = Math.min(100, Math.max(0, option.percentage ?? 0))
   const displayPercentage = Math.round(percentage)
 
-  const textColor = isSelected
-    ? optionVariants.text.selected
-    : showResult
-      ? optionVariants.text.result
-      : optionVariants.text.default
+  // 옵션 텍스트 색상
+  const optionTextColor = isSelected
+    ? 'text-primary-500 dark:text-white'
+    : 'text-text-primary dark:text-white'
+
+  // 퍼센트 텍스트 색상
+  const percentageTextColor = isSelected
+    ? 'text-primary-500 dark:text-primary-400'
+    : 'text-text-primary dark:text-white'
 
   return (
     <button
@@ -90,7 +88,7 @@ export function VoteOptionItem({
         <span
           className={cn(
             'relative z-10 flex h-full min-w-0 items-center truncate px-3 text-sm font-medium sm:px-6',
-            textColor
+            optionTextColor
           )}
           title={option.valueLabel}
         >
@@ -98,8 +96,10 @@ export function VoteOptionItem({
         </span>
       </div>
 
-      {/* 퍼센트 (색상 동일 + 스타일 통일) */}
-      <span className={cn('text-right text-sm font-medium', textColor)}>
+      {/* 퍼센트 */}
+      <span
+        className={cn('text-right text-sm font-medium', percentageTextColor)}
+      >
         {showResult ? `${displayPercentage}%` : ''}
       </span>
     </button>
