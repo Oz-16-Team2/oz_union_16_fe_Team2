@@ -23,8 +23,8 @@ const optionVariants = {
   },
 
   gauge: {
-    first: 'bg-gray-300 dark:bg-white/15',
-    second: 'bg-primary-100 dark:bg-primary-400',
+    first: 'bg-gray-300 dark:bg-white/20',
+    second: 'bg-primary-100 dark:bg-primary-600/20',
   },
 
   indicator: {

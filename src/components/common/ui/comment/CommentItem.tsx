@@ -60,7 +60,7 @@ export function CommentItem({
     <div
       className={cn(
         'flex gap-3 rounded-xl px-3 py-3 sm:px-4',
-        isSelected && 'bg-primary-100/30'
+        isSelected && 'bg-primary-100/5'
       )}
       onClick={() => onSelect?.()}
     >
