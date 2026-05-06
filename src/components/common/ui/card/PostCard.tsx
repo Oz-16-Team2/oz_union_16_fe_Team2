@@ -44,6 +44,17 @@ export function PostCard({
 
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
 
+  const handleCopyShareUrl = async () => {
+    try {
+      await navigator.clipboard.writeText(
+        `${window.location.origin}/post/${postId}`
+      )
+      toast.success('게시글 링크가 복사되었습니다.')
+    } catch {
+      toast.error('게시글 링크 복사에 실패했습니다.')
+    }
+  }
+
   const {
     liked,
     scrapped,
@@ -51,7 +62,13 @@ export function PostCard({
     toggleLike,
     toggleScrap,
     handleShare,
-  } = usePostCardActions({ postId, likeCount, isLiked, isScrapped, onShare })
+  } = usePostCardActions({
+    postId,
+    likeCount,
+    isLiked,
+    isScrapped,
+    onShare: onShare ?? handleCopyShareUrl,
+  })
 
   const {
     showReportForm,
