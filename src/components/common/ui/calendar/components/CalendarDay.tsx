@@ -20,7 +20,7 @@ type DayButtonState = 'default' | 'disabled' | 'redDay' | 'selected' | 'today'
 const DAY_BUTTON_STATE_CLASS: Record<DayButtonState, string> = {
   default: 'text-text-primary',
   disabled:
-    'cursor-not-allowed text-text-muted disabled:bg-transparent disabled:text-text-muted',
+    'cursor-not-allowed text-text-muted disabled:!bg-transparent disabled:!text-text-muted dark:disabled:!bg-transparent',
   redDay: 'text-red-500 hover:text-red-500',
   selected: 'bg-primary-500 text-white hover:bg-primary-500',
   today: 'text-primary-500',

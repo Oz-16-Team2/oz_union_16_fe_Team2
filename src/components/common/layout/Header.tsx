@@ -1,13 +1,22 @@
+import { useState } from 'react'
 import { useNavigate } from 'react-router'
 
 import { Laptop, Moon, Sun } from 'lucide-react'
 
 import { DarklogoImage, logoImage } from '@/assets/images'
-import { ActionMenu } from '@/components/common/overlay'
-import { Button } from '@/components/common/ui'
+import {
+  ActionMenu,
+  type ProfileEditFormValues,
+  ProfileEditModal,
+} from '@/components/common/overlay'
+import { Button, useToast } from '@/components/common/ui'
 import { useTheme } from '@/lib/theme/ThemeProvider'
-import { useLogoutMutation } from '@/query/auth'
-import { useAuthStore } from '@/store/authStore'
+import {
+  useChangeNicknameMutation,
+  useChangePasswordMutation,
+  useLogoutMutation,
+} from '@/query/auth'
+import { type AuthUser, useAuthStore } from '@/store/authStore'
 
 const THEME_META = {
   light: { label: '라이트 테마', display: 'Light', Icon: Sun },
@@ -15,12 +24,36 @@ const THEME_META = {
   system: { label: '시스템 테마', display: 'System', Icon: Laptop },
 } as const
 
+const LOCAL_AUTH_PROVIDERS = new Set(['local', 'email', 'password'])
+
+const isLocalLoginUser = (user: AuthUser) => {
+  if (user.isSocial === true) {
+    return false
+  }
+
+  if (!user.authProvider) {
+    return user.isSocial === false
+  }
+
+  return LOCAL_AUTH_PROVIDERS.has(user.authProvider.toLowerCase())
+}
+
+const canUserEditProfile = isLocalLoginUser
+
+const canUserChangePassword = isLocalLoginUser
+
 export function Header() {
   const { theme, setTheme } = useTheme()
   const navigate = useNavigate()
   const user = useAuthStore((state) => state.user)
+  const updateUser = useAuthStore((state) => state.updateUser)
   const logoutMutation = useLogoutMutation()
+  const changeNicknameMutation = useChangeNicknameMutation()
+  const changePasswordMutation = useChangePasswordMutation()
+  const toast = useToast()
+  const [isProfileEditOpen, setIsProfileEditOpen] = useState(false)
   const { label, display, Icon } = THEME_META[theme]
+  const canEditProfile = user ? canUserEditProfile(user) : false
 
   const handleClickTheme = () => {
     if (theme === 'light') {
@@ -40,6 +73,40 @@ export function Header() {
     // 로그아웃은 서버 쿠키 정리까지 끝내야 해서
     // 로컬 상태를 바로 지우지 않고 실제 API 호출을 먼저 보냅니다.
     logoutMutation.mutate()
+  }
+
+  const handleSubmitProfileEdit = async (values: ProfileEditFormValues) => {
+    if (!user || !canEditProfile) return
+
+    const shouldChangeNickname = values.nickname !== user.nickname
+    const shouldChangePassword =
+      values.currentPassword.length > 0 ||
+      values.newPassword.length > 0 ||
+      values.passwordConfirm.length > 0
+
+    // 닉네임과 비밀번호는 서로 다른 API라 변경된 항목만 순서대로 요청합니다.
+    const nicknameResponse = shouldChangeNickname
+      ? await changeNicknameMutation.mutateAsync({
+          nickname: values.nickname,
+        })
+      : null
+
+    if (shouldChangePassword) {
+      await changePasswordMutation.mutateAsync({
+        password: values.currentPassword,
+        new_password: values.newPassword,
+        new_password_confirm: values.passwordConfirm,
+      })
+    }
+
+    if (nicknameResponse) {
+      updateUser({
+        nickname: nicknameResponse.detail.nickname,
+      })
+    }
+
+    setIsProfileEditOpen(false)
+    toast.success('내정보가 변경되었습니다.')
   }
 
   return (
@@ -86,6 +153,14 @@ export function Header() {
               menuClassName="min-w-35 top-10 border border-border-default"
               align="right"
               items={[
+                ...(canEditProfile
+                  ? [
+                      {
+                        label: '내정보 변경',
+                        onClick: () => setIsProfileEditOpen(true),
+                      },
+                    ]
+                  : []),
                 { label: '마이페이지', onClick: () => navigate('/mypage') },
                 {
                   label: '북마크',
@@ -123,6 +198,18 @@ export function Header() {
           )}
         </div>
       </div>
+      {user && canEditProfile && isProfileEditOpen ? (
+        <ProfileEditModal
+          nickname={user.nickname}
+          profileImageUrl={user.profileImageUrl}
+          canChangePassword={canUserChangePassword(user)}
+          isSubmitting={
+            changeNicknameMutation.isPending || changePasswordMutation.isPending
+          }
+          onSubmit={handleSubmitProfileEdit}
+          onClose={() => setIsProfileEditOpen(false)}
+        />
+      ) : null}
     </header>
   )
 }

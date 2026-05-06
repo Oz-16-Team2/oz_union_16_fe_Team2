@@ -64,7 +64,7 @@ export function PostList({
   return (
     <section
       className={cn(
-        'flex w-full min-w-0 flex-col gap-4 px-4',
+        'flex w-full min-w-0 flex-col gap-4 p-0 sm:px-4',
         stickPaginationToBottom && 'flex-1'
       )}
     >

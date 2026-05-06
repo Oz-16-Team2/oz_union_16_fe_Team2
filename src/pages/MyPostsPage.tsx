@@ -137,9 +137,7 @@ export function MyPostsPage() {
 
   return (
     <main className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-6">
-      <div className="px-4">
-        <h1 className="text-2xl font-semibold text-center">내가 쓴 게시글</h1>
-      </div>
+      <h1 className="text-2xl font-semibold text-center">내가 쓴 게시글</h1>
 
       <PostList
         posts={filteredPosts}
