@@ -1,6 +1,7 @@
 import { Bookmark, Heart, MessageCircle, Share2 } from 'lucide-react'
 
 import { Button } from '@/components/common/ui'
+import { useToast } from '@/components/common/ui/toast/useToast'
 import {
   useTogglePostLikeMutation,
   useTogglePostScrapMutation,
@@ -24,6 +25,7 @@ export function PostDetailActions({
 }: PostDetailActionsProps) {
   const likeMutation = useTogglePostLikeMutation(postId)
   const scrapMutation = useTogglePostScrapMutation({ postId, isScrapped })
+  const toast = useToast()
 
   const handleLike = () => {
     likeMutation.mutate()
@@ -37,9 +39,12 @@ export function PostDetailActions({
 
   const handleShare = async () => {
     try {
-      await navigator.clipboard.writeText(window.location.href)
+      await navigator.clipboard.writeText(
+        `${window.location.origin}/post/${postId}`
+      )
+      toast.success('게시글 링크가 복사되었습니다.')
     } catch {
-      // TODO: 토스트 연결 시 공유 실패 메시지 노출
+      toast.error('게시글 링크 복사에 실패했습니다.')
     }
   }
 

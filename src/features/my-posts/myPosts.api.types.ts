@@ -15,6 +15,7 @@ export type ApiMyPostListItem = {
   tags: string[]
   content_preview: string
   like_count: number
+  is_liked: boolean
   comment_count: number
   is_scrapped: boolean
 }

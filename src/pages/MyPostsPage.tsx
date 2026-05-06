@@ -22,7 +22,7 @@ function toMyPostListItem(post: ApiMyPostListItem): PostListItem {
     contentPreview: post.content_preview,
     likeCount: post.like_count,
     commentCount: post.comment_count,
-    isLiked: false,
+    isLiked: post.is_liked,
     isScrapped: post.is_scrapped,
     isOwner: true,
   }
