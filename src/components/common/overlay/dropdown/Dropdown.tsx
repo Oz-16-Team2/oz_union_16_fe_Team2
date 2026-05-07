@@ -100,7 +100,8 @@ export function Dropdown({
         className={cn(
           dropdownTriggerVariants({ size }),
           isOpen && 'border-border-active',
-          value && 'text-text-primary cursor-pointer'
+          value && 'text-text-primary cursor-pointer',
+          disabled && 'cursor-not-allowed opacity-50'
         )}
         disabled={disabled}
       >

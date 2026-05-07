@@ -14,6 +14,7 @@ import { ConfirmModal } from '@/components/common/overlay/modal/confirm/ConfirmM
 import { ReportFormModal } from '@/components/common/overlay/modal/form/ReportFormModal'
 import { useToast } from '@/components/common/ui/toast/useToast'
 import { useDeletePostMutation } from '@/query/post'
+import { useAuthStore } from '@/store/authStore'
 import { cn } from '@/utils/cn'
 import { formatRelativeTime } from '@/utils/formatRelativeTime'
 
@@ -41,6 +42,8 @@ export function PostCard({
 }: PostCardProps) {
   const navigate = useNavigate()
   const toast = useToast()
+  const user = useAuthStore((state) => state.user)
+  const isGuest = !user
 
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
 
@@ -171,6 +174,7 @@ export function PostCard({
           title="게시글 신고"
           options={reportReasons}
           isSubmitting={isPending}
+          disabled={isGuest}
           onSubmit={handleReportSubmit}
           onClose={closeReportForm}
         />
