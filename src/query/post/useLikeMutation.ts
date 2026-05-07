@@ -34,7 +34,6 @@ export function useLikeMutation({
       setLikeCount(context.prevCount)
     },
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ['posts'] })
       queryClient.invalidateQueries({ queryKey: ['postDetail', postId] })
     },
   })
