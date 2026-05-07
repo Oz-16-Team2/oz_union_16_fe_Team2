@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { Navigate, useNavigate, useParams } from 'react-router'
 
 import { useQueryClient } from '@tanstack/react-query'
@@ -16,6 +17,10 @@ export function PostEditPage() {
   const toast = useToast()
   const { id } = useParams<{ id: string }>()
   const postId = Number(id)
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }, [])
 
   const { data: post, isLoading, isError } = usePostQuery(postId)
 

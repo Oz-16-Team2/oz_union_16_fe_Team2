@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { useNavigate } from 'react-router'
 
 import { useToast } from '@/components/common/ui'
@@ -7,6 +8,10 @@ import { useCreatePostMutation } from '@/query/post'
 export function PostCreatePage() {
   const navigate = useNavigate()
   const toast = useToast()
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }, [])
 
   const { mutate: createPost, isPending } = useCreatePostMutation({
     onSuccess: () => {
