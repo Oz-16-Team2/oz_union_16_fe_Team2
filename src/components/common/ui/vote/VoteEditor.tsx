@@ -12,7 +12,7 @@ function getSubmitLabel(mode: VoteEditorProps['mode']) {
 }
 
 const inputVariants = {
-  base: 'h-10 w-full rounded-full px-4 text-sm outline-none placeholder:text-text-muted sm:h-10 sm:px-4',
+  base: 'h-10 w-full rounded-full px-4 text-sm shadow-sm outline-none placeholder:text-text-muted sm:h-10 sm:px-4',
 
   enabled: {
     first:

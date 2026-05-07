@@ -198,7 +198,7 @@ export function usePostForm(
     }
 
     if (hasStartedVoteInput && validVoteOptions.length < 2) {
-      setVotePeriodError('투표 옵션을 2개 이상 입력해주세요.')
+      setVotePeriodError('투표 옵션을 입력해주세요.')
       throw new Error('vote-options-required')
     }
 

@@ -63,7 +63,7 @@ export function VoteDisplay({
       {/* 투표 컨테이너 */}
       <section
         className={cn(
-          'w-full rounded-2xl border border-border-default bg-gray-100 px-3 py-3 dark:bg-white/10 sm:px-3.5 sm:py-3.5',
+          'w-full rounded-2xl border border-border-default  bg-gray-100 px-3 py-3 dark:bg-white/10 sm:px-3.5 sm:py-3.5',
           isClosed && 'opacity-50'
         )}
       >
