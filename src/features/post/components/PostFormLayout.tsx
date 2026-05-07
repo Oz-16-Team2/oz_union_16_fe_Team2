@@ -35,7 +35,7 @@ export function PostFormLayout({
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-6 p-6">
+    <form onSubmit={handleSubmit} className="flex flex-col gap-6 p-3 sm:p-6">
       {/* 이미지 업로드 */}
       <div className="flex flex-col gap-2">
         <SectionLabel label="이미지 선택" />
