@@ -99,7 +99,7 @@ export function PostDetailLayout({ post }: PostDetailLayoutProps) {
   return (
     <>
       <div className="flex w-full max-w-300 flex-col gap-3">
-        <article className="w-full rounded-2xl border border-border-default bg-white px-5 py-5 shadow-card-main dark:bg-gray-900 sm:px-8 sm:py-6">
+        <article className="w-full rounded-2xl border border-border-default bg-white px-5 py-5 shadow-card-main dark:bg-gray-950 sm:px-8 sm:py-6">
           {/* 뒤로가기 버튼 */}
           <Button
             variant={'ghost'}

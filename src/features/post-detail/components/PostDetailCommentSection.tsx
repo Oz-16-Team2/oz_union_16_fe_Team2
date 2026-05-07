@@ -146,9 +146,7 @@ export function PostDetailCommentSection({
           profileImageUrl={user?.profileImageUrl}
           nickname={user?.nickname}
           placeholder={
-            user
-              ? '댓글을 입력해주세요'
-              : '로그인 후 댓글을 작성할 수 있습니다.'
+            user ? '댓글을 입력해주세요' : '로그인 후 이용 가능합니다.'
           }
         />
 

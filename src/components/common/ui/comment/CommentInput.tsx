@@ -38,7 +38,7 @@ export function CommentInput({
   return (
     <div className="flex items-start gap-3 sm:gap-4 sm:pl-4">
       {/* 프로필 */}
-      <div className="flex h-14 items-center">
+      <div className="flex h-20 items-center">
         <div className="h-12 w-12 shrink-0 overflow-hidden rounded-full bg-surface">
           {profileImageUrl ? (
             <img

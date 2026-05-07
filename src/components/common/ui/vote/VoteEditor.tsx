@@ -1,6 +1,7 @@
 import { Users } from 'lucide-react'
 
 import { Button, Calendar } from '@/components/common/ui'
+import { useAuthStore } from '@/store/authStore'
 import { cn } from '@/utils/cn'
 
 import { VoteEditorMode, type VoteEditorProps } from './Vote.type'
@@ -12,7 +13,7 @@ function getSubmitLabel(mode: VoteEditorProps['mode']) {
 }
 
 const inputVariants = {
-  base: 'h-10 w-full rounded-full px-4 text-sm shadow-sm outline-none placeholder:text-text-muted sm:h-10 sm:px-4',
+  base: 'h-11 w-full rounded-full px-4 text-sm shadow-sm outline-none placeholder:text-text-muted sm:h-11 sm:px-4',
 
   enabled: {
     first:
@@ -39,14 +40,17 @@ export function VoteEditor({
   onSubmit,
   onChangePeriod,
 }: VoteEditorProps) {
+  const user = useAuthStore((state) => state.user)
+
   const hasPeriod = Boolean(period?.start && period?.end)
   const hasValidOptions = options.every((option) => option.trim() !== '')
-  const isSubmitDisabled = disabled || !hasPeriod || !hasValidOptions
-  const submitLabel = getSubmitLabel(mode)
+  const isGuest = !user
+  const isSubmitDisabled = isGuest || disabled || !hasPeriod || !hasValidOptions
+  const submitLabel = isGuest ? '로그인 후 참여해주세요' : getSubmitLabel(mode)
 
   return (
     <>
-      <div className="mb-3">
+      <div className="mb-1">
         <Calendar
           value={period}
           onChange={onChangePeriod}
@@ -75,7 +79,7 @@ export function VoteEditor({
             return (
               <div
                 key={`vote-editor-option-${index}`}
-                className="grid grid-cols-[60px_minmax(0,1fr)] items-center gap-2 sm:grid-cols-[64px_minmax(0,1fr)]"
+                className="grid grid-cols-[52px_minmax(0,1fr)] items-center gap-1.5 sm:grid-cols-[56px_minmax(0,1fr)]"
               >
                 <span
                   className={cn(
@@ -121,9 +125,10 @@ export function VoteEditor({
             <Button
               type="button"
               variant="primary"
+              size="md"
               onClick={onSubmit}
               disabled={isSubmitDisabled}
-              className="h-10 w-full disabled:bg-gray-300 disabled:text-text-muted disabled:hover:bg-gray-300 dark:disabled:bg-white/15 dark:disabled:text-white/40 dark:disabled:hover:bg-white/15 sm:max-w-md"
+              className="h-11 w-full text-sm disabled:bg-gray-300 disabled:text-text-muted disabled:hover:bg-gray-300 dark:disabled:bg-white/15 dark:disabled:text-white/40 dark:disabled:hover:bg-white/15 sm:max-w-md"
             >
               {submitLabel}
             </Button>

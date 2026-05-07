@@ -138,26 +138,31 @@ export function PostDetailBody({
         )
       )}
 
-      {/* 제목 */}
-      <h1 className="text-xl font-semibold text-text-primary">{title}</h1>
+      {/* 본문 정보 영역 */}
+      <section className="min-h-32 space-y-4 overflow-hidden">
+        {/* 제목 */}
+        <h1 className="break-all text-xl font-semibold text-text-primary">
+          {title}
+        </h1>
 
-      {/* 내용 (빈 값이면 렌더 안함) */}
-      {content && (
-        <p className="whitespace-pre-wrap break-all text-sm leading-relaxed text-text-muted">
-          {content}
-        </p>
-      )}
+        {/* 내용 (빈 값이면 렌더 안함) */}
+        {content && (
+          <p className="whitespace-pre-wrap break-all text-sm leading-relaxed text-text-muted">
+            {content}
+          </p>
+        )}
 
-      {/* 태그 */}
-      {tags.length > 0 && (
-        <div className="mt-4 flex flex-wrap gap-1 text-xs text-text-muted">
-          {tags.map((tag, index) => (
-            <span key={`${tag}-${index}`} className="break-all">
-              #{tag}
-            </span>
-          ))}
-        </div>
-      )}
+        {/* 태그 */}
+        {tags.length > 0 && (
+          <div className="flex flex-wrap gap-1 text-xs text-text-muted">
+            {tags.map((tag, index) => (
+              <span key={`${tag}-${index}`} className="break-all">
+                #{tag}
+              </span>
+            ))}
+          </div>
+        )}
+      </section>
 
       {selectedImageIndex !== null && (
         <PostImageViewerModal

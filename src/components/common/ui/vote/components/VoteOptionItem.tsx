@@ -14,8 +14,7 @@ type VoteOptionItemProps = {
 }
 
 const optionVariants = {
-  base: 'grid w-full min-w-0 grid-cols-[16px_minmax(0,1fr)_40px] items-center gap-2 text-left sm:grid-cols-[16px_minmax(0,1fr)_40px]',
-
+  base: 'grid w-full min-w-0 grid-cols-[20px_minmax(0,1fr)_40px] items-center gap-2 text-left sm:grid-cols-[24px_minmax(0,1fr)_40px]',
   text: {
     selected: 'text-primary-500 dark:text-white',
     result: 'text-text-primary',
@@ -73,7 +72,7 @@ export function VoteOptionItem({
       </span>
 
       {/* 게이지 */}
-      <div className="relative h-10 min-w-0 overflow-hidden rounded-full bg-gray-100 shadow-sm dark:bg-white/5">
+      <div className="relative h-11 min-w-0 overflow-hidden rounded-full bg-gray-100 shadow-sm dark:bg-white/5">
         {showResult && percentage > 0 && (
           <div
             className={cn(
@@ -82,7 +81,7 @@ export function VoteOptionItem({
                 ? optionVariants.gauge.first
                 : optionVariants.gauge.second
             )}
-            style={{ width: `${percentage}%` }}
+            style={{ width: showResult ? `${percentage}%` : '100%' }}
           />
         )}
 
