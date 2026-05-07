@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query'
+import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import type { AxiosError } from 'axios'
 
 import type { ApiErrorResponse } from '@/apis/api.types'
@@ -17,5 +17,6 @@ export function useBookmarkedPostsQuery(params: {
       return res.data
     },
     gcTime: 0,
+    placeholderData: keepPreviousData,
   })
 }

@@ -33,10 +33,9 @@ export function MyPostsPage() {
   const [searchInput, setSearchInput] = useState('')
   const [searchQuery, setSearchQuery] = useState('')
   const hasSearchQuery = searchQuery.trim().length > 0
-  const apiPage = currentPage - 1
 
   const { data, isLoading, isFetching, isError, error } = useMyPostsQuery({
-    page: hasSearchQuery ? 0 : apiPage,
+    page: hasSearchQuery ? 1 : currentPage,
     size: POSTS_PAGE_SIZE,
   })
 

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
@@ -18,6 +18,10 @@ export function useScrapMutation({
   const queryClient = useQueryClient()
   const [scrapped, setScrapped] = useState(initialScrapped)
 
+  useEffect(() => {
+    setScrapped(initialScrapped)
+  }, [initialScrapped])
+
   const { mutate, isPending } = useMutation({
     mutationFn: (currentScrapped: boolean) =>
       currentScrapped ? postApi.unscrapPost(postId) : postApi.scrapPost(postId),
@@ -27,6 +31,7 @@ export function useScrapMutation({
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['bookmarkedPosts'] })
+      queryClient.invalidateQueries({ queryKey: ['posts', 'me'] })
     },
     onError: (_err, _vars, context) => {
       if (!context) return
