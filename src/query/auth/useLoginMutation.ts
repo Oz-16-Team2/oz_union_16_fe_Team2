@@ -1,7 +1,7 @@
 import type { UseFormSetError } from 'react-hook-form'
 import { useNavigate } from 'react-router'
 
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { type AxiosError, isAxiosError } from 'axios'
 
 import {
@@ -26,6 +26,7 @@ export function useLoginMutation(
   options?: UseLoginMutationOptions
 ) {
   const navigate = useNavigate()
+  const queryClient = useQueryClient()
   const setSession = useAuthStore((state) => state.setSession)
 
   // 로그인은 성공 직후 /me 조회까지 끝내서 세션을 완성합니다.
@@ -44,6 +45,7 @@ export function useLoginMutation(
     },
     onSuccess: (data) => {
       setSession(data.accessToken, data.user)
+      queryClient.removeQueries()
 
       if (options?.onSuccess) {
         options.onSuccess()
