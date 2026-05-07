@@ -153,5 +153,5 @@ export function mapCommentApiToComment(comment: CommentApiResponse): Comment {
 export function mapCommentsApiToComments(
   response: GetCommentsApiResponse
 ): Comment[] {
-  return response.results.map(mapCommentApiToComment)
+  return response.results.comments.map(mapCommentApiToComment)
 }

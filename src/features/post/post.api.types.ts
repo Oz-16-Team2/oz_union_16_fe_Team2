@@ -129,7 +129,12 @@ export type CommentApiResponse = {
 }
 
 export type GetCommentsApiResponse = {
-  results: CommentApiResponse[]
+  results: {
+    comments: CommentApiResponse[]
+    page: number
+    size: number
+    total_count: number
+  }
 }
 
 export type CreateCommentApiRequest = {

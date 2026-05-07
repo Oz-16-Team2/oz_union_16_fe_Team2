@@ -6,7 +6,12 @@ import type { AxiosError } from 'axios'
 import type { ApiErrorResponse } from '@/apis/api.types'
 import { formatError } from '@/apis/api.utils'
 import { ReportFormModal } from '@/components/common/overlay/modal/form/ReportFormModal'
-import { CommentInput, CommentList, useToast } from '@/components/common/ui'
+import {
+  CommentInput,
+  CommentList,
+  Pagination,
+  useToast,
+} from '@/components/common/ui'
 import { POST_REPORT_REASONS } from '@/components/common/ui/card/usePostCardReport'
 import { useCommentsQuery } from '@/query/post/useCommentsQuery'
 import { useCreateCommentMutation } from '@/query/post/useCreateCommentMutation'
@@ -27,8 +32,12 @@ export function PostDetailCommentSection({
   const navigate = useNavigate()
   const user = useAuthStore((state) => state.user)
   const toast = useToast()
+  const [currentPage, setCurrentPage] = useState(1)
 
-  const { data: comments = [], isLoading, isError } = useCommentsQuery(postId)
+  const { data, isLoading, isError } = useCommentsQuery(postId, currentPage)
+  const comments = data?.comments ?? []
+  const totalPages = data?.totalPages ?? 1
+
   const { refetch: refetchPostDetail } = usePostDetailQuery(postId)
 
   const { mutateAsync: createComment, isPending } = useCreateCommentMutation()
@@ -40,45 +49,37 @@ export function PostDetailCommentSection({
 
   const [reportCommentId, setReportCommentId] = useState<number | null>(null)
 
-  // 비회원 액션 방어: 로그인하지 않은 사용자는 액션 대신 로그인 페이지로 이동
   const requireLogin = () => {
     if (!user) {
       navigate('/login')
       return true
     }
-
     return false
   }
 
-  // 댓글 작성
   const handleSubmitComment = async (content: string) => {
     if (requireLogin()) return
 
     try {
       await createComment({ postId, content })
-      refetchPostDetail()
+
+      setCurrentPage(1)
+
+      toast.success('댓글이 작성되었습니다.')
     } catch {
       toast.error('댓글 작성에 실패했습니다.')
     }
   }
 
-  // 댓글 좋아요
   const handleLikeComment = (commentId: number) => {
     if (requireLogin()) return
-
     const targetComment = comments.find((comment) => comment.id === commentId)
     if (!targetComment) return
-
-    toggleCommentLike({
-      commentId,
-      isLiked: targetComment.isLiked,
-    })
+    toggleCommentLike({ commentId, isLiked: targetComment.isLiked })
   }
 
-  // 댓글 삭제
   const handleDeleteComment = (commentId: number) => {
     if (requireLogin()) return
-
     deleteComment(commentId, {
       onSuccess: () => {
         refetchPostDetail()
@@ -86,31 +87,23 @@ export function PostDetailCommentSection({
     })
   }
 
-  // 댓글 수정
   const handleEditComment = (commentId: number, content: string) => {
     if (requireLogin()) return
-
     updateComment({ commentId, content })
   }
 
-  // 신고 메뉴 클릭: 비회원이면 로그인 이동, 회원이면 신고 모달 열기
   const handleOpenReportModal = (commentId: number) => {
     if (requireLogin()) return
-
     setReportCommentId(commentId)
   }
 
-  // 신고 제출
   const handleSubmitReport = (data: { reason: string; content: string }) => {
     if (requireLogin()) return
     if (!reportCommentId) return
-
-    // 신고 사유 선택 안 했을 때
     if (!data.reason) {
       toast.error('신고 사유를 선택해주세요.')
       return
     }
-
     reportComment(
       {
         commentId: reportCommentId,
@@ -125,7 +118,6 @@ export function PostDetailCommentSection({
         onError: (error) => {
           const axiosError = error as AxiosError<ApiErrorResponse>
           const detail = axiosError.response?.data.error_detail
-
           toast.error(
             detail ? formatError(detail) : '신고 접수에 실패했습니다.'
           )
@@ -169,6 +161,14 @@ export function PostDetailCommentSection({
             onDelete={handleDeleteComment}
             onReport={handleOpenReportModal}
             onEdit={handleEditComment}
+          />
+        </div>
+
+        <div className="mt-4 flex justify-center">
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
           />
         </div>
       </section>
