@@ -8,6 +8,7 @@ type PostVoteSectionProps = {
   mode: PostFormMode
   options: string[]
   period?: DateRange
+  periodError?: string
   onChangeOption: (index: number, value: string) => void
   onChangePeriod: (date: DateRange | null) => void
   isExistingVoteLocked?: boolean
@@ -22,6 +23,7 @@ export function PostVoteSection({
   mode,
   options,
   period,
+  periodError,
   onChangeOption,
   onChangePeriod,
   isExistingVoteLocked = false,
@@ -30,8 +32,9 @@ export function PostVoteSection({
     return (
       <>
         <p className="text-sm text-text-muted">
-          기존 투표는 수정 페이지에서 변경할 수 없습니다. 투표 수정은
-          상세페이지에서 진행해주세요.
+          기존 투표는 수정 페이지에서 변경할 수 없습니다.
+          <br />
+          투표 수정은 상세페이지에서 진행해주세요.
         </p>
 
         <div className="mb-2 flex items-center gap-2 text-sm">
@@ -40,21 +43,22 @@ export function PostVoteSection({
             {formatDate(period?.start)} ~ {formatDate(period?.end)}
           </span>
         </div>
-        <section className="relative mx-auto min-h-62 w-full max-w-267.5 rounded-2xl border border-border-default bg-gray-100 px-6 py-6 shadow-card-main dark:bg-white/10">
-          <div className="flex flex-col gap-4 pt-8">
+
+        <section className="w-full rounded-2xl border border-border-default bg-gray-100 px-4 py-5 shadow-card-main dark:bg-white/10">
+          <div className="flex flex-col gap-4">
             {options.map((option, index) => {
               const isFirst = index === 0
 
               return (
                 <div
                   key={`${option}-${index}`}
-                  className="grid w-full grid-cols-[20px_minmax(0,1fr)_44px] items-center gap-2 text-left sm:grid-cols-[24px_minmax(0,1fr)_56px]"
+                  className="grid w-full grid-cols-[28px_minmax(0,1fr)] items-center gap-3 text-left sm:grid-cols-[32px_minmax(0,1fr)]"
                 >
-                  <span className="flex items-center justify-center">
+                  <span className="flex items-center justify-center pl-1">
                     <span className="flex size-4 items-center justify-center rounded-sm bg-gray-300 dark:bg-white/20" />
                   </span>
 
-                  <div className="relative h-12 min-w-0 overflow-hidden rounded-full bg-gray-100 shadow-sm dark:bg-white/10 sm:h-14">
+                  <div className="relative h-12 min-w-0 overflow-hidden rounded-full bg-gray-100 dark:bg-white/10">
                     <div
                       className={cn(
                         'absolute inset-y-0 left-0 rounded-full',
@@ -63,7 +67,7 @@ export function PostVoteSection({
                       style={{ width: '0%' }}
                     />
 
-                    <span className="relative z-10 flex h-full min-w-0 items-center truncate px-3 text-sm font-medium text-text-primary sm:px-6">
+                    <span className="relative z-10 flex h-full min-w-0 items-center truncate px-4 text-sm font-medium text-text-primary">
                       {option}
                     </span>
                   </div>
@@ -82,6 +86,7 @@ export function PostVoteSection({
         mode={mode}
         options={options}
         period={period}
+        periodError={periodError}
         onChangeOption={onChangeOption}
         onChangePeriod={onChangePeriod}
         hideParticipantCount

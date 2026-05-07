@@ -592,3 +592,13 @@ input:-webkit-autofill:focus {
 html {
   scrollbar-gutter: stable;
 }
+
+/* sonner toast의 fixed wrapper가 모바일에서 상단 클릭을 막는 문제 방지 */
+[data-sonner-toaster] {
+  pointer-events: none !important;
+}
+
+/* sonner toast li 자체도 모바일에서 넓은 클릭 영역을 만들기 때문에 클릭 통과 */
+[data-sonner-toast] {
+  pointer-events: none !important;
+}

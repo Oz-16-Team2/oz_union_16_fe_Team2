@@ -92,7 +92,7 @@ export function PostDetailLayout({ post }: PostDetailLayoutProps) {
 
   return (
     <>
-      <article className="w-full max-w-300 rounded-2xl border border-border-default bg-surface px-8 py-6 shadow-card-main">
+      <article className="w-full max-w-300 rounded-2xl border border-border-default bg-white dark:bg-gray-900 px-8 py-6 shadow-card-main">
         <PostDetailHeader
           author={{
             nickname: post.nickname,

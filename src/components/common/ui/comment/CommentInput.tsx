@@ -55,25 +55,25 @@ export function CommentInput({
       </div>
 
       {/* 입력 영역 */}
-      <div className="flex flex-1 flex-col gap-2">
+      <div className="flex min-w-0 flex-1 flex-col gap-2">
         <div className="relative">
           <Textarea
             disabled={disabled}
-            className="h-14 min-h-14 max-h-30 overflow-hidden bg-gray-100 pr-20 pb-6 disabled:bg-gray-200 disabled:text-text-muted disabled:placeholder:text-gray-400 disabled:opacity-100 dark:border-white/15 dark:bg-white/5 dark:disabled:bg-white/5"
+            className="h-20 min-h-20 max-h-30 overflow-y-auto bg-gray-100 pr-16 pb-7 disabled:bg-gray-200 disabled:text-text-muted disabled:placeholder:text-gray-400 disabled:opacity-100 dark:border-white/15 dark:bg-white/5 dark:disabled:bg-white/5"
             value={value}
             onChange={(e) => setValue(e.target.value)}
             placeholder={placeholder}
             maxLength={maxLength}
           />
 
-          <span className="absolute right-4 bottom-3 text-xs text-text-muted">
+          <span className="absolute right-6 bottom-2 text-xs text-text-muted">
             {value.length}/{maxLength}
           </span>
         </div>
 
-        <div className="flex justify-end">
+        <div className="mt-1 flex justify-end">
           <Button
-            variant="submit"
+            variant="primary"
             size="sm"
             rounded="full"
             onClick={handleSubmit}

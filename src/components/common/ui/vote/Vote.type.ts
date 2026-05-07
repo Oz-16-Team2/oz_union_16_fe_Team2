@@ -56,6 +56,8 @@ export type VoteEditorProps = {
   disabled?: boolean
   hideOptionLength?: boolean
   hideParticipantCount?: boolean
+  periodError?: string
+  actionSlot?: React.ReactNode
   onChangeOption?: (index: number, value: string) => void
   onSubmit?: () => void
   onChangePeriod?: (date: DateRange | null) => void

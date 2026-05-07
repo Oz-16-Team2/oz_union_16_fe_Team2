@@ -65,6 +65,7 @@ export function usePostForm(
     if (!startDate || !endDate) return undefined
     return { start: new Date(startDate), end: new Date(endDate) }
   })
+  const [votePeriodError, setVotePeriodError] = useState('')
 
   // 목표
   const [selectedGoalId, setSelectedGoalId] = useState<number | undefined>(
@@ -164,7 +165,17 @@ export function usePostForm(
   function changeVotePeriod(date: DateRange | null) {
     if (isExistingVoteLocked) return
 
-    setVotePeriod(date ?? undefined)
+    setVotePeriodError('')
+
+    if (!date) {
+      setVotePeriod(undefined)
+      return
+    }
+
+    setVotePeriod({
+      start: date.start,
+      end: date.end ?? date.start,
+    })
   }
 
   // 최종 payload 빌드 — imageUrl이 확정된 이미지만 포함
@@ -177,9 +188,21 @@ export function usePostForm(
       .filter((option) => option.trim() !== '')
       .map((option) => option.trim())
 
-    const hasActiveVote =
-      Boolean(votePeriod?.start && votePeriod?.end) &&
-      validVoteOptions.length >= 2
+    const hasEnteredVoteOptions = validVoteOptions.length > 0
+    const hasSelectedVotePeriod = Boolean(votePeriod?.start && votePeriod?.end)
+    const hasStartedVoteInput = hasEnteredVoteOptions || hasSelectedVotePeriod
+
+    if (hasStartedVoteInput && !hasSelectedVotePeriod) {
+      setVotePeriodError('투표 기간을 선택해주세요.')
+      throw new Error('vote-period-required')
+    }
+
+    if (hasStartedVoteInput && validVoteOptions.length < 2) {
+      setVotePeriodError('투표 옵션을 입력해주세요.')
+      throw new Error('vote-options-required')
+    }
+
+    const hasActiveVote = hasSelectedVotePeriod && validVoteOptions.length >= 2
 
     // 기존 투표가 없고, 새 투표 입력값이 유효할 때만 vote payload 전송
     const shouldSendVote = hasActiveVote && !initialHasVote
@@ -234,6 +257,7 @@ export function usePostForm(
     selectedTagIds,
     voteOptions,
     votePeriod,
+    votePeriodError,
     selectedGoalId,
 
     // 파생

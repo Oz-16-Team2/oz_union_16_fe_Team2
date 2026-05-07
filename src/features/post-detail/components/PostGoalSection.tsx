@@ -41,9 +41,9 @@ export function PostGoalSection({
 
   return (
     <section className="mt-8">
-      <div className="relative min-h-60">
+      <div className="flex flex-col gap-6 sm:relative sm:min-h-60">
         {/* 왼쪽 영역 */}
-        <div className="flex w-64.75 flex-col gap-2">
+        <div className="flex w-full flex-col gap-2 sm:w-64.75">
           {/* 헤더 */}
           <div className="flex items-center justify-between">
             <h3 className="text-base font-bold text-text-primary">개별 목표</h3>
@@ -63,7 +63,7 @@ export function PostGoalSection({
         </div>
 
         {/* 그래프 */}
-        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+        <div className="flex justify-center sm:absolute sm:left-1/2 sm:top-1/2 sm:-translate-x-1/2 sm:-translate-y-1/2">
           <DonutChart progressRate={progressRate} status={status} size={220} />
         </div>
       </div>

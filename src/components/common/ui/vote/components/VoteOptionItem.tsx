@@ -14,7 +14,7 @@ type VoteOptionItemProps = {
 }
 
 const optionVariants = {
-  base: 'grid w-full grid-cols-[20px_minmax(0,1fr)_44px] items-center gap-2 text-left sm:grid-cols-[24px_minmax(0,1fr)_56px]',
+  base: 'grid w-full min-w-0 grid-cols-[16px_minmax(0,1fr)_40px] items-center gap-2 text-left sm:grid-cols-[16px_minmax(0,1fr)_40px]',
 
   text: {
     selected: 'text-primary-500 dark:text-white',
@@ -73,7 +73,7 @@ export function VoteOptionItem({
       </span>
 
       {/* 게이지 */}
-      <div className="relative h-12 min-w-0 overflow-hidden rounded-full bg-gray-100 shadow-sm dark:bg-white/5 sm:h-14">
+      <div className="relative h-10 min-w-0 overflow-hidden rounded-full bg-gray-100 shadow-sm dark:bg-white/5">
         {showResult && percentage > 0 && (
           <div
             className={cn(
@@ -89,7 +89,7 @@ export function VoteOptionItem({
         {/* 게이지 내부 텍스트 */}
         <span
           className={cn(
-            'relative z-10 flex h-full min-w-0 items-center truncate px-3 text-sm font-medium sm:px-6',
+            'relative z-10 flex h-full min-w-0 items-center truncate px-4 text-sm font-medium',
             textColor
           )}
           title={option.valueLabel}
@@ -98,7 +98,7 @@ export function VoteOptionItem({
         </span>
       </div>
 
-      {/* 퍼센트 (색상 동일 + 스타일 통일) */}
+      {/* 퍼센트 */}
       <span className={cn('text-right text-sm font-medium', textColor)}>
         {showResult ? `${displayPercentage}%` : ''}
       </span>

@@ -152,10 +152,7 @@ export function PostDetailBody({
       {tags.length > 0 && (
         <div className="mt-4 flex flex-wrap gap-1 text-xs text-text-muted">
           {tags.map((tag, index) => (
-            <span
-              key={`${tag}-${index}`}
-              className="max-w-fit break-all rounded-md bg-gray-100 px-2 py-1 text-xs text-text-muted dark:bg-white/10"
-            >
+            <span key={`${tag}-${index}`} className="break-all">
               #{tag}
             </span>
           ))}
