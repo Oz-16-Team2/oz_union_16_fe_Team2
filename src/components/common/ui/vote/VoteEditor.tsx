@@ -13,7 +13,7 @@ function getSubmitLabel(mode: VoteEditorProps['mode']) {
 }
 
 const inputVariants = {
-  base: 'h-11 w-full rounded-full px-4 text-sm shadow-sm outline-none placeholder:text-text-muted sm:h-11 sm:px-4',
+  base: 'h-11 w-full rounded-full px-4 text-sm shadow-sm outline-none placeholder:text-text-muted sm:h-13.5 sm:px-4',
 
   enabled: {
     first:
@@ -50,17 +50,17 @@ export function VoteEditor({
 
   return (
     <>
-      <div className="mb-1">
+      <div>
         <Calendar
           value={period}
           onChange={onChangePeriod}
           label="투표 기간을 선택하세요"
-          className="w-full"
+          className="w-full [&_button]:p-1.5"
         />
 
         {periodError && (
-          <p className="mt-1.5 px-4 text-xs text-status-danger-text">
-            {periodError}
+          <p className="px-2 mt-0.5 text-xs text-status-danger-text">
+            * {periodError}
           </p>
         )}
       </div>
@@ -110,7 +110,7 @@ export function VoteEditor({
                   />
 
                   {!hideOptionLength && (
-                    <span className="absolute right-5 bottom-1.5 text-2xs text-text-muted">
+                    <span className="absolute right-5 bottom-2 text-2xs text-text-muted sm:bottom-3">
                       {safeOption.length}/{VOTE_OPTION_MAX_LENGTH}
                     </span>
                   )}

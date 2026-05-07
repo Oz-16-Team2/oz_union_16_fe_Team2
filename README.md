@@ -228,7 +228,8 @@ pnpm storybook
 
 ### FE
 
-<table width="100%" align="center" cellspacing="0" cellpadding="12">
+<div align="center">
+<table width="100%" style="width: 100%; table-layout: fixed;" align="center" cellspacing="0" cellpadding="12">
   <colgroup>
     <col width="33.33%" />
     <col width="33.33%" />
@@ -236,13 +237,13 @@ pnpm storybook
   </colgroup>
   <tr>
     <td width="33.33%" align="center" valign="top">
-      <a href="https://github.com/alstmd9902"><img src="https://github.com/alstmd9902.png?size=100" width="100" alt="오승연 프로필" /><br /><sub><b>@alstmd9902</b></sub></a>
+      <a href="https://github.com/alstmd9902"><img src="https://github.com/alstmd9902.png?size=140" width="140" alt="오승연 프로필" /><br /><sub><b>@alstmd9902</b></sub></a>
     </td>
     <td width="33.33%" align="center" valign="top">
-      <a href="https://github.com/0rrriiinnn0"><img src="https://github.com/0rrriiinnn0.png?size=100" width="100" alt="김예린 프로필" /><br /><sub><b>@0rrriiinnn0</b></sub></a>
+      <a href="https://github.com/0rrriiinnn0"><img src="https://github.com/0rrriiinnn0.png?size=140" width="140" alt="김예린 프로필" /><br /><sub><b>@0rrriiinnn0</b></sub></a>
     </td>
     <td width="33.33%" align="center" valign="top">
-      <a href="https://github.com/hyunsik2000"><img src="https://github.com/hyunsik2000.png?size=100" width="100" alt="류현식 프로필" /><br /><sub><b>@hyunsik2000</b></sub></a>
+      <a href="https://github.com/hyunsik2000"><img src="https://github.com/hyunsik2000.png?size=140" width="140" alt="류현식 프로필" /><br /><sub><b>@hyunsik2000</b></sub></a>
     </td>
   </tr>
   <tr>
@@ -256,11 +257,12 @@ pnpm storybook
     <td width="33.33%" align="center">팀원</td>
   </tr>
   <tr>
-    <td width="33.33%" align="center">로그인/회원가입<br />마이페이지<br />목표 관리</td>
-    <td width="33.33%" align="center">게시글 상세<br />댓글<br />투표</td>
-    <td width="33.33%" align="center">게시글 목록<br />게시글 작성/수정<br />랭킹</td>
+    <td width="33.33%" align="center">로그인 / 회원가입<br />마이페이지<br />내가 쓴 게시글</td>
+    <td width="33.33%" align="center">게시글 상세페이지<br />댓글<br />투표</td>
+    <td width="33.33%" align="center">메인페이지<br />게시글 작성/수정<br />북마크</td>
   </tr>
 </table>
+</div>
 
 ## 프로젝트 규칙
 

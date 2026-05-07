@@ -14,6 +14,7 @@ import { useToast } from '@/components/common/ui/toast/useToast'
 import type { PostDetailData } from '@/features/post/post.types'
 import { useDeletePostMutation } from '@/query/post/useDeletePostMutation'
 import { useReportPostMutation } from '@/query/post/useReportPostMutation'
+import { useAuthStore } from '@/store/authStore'
 
 import { PostDetailActions } from './PostDetailActions'
 import { PostDetailBody } from './PostDetailBody'
@@ -29,6 +30,8 @@ type PostDetailLayoutProps = {
 export function PostDetailLayout({ post }: PostDetailLayoutProps) {
   const navigate = useNavigate()
   const toast = useToast()
+  const user = useAuthStore((state) => state.user)
+  const isGuest = !user
 
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
   const [isReportModalOpen, setIsReportModalOpen] = useState(false)
@@ -173,6 +176,7 @@ export function PostDetailLayout({ post }: PostDetailLayoutProps) {
           title="게시글 신고"
           options={POST_REPORT_REASONS}
           isSubmitting={reportMutation.isPending}
+          disabled={isGuest}
           onSubmit={handleReportSubmit}
           onClose={() => setIsReportModalOpen(false)}
         />

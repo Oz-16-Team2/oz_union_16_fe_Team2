@@ -10,6 +10,8 @@ type ReportFormModalProps = {
   options: DropdownOption[]
   title: string
   isSubmitting?: boolean
+  disabled?: boolean
+  disabledMessage?: string
   onSubmit: (data: { reason: string; content: string }) => void
 } & Omit<ModalProps, 'children'>
 
@@ -17,6 +19,8 @@ export function ReportFormModal({
   options,
   title = '제목',
   isSubmitting = false,
+  disabled = false,
+  disabledMessage = '*로그인 후 이용 가능합니다.',
   className,
   onSubmit,
   onClose,
@@ -29,6 +33,7 @@ export function ReportFormModal({
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    if (disabled) return
     onSubmit({ reason, content })
   }
 
@@ -60,6 +65,7 @@ export function ReportFormModal({
               value={reason}
               onChange={setReason}
               placeholder="선택해주세요"
+              disabled={disabled}
               className="w-full min-w-0"
             />
             <label
@@ -73,11 +79,17 @@ export function ReportFormModal({
               size="sm"
               value={content}
               onChange={handleContentChange}
+              disabled={disabled}
               className="w-full min-w-0"
             />
+            {disabled && (
+              <p className="-mt-1 text-left text-sm text-status-error-text sm:col-span-2">
+                {disabledMessage}
+              </p>
+            )}
           </div>
         </Modal.Content>
-        <Modal.Footer className="mt-7 gap-3">
+        <Modal.Footer className="mt-5 gap-3">
           <Button
             variant="modal"
             rounded="lg"
@@ -90,7 +102,7 @@ export function ReportFormModal({
             variant="primary"
             rounded="lg"
             type="submit"
-            disabled={isSubmitting}
+            disabled={disabled || isSubmitting}
             className="px-5 py-1.5 text-xs font-light"
           >
             {isSubmitting ? '처리중...' : '등록'}
