@@ -1,4 +1,5 @@
 import { VoteViewerMode } from '@/components/common/ui/vote/Vote.type'
+
 type VoteResultOption = {
   vote_option_id: number
   content: string
@@ -14,13 +15,28 @@ type VoteDetail = {
   options: VoteResultOption[]
 }
 
+type VoteModeInfo = {
+  status: string
+  end_at?: string | null
+  endAt?: string | null
+}
+
+function isVoteClosed(voteInfo: VoteModeInfo) {
+  if (voteInfo.status.toLowerCase() === 'closed') return true
+
+  const endAt = voteInfo.end_at ?? voteInfo.endAt
+  if (!endAt) return false
+
+  const now = new Date()
+  const endDate = new Date(`${endAt}T23:59:59`)
+
+  return now > endDate
+}
+
 // 투표 상태 - ui 모드 변환
-export function getVoteMode(
-  voteInfo: { status: string } | null,
-  isVoted?: boolean
-) {
+export function getVoteMode(voteInfo: VoteModeInfo | null, isVoted?: boolean) {
   if (!voteInfo) return VoteViewerMode.GUEST
-  if (voteInfo.status === 'closed') return VoteViewerMode.CLOSED
+  if (isVoteClosed(voteInfo)) return VoteViewerMode.CLOSED
   if (isVoted) return VoteViewerMode.VOTED
 
   return VoteViewerMode.MEMBER

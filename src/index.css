@@ -2,10 +2,6 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
-/* html {
-  scrollbar-gutter: stable;
-} */
-
 body {
   font-family: 'Pretendard', ui-sans-serif, system-ui, sans-serif;
   color: var(--text-primary);
@@ -585,12 +581,6 @@ input:-webkit-autofill:focus {
     margin-inline: auto !important;
     translate: 0 0;
   }
-}
-
-/* 스크롤바가 생길 때 레이아웃이 왼쪽으로 밀리는 현상 방지
-   → 스크롤바 공간을 항상 미리 확보해서 UI 흔들림 제거 */
-html {
-  scrollbar-gutter: stable;
 }
 
 /* sonner toast의 fixed wrapper가 모바일에서 상단 클릭을 막는 문제 방지 */

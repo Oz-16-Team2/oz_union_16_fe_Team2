@@ -2,6 +2,7 @@ import { Users } from 'lucide-react'
 
 import { Button } from '@/components/common/ui'
 import { formatSelectedDate } from '@/components/common/ui/calendar/Calendar.util'
+import { useAuthStore } from '@/store/authStore'
 import { cn } from '@/utils/cn'
 
 import { VoteOptionItem } from './components/VoteOptionItem'
@@ -16,19 +17,27 @@ export function VoteDisplay({
   onSelectOption,
   onActionClick,
 }: VoteDisplayProps) {
+  const user = useAuthStore((state) => state.user)
+
+  const isGuest = !user
   const isClosed = mode === VoteViewerMode.CLOSED
   const isVoted = mode === VoteViewerMode.VOTED
   const showResult = true
 
   const hasCheckedOption = options.some((option) => option.checked)
   const isActionDisabled =
-    isClosed || isVoted || (mode === VoteViewerMode.MEMBER && !hasCheckedOption)
+    isGuest ||
+    isClosed ||
+    isVoted ||
+    (mode === VoteViewerMode.MEMBER && !hasCheckedOption)
 
-  const buttonLabel = isClosed
-    ? '투표 마감'
-    : isVoted
-      ? '투표 완료'
-      : '투표하기'
+  const buttonLabel = isGuest
+    ? '로그인 후 참여해주세요'
+    : isClosed
+      ? '투표 마감'
+      : isVoted
+        ? '투표 완료'
+        : '투표하기'
 
   const hasPeriod = Boolean(period?.start && period?.end)
 
@@ -63,7 +72,7 @@ export function VoteDisplay({
       {/* 투표 컨테이너 */}
       <section
         className={cn(
-          'w-full rounded-2xl border border-border-default  bg-gray-100 px-3 py-3 dark:bg-white/10 sm:px-3.5 sm:py-3.5',
+          'w-full rounded-2xl border border-border-default bg-gray-100 px-3 py-3 dark:bg-white/10 sm:px-3.5 sm:py-3.5',
           isClosed && 'opacity-50'
         )}
       >
@@ -86,9 +95,10 @@ export function VoteDisplay({
           <Button
             type="button"
             variant="primary"
+            size="md"
             onClick={onActionClick}
             disabled={isActionDisabled}
-            className="h-10 w-full text-md disabled:bg-gray-300 disabled:text-text-muted disabled:hover:bg-gray-300 dark:disabled:bg-white/15 dark:disabled:text-white/40 dark:disabled:hover:bg-white/15 sm:max-w-md"
+            className="h-11 w-full text-sm disabled:bg-gray-300 disabled:text-text-muted disabled:hover:bg-gray-300 dark:disabled:bg-white/15 dark:disabled:text-white/40 dark:disabled:hover:bg-white/15 sm:max-w-md"
           >
             {buttonLabel}
           </Button>
