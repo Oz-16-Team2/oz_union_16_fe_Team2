@@ -10,11 +10,9 @@
 
 작심며칠은 사용자가 개인 목표를 설정하고 일별 체크 기록을 남길 수 있는 서비스입니다. 사용자는 목표와 연결된 게시글을 작성하고, 댓글/좋아요/스크랩/투표 기능을 통해 다른 사용자와 목표 달성 경험을 공유할 수 있습니다.
 
-## 주요 기능
+## ✨ 주요 기능
 
-### 인증
-
-#### 일반 회원가입 / 내정보 변경
+## 회원가입 / 내정보 변경
 
 - 닉네임 중복 확인
 - 이메일 인증
@@ -25,7 +23,7 @@
 | :----------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------: |
 | <img src="./public/images/signup-demo.gif" alt="회원가입 시연" width="100%" /> | <img src="./public/images/profile-edit-demo.gif" alt="내정보 변경 시연" width="100%" /> |
 
-#### 로그인
+## 로그인
 
 - 일반 로그인
 - 소셜 로그인 (Google, Kakao, Naver 지원)
@@ -36,7 +34,7 @@
 | :------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------: |
 | <img src="./public/images/login-demo.gif" alt="일반 로그인 시연" width="100%" /> | <img src="./public/images/social-login-demo.gif" alt="소셜 로그인 시연" width="100%" /> |
 
-### 메인 / 랭킹
+## 메인 / 랭킹
 
 - 게시글 목록 조회
 - 최신순, 인기순(댓글 수 + 게시글 좋아요 수 기반), 추천순(회원 전용, 태그 + 좋아요 기반) 정렬
@@ -49,7 +47,7 @@
 | :------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------: |
 | <img src="./public/images/guest-main-demo.gif" alt="비회원 메인 페이지 시연" width="100%" /> | <img src="./public/images/main-ranking-demo.gif" alt="회원 메인 페이지와 랭킹 시연" width="100%" /> |
 
-### 게시글 작성 / 상세 / 수정
+## 게시글 작성 / 상세 / 수정
 
 #### 게시글 작성
 
@@ -76,7 +74,7 @@
 | :------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------: |
 | <img src="./public/images/post-create-demo.gif" alt="게시글 작성 시연" width="100%" /> | <img src="./public/images/post-detail-demo.gif" alt="게시글 상세 시연" width="100%" /> | <img src="./public/images/post-edit-demo.gif" alt="게시글 수정 시연" width="100%" /> |
 
-### 마이페이지
+## 마이페이지
 
 #### 목표 관리
 
@@ -95,7 +93,7 @@
 | :---------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------: |
 | <img src="./public/images/goal-demo.gif" alt="목표 관리 시연" width="100%" /> | <img src="./public/images/heatmap-demo.gif" alt="나의 활동과 히트맵 시연" width="100%" /> |
 
-### 내가 쓴 게시글 / 북마크
+## 내가 쓴 게시글 / 북마크
 
 - 내가 작성한 게시글 목록 조회
 - 북마크한 게시글 목록 조회
@@ -230,32 +228,37 @@ pnpm storybook
 
 ### FE
 
-<table width="100%" cellspacing="16" cellpadding="12">
+<table width="100%" align="center" cellspacing="0" cellpadding="12">
+  <colgroup>
+    <col width="33.33%" />
+    <col width="33.33%" />
+    <col width="33.33%" />
+  </colgroup>
   <tr>
-    <td align="center" valign="top">
+    <td width="33.33%" align="center" valign="top">
       <a href="https://github.com/alstmd9902"><img src="https://github.com/alstmd9902.png?size=100" width="100" alt="오승연 프로필" /><br /><sub><b>@alstmd9902</b></sub></a>
     </td>
-    <td align="center" valign="top">
+    <td width="33.33%" align="center" valign="top">
       <a href="https://github.com/0rrriiinnn0"><img src="https://github.com/0rrriiinnn0.png?size=100" width="100" alt="김예린 프로필" /><br /><sub><b>@0rrriiinnn0</b></sub></a>
     </td>
-    <td align="center" valign="top">
+    <td width="33.33%" align="center" valign="top">
       <a href="https://github.com/hyunsik2000"><img src="https://github.com/hyunsik2000.png?size=100" width="100" alt="류현식 프로필" /><br /><sub><b>@hyunsik2000</b></sub></a>
     </td>
   </tr>
   <tr>
-    <td align="center">오승연</td>
-    <td align="center">김예린</td>
-    <td align="center">류현식</td>
+    <td width="33.33%" align="center">오승연</td>
+    <td width="33.33%" align="center">김예린</td>
+    <td width="33.33%" align="center">류현식</td>
   </tr>
   <tr>
-    <td align="center">팀장 (Lead)</td>
-    <td align="center">팀원</td>
-    <td align="center">팀원</td>
+    <td width="33.33%" align="center">팀장 (Lead)</td>
+    <td width="33.33%" align="center">팀원</td>
+    <td width="33.33%" align="center">팀원</td>
   </tr>
   <tr>
-    <td align="center">로그인/회원가입<br />마이페이지<br />목표 관리</td>
-    <td align="center">게시글 상세<br />댓글<br />투표</td>
-    <td align="center">게시글 목록<br />게시글 작성/수정<br />랭킹</td>
+    <td width="33.33%" align="center">로그인/회원가입<br />마이페이지<br />목표 관리</td>
+    <td width="33.33%" align="center">게시글 상세<br />댓글<br />투표</td>
+    <td width="33.33%" align="center">게시글 목록<br />게시글 작성/수정<br />랭킹</td>
   </tr>
 </table>
 
