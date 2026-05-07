@@ -6,6 +6,8 @@ import { Outlet } from 'react-router'
 
 import { Footer, Header } from '@/components/common/layout'
 
+import { ScrollToTopButton } from './ScrollToTopButton'
+
 export function RootLayout() {
   return (
     <div className="flex min-h-dvh flex-col">
@@ -15,6 +17,7 @@ export function RootLayout() {
         <Outlet />
       </div>
       <Footer />
+      <ScrollToTopButton />
     </div>
   )
 }

@@ -2,11 +2,13 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router'
 
 import type { AxiosError } from 'axios'
+import { ChevronLeft } from 'lucide-react'
 
 import type { ApiErrorResponse } from '@/apis/api.types'
 import { formatError } from '@/apis/api.utils'
 import { ConfirmModal } from '@/components/common/overlay/modal/confirm/ConfirmModal'
 import { ReportFormModal } from '@/components/common/overlay/modal/form/ReportFormModal'
+import { Button } from '@/components/common/ui'
 import { POST_REPORT_REASONS } from '@/components/common/ui/card/usePostCardReport'
 import { useToast } from '@/components/common/ui/toast/useToast'
 import type { PostDetailData } from '@/features/post/post.types'
@@ -53,6 +55,10 @@ export function PostDetailLayout({ post }: PostDetailLayoutProps) {
     setIsReportModalOpen(true)
   }
 
+  const handleBack = () => {
+    navigate(-1)
+  }
+
   const handleReportSubmit = (data: { reason: string; content: string }) => {
     reportMutation.mutate(
       {
@@ -92,53 +98,65 @@ export function PostDetailLayout({ post }: PostDetailLayoutProps) {
 
   return (
     <>
-      <article className="w-full max-w-300 rounded-2xl border border-border-default bg-white dark:bg-gray-900 px-8 py-6 shadow-card-main">
-        <PostDetailHeader
-          author={{
-            nickname: post.nickname,
-            profileImageUrl: post.profileImageUrl,
-          }}
-          createdAt={post.createdAt}
-          menuItems={menuItems}
-        />
-
-        <div className="mt-6">
-          <PostDetailBody
-            title={post.title}
-            content={post.content}
-            tags={post.tags}
-            images={post.images}
+      <div className="flex w-full max-w-300 flex-col gap-3">
+        <article className="w-full rounded-2xl border border-border-default bg-white px-5 py-5 shadow-card-main dark:bg-gray-900 sm:px-8 sm:py-6">
+          {/* 뒤로가기 버튼 */}
+          <Button
+            variant={'ghost'}
+            onClick={handleBack}
+            aria-label="뒤로 이동"
+            className="mb-3 px-0 hover:bg-transparent hover:text-text-primary sm:pr-2"
+          >
+            <ChevronLeft size={22} aria-hidden="true" />
+            <span className="text-sm font-medium sm:inline">뒤로 이동</span>
+          </Button>
+          <PostDetailHeader
+            author={{
+              nickname: post.nickname,
+              profileImageUrl: post.profileImageUrl,
+            }}
+            createdAt={post.createdAt}
+            menuItems={menuItems}
           />
-        </div>
 
-        <PostDetailVoteSection post={post} />
-
-        {post.hasGoal && post.goalInfo && (
           <div className="mt-6">
-            <PostGoalSection
-              title={post.goalInfo.title}
-              startDate={post.goalInfo.startDate ?? ''}
-              endDate={post.goalInfo.endDate ?? ''}
-              progressRate={post.goalInfo.progressRate ?? 0}
-              status="in_progress"
+            <PostDetailBody
+              title={post.title}
+              content={post.content}
+              tags={post.tags}
+              images={post.images}
             />
           </div>
-        )}
 
-        <div className="mt-8">
-          <PostDetailActions
-            postId={post.postId}
-            likeCount={post.likeCount}
-            commentCount={post.commentCount}
-            isLiked={post.isLiked}
-            isScrapped={post.isScrapped}
-          />
-        </div>
+          <PostDetailVoteSection post={post} />
 
-        <div id="post-detail-comment-section">
-          <PostDetailCommentSection postId={post.postId} />
-        </div>
-      </article>
+          {post.hasGoal && post.goalInfo && (
+            <div className="mt-6">
+              <PostGoalSection
+                title={post.goalInfo.title}
+                startDate={post.goalInfo.startDate ?? ''}
+                endDate={post.goalInfo.endDate ?? ''}
+                progressRate={post.goalInfo.progressRate ?? 0}
+                status="in_progress"
+              />
+            </div>
+          )}
+
+          <div className="mt-8">
+            <PostDetailActions
+              postId={post.postId}
+              likeCount={post.likeCount}
+              commentCount={post.commentCount}
+              isLiked={post.isLiked}
+              isScrapped={post.isScrapped}
+            />
+          </div>
+
+          <div id="post-detail-comment-section">
+            <PostDetailCommentSection postId={post.postId} />
+          </div>
+        </article>
+      </div>
 
       {isDeleteModalOpen && (
         <ConfirmModal
