@@ -73,7 +73,7 @@ export function CommentInput({
 
         <div className="mt-1 flex justify-end">
           <Button
-            variant="submit"
+            variant="primary"
             size="sm"
             rounded="full"
             onClick={handleSubmit}
