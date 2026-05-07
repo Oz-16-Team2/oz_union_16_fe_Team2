@@ -60,6 +60,7 @@ type DropdownProps = {
   value?: string
   onChange?: (value: string) => void
   disabled?: boolean
+  className?: string
 }
 
 export function Dropdown({
@@ -70,6 +71,7 @@ export function Dropdown({
   value,
   onChange,
   disabled = false,
+  className,
 }: DropdownProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [isClosing, setIsClosing] = useState(false)
@@ -90,7 +92,7 @@ export function Dropdown({
   const selectedLabel = options.find((opt) => opt.value === value)?.label
 
   return (
-    <div ref={ref} className="relative w-full min-w-64">
+    <div ref={ref} className={cn('relative w-full min-w-64', className)}>
       <button
         id={id}
         type="button"

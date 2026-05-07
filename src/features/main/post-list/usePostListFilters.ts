@@ -114,7 +114,7 @@ export function usePostListFilters() {
       return {
         type: 'search' as const,
         keyword: debouncedKeyword,
-        page: page - 1,
+        page,
       }
     }
     if (sort === 'trending') {
@@ -123,7 +123,7 @@ export function usePostListFilters() {
     if (sort === 'suggested') {
       return { type: 'suggested' as const, page }
     }
-    return { type: 'latest' as const, page: page - 1 }
+    return { type: 'latest' as const, page }
   }, [debouncedKeyword, sort, page])
 
   /** 엔터/버튼 클릭 시 즉시 반영 (디바운스 대기 없음) */

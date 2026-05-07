@@ -1,6 +1,7 @@
 import { useState } from 'react'
 
 import { Button, Textarea } from '@/components/common/ui'
+import { cn } from '@/utils/cn'
 
 import { Dropdown, type DropdownOption } from '../../dropdown/Dropdown'
 import { Modal, type ModalProps } from '../base/Modal'
@@ -41,12 +42,12 @@ export function ReportFormModal({
       size={size}
       rounded={rounded}
       border={border}
-      className={className}
+      className={cn('w-[calc(100vw-32px)] sm:w-full', className)}
     >
       <Modal.Header>{title}</Modal.Header>
       <form onSubmit={handleSubmit}>
         <Modal.Content>
-          <div className="grid grid-cols-[auto_1fr] items-center gap-x-4 gap-y-3">
+          <div className="grid grid-cols-1 items-start gap-2 sm:grid-cols-[auto_1fr] sm:items-center sm:gap-x-4 sm:gap-y-3">
             <label
               htmlFor="reason"
               className="whitespace-nowrap text-sm text-text-muted"
@@ -59,10 +60,11 @@ export function ReportFormModal({
               value={reason}
               onChange={setReason}
               placeholder="선택해주세요"
+              className="w-full min-w-0"
             />
             <label
               htmlFor="content"
-              className="whitespace-nowrap text-sm text-text-muted"
+              className="mt-2 whitespace-nowrap text-sm text-text-muted sm:mt-0"
             >
               직접 입력
             </label>
@@ -71,6 +73,7 @@ export function ReportFormModal({
               size="sm"
               value={content}
               onChange={handleContentChange}
+              className="w-full min-w-0"
             />
           </div>
         </Modal.Content>

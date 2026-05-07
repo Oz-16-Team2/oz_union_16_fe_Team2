@@ -24,7 +24,7 @@ export function PostDetailHeader({
   menuItems,
 }: PostDetailHeaderProps) {
   return (
-    <div className="mt-9 flex items-center justify-between">
+    <div className="flex items-center justify-between">
       {/* 왼쪽 (프로필) */}
       <div className="flex items-center gap-3">
         <div className="h-10 w-10 overflow-hidden rounded-full bg-gray-200">

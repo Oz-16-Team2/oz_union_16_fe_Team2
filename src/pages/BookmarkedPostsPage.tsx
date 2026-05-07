@@ -40,7 +40,7 @@ export function BookmarkedPostsPage() {
 
   const { data, isLoading, isFetching, isError, error } =
     useBookmarkedPostsQuery({
-      page: hasSearchQuery ? 0 : page - 1,
+      page: hasSearchQuery ? 1 : page,
       size: POSTS_PAGE_SIZE,
     })
 
