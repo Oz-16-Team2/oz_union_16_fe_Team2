@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router'
 
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import type { AxiosError } from 'axios'
 
 import {
@@ -23,6 +23,7 @@ import { useAuthStore } from '@/store/authStore'
 // 로그아웃 관련 로직을 캡슐화한 커스텀 훅
 export function useLogoutMutation() {
   const navigate = useNavigate()
+  const queryClient = useQueryClient()
   const toast = useToast()
   const clearSession = useAuthStore((state) => state.clearSession)
 
@@ -31,6 +32,7 @@ export function useLogoutMutation() {
   // - 로그인 페이지로 이동
   const finishLogout = () => {
     clearSession()
+    queryClient.removeQueries()
     navigate('/')
   }
 
